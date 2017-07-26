@@ -15,6 +15,8 @@ import java.util.List;
  */
 
 public class Permissions4M {
+    private static final String CONCAT = "$$";
+    private static final String PERMISSIONS_PROXY = "PermissionsProxy";
     private static PermissionsProxy instance;
 
     @SuppressWarnings("unchecked")
@@ -38,7 +40,7 @@ public class Permissions4M {
 
     private static void init(Activity activity) {
         String name = activity.getClass().getName();
-        String proxyName = name + "$$" + "PermissionsProxy";
+        String proxyName = name + CONCAT + PERMISSIONS_PROXY;
         try {
             instance = (PermissionsProxy) Class.forName(proxyName).newInstance();
         } catch (InstantiationException e) {

@@ -93,14 +93,26 @@ public class AnnotationProcessor extends AbstractProcessor {
             Annotation annotation = method.getAnnotation(clazz);
             String methodName = method.getSimpleName().toString();
             if (annotation instanceof PermissionsGranted) {
-                int value = ((PermissionsGranted) annotation).value();
-                info.grantedMap.put(value, methodName);
+                int[] value = ((PermissionsGranted) annotation).value();
+                if (value.length > 1) {
+                    info.grantedMap.put(methodName, value);
+                } else {
+                    info.singleGrantMap.put(value[0], methodName);
+                }
             } else if (annotation instanceof PermissionsDenied) {
-                int value = ((PermissionsDenied) annotation).value();
-                info.deniedMap.put(value, methodName);
+                int[] value = ((PermissionsDenied) annotation).value();
+                if (value.length > 1) {
+                    info.deniedMap.put(methodName, value);
+                } else {
+                    info.singleDeniedMap.put(value[0], methodName);
+                }
             } else if (annotation instanceof PermissionsRationale) {
-                int value = ((PermissionsRationale) annotation).value();
-                info.rationaleMap.put(value, methodName);
+                int[] value = ((PermissionsRationale) annotation).value();
+                if (value.length > 1) {
+                    info.rationaleMap.put(methodName, value);
+                } else {
+                    info.singleRationaleMap.put(value[0], methodName);
+                }
             } else {
                 error(method, "%s not support.", method);
                 return true;
