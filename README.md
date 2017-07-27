@@ -25,7 +25,8 @@
 
 	// 权限申请成功
 	@PermissionsGranted(CONTACT_CODE)
-    ~~public void contactGranted(int code) {~~（此处方法中含有形式参数）
+	// 注意方法体中含有形式参数
+    ~~public void contactGranted(int code) {~~
         ToastUtil.show("读取联系人权限成功");
     }
 
@@ -48,7 +49,8 @@
 
 	// 权限申请成功
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    ~~public void storageAndCallGranted() {~~（此处方法中不含形式参数）
+	// 注意方法体中不含形式参数
+    ~~public void storageAndCallGranted() {~~
         switch (code) {
             case STORAGE_CODE:
                 ToastUtil.show("设备存储权限授权成功");
