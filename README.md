@@ -19,7 +19,7 @@
 
 <h2 id="notice">注意事项</h2>
 
-针对**单个权限申请**，注解所修饰的方法是不含参数的，应如下：
+针对**单个权限申请**，注解所修饰的方法是不含参数的，**应如下**：
 
 	// 权限申请成功
 	@PermissionsGranted(CONTACT_CODE)
@@ -27,16 +27,16 @@
         ToastUtil.show("读取联系人权限成功");
     }
 
-而如下是不可取的：
+而如下是**不可取**的：
 
 	// 权限申请成功
 	@PermissionsGranted(CONTACT_CODE)
 	// 注意方法体中含有形式参数
-    ~~public void contactGranted(int code) {~~
+    public void contactGranted(int code) {
         ToastUtil.show("读取联系人权限成功");
     }
 
-针对**多个权限申请**，注解所修饰的方法是含参数的，应如下：
+针对**多个权限申请**，注解所修饰的方法是含参数的，**应如下**：
 
 	// 权限申请成功
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
@@ -51,12 +51,12 @@
         }
     }
 
-而如下是不可取的：
+而如下是**不可取**的：
 
 	// 权限申请成功
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
 	// 注意方法体中不含形式参数
-    ~~public void storageAndCallGranted() {~~
+    public void storageAndCallGranted() {
         switch (code) {
             case STORAGE_CODE:
                 ToastUtil.show("设备存储权限授权成功");
