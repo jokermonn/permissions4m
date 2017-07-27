@@ -6,16 +6,16 @@
 [注意事项](#notice)
 
 * Activity
- * [单个权限申请](#single_activity)
- * [多个权限申请](#multiple_activity)
- * [单个权限申请自定义](#single_custom_activity)
- * [多个权限申请自定义](#mutiple_custom_activity)
+    * [单个权限申请](#single_activity)
+    * [多个权限申请](#multiple_activity)
+    * [单个权限申请自定义](#single_custom_activity)
+    * [多个权限申请自定义](#mutiple_custom_activity)
  
 * Fragment
- * [单个权限申请](#single_fragment)
- * [多个权限申请](#multiple_fragment)
- * [单个权限申请自定义](#single_custom_fragment)
- * [多个权限申请自定义](#mutiple_custom_fragment)
+    * [单个权限申请](#single_fragment)
+    * [多个权限申请](#multiple_fragment)
+    * [单个权限申请自定义](#single_custom_fragment)
+    * [多个权限申请自定义](#mutiple_custom_fragment)
 
 <h2 id="notice">注意事项</h2>
 
