@@ -184,11 +184,14 @@ public class MainFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // 请自行处理申请权限，两种方法等价
                         // 方法1，使用框架已封装的方法
-                        Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new String[]{Manifest
+                        Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
+                                String[]{Manifest
                                 .permission.CAMERA}, CAMERA_CODE);
                         // 方法2，使用自身方法
-//                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest
-//                                .permission.CAMERA}, CAMERA_CODE);
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                            MainFragment.this.requestPermissions(new String[]{Manifest
+//                                    .permission.CAMERA}, CAMERA_CODE);
+//                        }
                     }
                 })
                 .show();
@@ -234,7 +237,8 @@ public class MainFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 // 请自行处理申请权限，两种方法等价
                                 // 方法1，使用框架已封装的方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new String[]{Manifest
+                                Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
+                                        String[]{Manifest
                                         .permission.READ_SMS}, SMS_CODE);
                                 // 方法2，使用自身方法
 //                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -253,7 +257,8 @@ public class MainFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 // 请自行处理申请权限，两种方法等价
                                 // 方法1，使用框架已封装的方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new String[]{Manifest
+                                Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
+                                        String[]{Manifest
                                         .permission.RECORD_AUDIO}, AUDIO_CODE);
                                 // 方法2，使用自身方法
 //                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
