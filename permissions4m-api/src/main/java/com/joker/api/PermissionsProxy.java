@@ -10,4 +10,6 @@ public interface PermissionsProxy<T> {
     void denied(T object, int code);
 
     void granted(T object, int code);
+
+    boolean customRationale(T object, int code);
 }

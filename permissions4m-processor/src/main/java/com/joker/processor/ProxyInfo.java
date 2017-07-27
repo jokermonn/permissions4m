@@ -21,10 +21,12 @@ class ProxyInfo {
     Map<String, int[]> grantedMap = new HashMap<>();
     Map<String, int[]> deniedMap = new HashMap<>();
     Map<String, int[]> rationaleMap = new HashMap<>();
+    Map<String, int[]> customRationaleMap = new HashMap<>();
     // requestCode -> methodName
     Map<Integer, String> singleGrantMap = new HashMap<>();
     Map<Integer, String> singleDeniedMap = new HashMap<>();
     Map<Integer, String> singleRationaleMap = new HashMap<>();
+    Map<Integer, String> singleCustomRationaleMap = new HashMap<>();
 
     ProxyInfo(Elements util, TypeElement element) {
         this.element = element;
@@ -66,6 +68,33 @@ class ProxyInfo {
         generateGrantedMethod(builder);
         generateDeniedMethod(builder);
         generateRationaleMethod(builder);
+        generateCustomRationaleMethod(builder);
+    }
+
+    private void generateCustomRationaleMethod(StringBuilder builder) {
+        checkBuilderNonNull(builder);
+        builder.append("@Override\n").append("public boolean customRationale(").append(element
+                .getSimpleName())
+                .append(" object, int code) {\n")
+                .append("switch(code) {");
+        for (String methodName : customRationaleMap.keySet()) {
+            int[] ints = customRationaleMap.get(methodName);
+            for (int requestCode : ints) {
+                builder.append("case ").append(requestCode).append(":\n");
+                if (singleCustomRationaleMap.containsKey(requestCode)) {
+                    singleCustomRationaleMap.remove(requestCode);
+                }
+            }
+            builder.append("{\n").append("object.").append(methodName).append("(code);\nreturn true;\n}\n");
+        }
+
+        for (Integer requestCode : singleCustomRationaleMap.keySet()) {
+            builder.append("case ").append(requestCode).append(": {\n")
+                    .append("object.").append(singleCustomRationaleMap.get(requestCode)).append("();" +
+                    "\nreturn true;\n}");
+        }
+
+        builder.append("default:\nreturn false;\n").append("}\n}\n\n");
     }
 
     private void generateRationaleMethod(StringBuilder builder) {
@@ -88,7 +117,6 @@ class ProxyInfo {
             builder.append("case ").append(requestCode).append(": {\n")
                     .append("object.").append(singleRationaleMap.get(requestCode)).append("();\nbreak;\n}");
         }
-
 
         builder.append("default:\nbreak;\n").append("}\n}\n\n");
     }

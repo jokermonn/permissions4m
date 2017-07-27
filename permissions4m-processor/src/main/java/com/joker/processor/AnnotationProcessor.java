@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
+import com.joker.annotation.PermissionsCustomRationale;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -47,6 +48,7 @@ public class AnnotationProcessor extends AbstractProcessor {
         if (isIllegal(roundEnv, PermissionsGranted.class)) return false;
         if (isIllegal(roundEnv, PermissionsDenied.class)) return false;
         if (isIllegal(roundEnv, PermissionsRationale.class)) return false;
+        if (isIllegal(roundEnv, PermissionsCustomRationale.class)) return false;
 
         Writer writer = null;
         for (ProxyInfo info : map.values()) {
@@ -112,6 +114,13 @@ public class AnnotationProcessor extends AbstractProcessor {
                     info.rationaleMap.put(methodName, value);
                 } else {
                     info.singleRationaleMap.put(value[0], methodName);
+                }
+            } else if (annotation instanceof PermissionsCustomRationale) {
+                int[] value = ((PermissionsCustomRationale) annotation).value();
+                if (value.length > 1) {
+                    info.customRationaleMap.put(methodName, value);
+                } else {
+                    info.singleCustomRationaleMap.put(value[0], methodName);
                 }
             } else {
                 error(method, "%s not support.", method);
