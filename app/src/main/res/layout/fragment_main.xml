@@ -8,7 +8,7 @@
     tools:context="com.joker.permissions4m.MainFragment">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_fragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -47,7 +47,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_fragment"/>
 
     <Button
         android:id="@+id/btn_storage"
@@ -103,4 +103,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_call"/>
 
+    <Button
+        android:id="@+id/btn_one"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="一键申请"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_sms"/>
 </android.support.constraint.ConstraintLayout>

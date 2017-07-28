@@ -13,10 +13,21 @@ import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
+import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
 import com.joker.permissions4m.other.ToastUtil;
 
+import static com.joker.permissions4m.MainActivity.CALENDAR_CODE;
+import static com.joker.permissions4m.MainActivity.LOCATION_CODE;
+import static com.joker.permissions4m.MainActivity.SENSORS_CODE;
+
+@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
+        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
+        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
 public class MainActivity extends AppCompatActivity {
+    public static final int CALENDAR_CODE = 7;
+    public static final int SENSORS_CODE = 8;
+    public static final int LOCATION_CODE = 9;
     private static final int STORAGE_CODE = 1;
     private static final int CALL_CODE = 2;
     private static final int CONTACT_CODE = 3;
@@ -29,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mCameraButton;
     private Button mSmsButton;
     private Button mAudioButton;
+    private Button mOneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         mCameraButton = (Button) findViewById(R.id.btn_camera);
         mSmsButton = (Button) findViewById(R.id.btn_sms);
         mAudioButton = (Button) findViewById(R.id.btn_audio);
+        mOneButton = (Button) findViewById(R.id.btn_one);
 
         // 单个申请
         mContactsButton.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +102,16 @@ public class MainActivity extends AppCompatActivity {
                         AUDIO_CODE);
             }
         });
+
+        // 同步申请
+        mOneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.BODY_SENSORS,
+//                        SENSORS_CODE);
+                Permissions4M.syncRequestPermissions(MainActivity.this);
+            }
+        });
     }
 
     @Override
@@ -99,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //====================================================================
-    @PermissionsGranted({STORAGE_CODE, CALL_CODE})
+    @PermissionsGranted({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallGranted(int code) {
         switch (code) {
             case STORAGE_CODE:
@@ -108,10 +131,21 @@ public class MainActivity extends AppCompatActivity {
             case CALL_CODE:
                 ToastUtil.show("通话权限授权成功 in activity");
                 break;
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权成功 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权成功 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权成功 in activity");
+                break;
+            default:
+                break;
         }
     }
 
-    @PermissionsDenied({STORAGE_CODE, CALL_CODE})
+    @PermissionsDenied({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallDenied(int code) {
         switch (code) {
             case STORAGE_CODE:
@@ -120,10 +154,21 @@ public class MainActivity extends AppCompatActivity {
             case CALL_CODE:
                 ToastUtil.show("通话权限授权失败 in activity");
                 break;
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权失败 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权失败 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权失败 in activity");
+                break;
+            default:
+                break;
         }
     }
 
-    @PermissionsRationale({STORAGE_CODE, CALL_CODE})
+    @PermissionsRationale({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallRationale(int code) {
         switch (code) {
             case STORAGE_CODE:
@@ -131,6 +176,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case CALL_CODE:
                 ToastUtil.show("请开启通话权限授权 in activity");
+                break;
+            case LOCATION_CODE:
+                ToastUtil.show("请开启地理位置权限 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("请开启传感器权限 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("请开启读取日历权限 in activity");
+                break;
+            default:
                 break;
         }
     }
@@ -171,7 +227,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // 请自行处理申请权限，两者方法等价
                         // 方法1.使用框架封装方法
-                        Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new String[]{Manifest
+                        Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
+                                String[]{Manifest
                                 .permission.CAMERA}, CAMERA_CODE);
                         // 方法2.使用自身方法
 //                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
@@ -221,7 +278,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 // 请自行处理申请权限，两者方法等价
                                 // 方法1.使用框架封装方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new String[]{Manifest
+                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
+                                        String[]{Manifest
                                         .permission.READ_SMS}, SMS_CODE);
                                 // 方法2.使用自身方法
 //                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
@@ -238,7 +296,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 // 请自行处理申请权限，两者方法等价
                                 // 方法1.使用框架封装方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new String[]{Manifest
+                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
+                                        String[]{Manifest
                                         .permission.RECORD_AUDIO}, AUDIO_CODE);
                                 // 方法2.使用自身方法
 //                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest

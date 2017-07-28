@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,24 @@ import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
+import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
 import com.joker.permissions4m.other.ToastUtil;
 
+import static com.joker.permissions4m.MainFragment.CALENDAR_CODE;
+import static com.joker.permissions4m.MainFragment.LOCATION_CODE;
+import static com.joker.permissions4m.MainFragment.SENSORS_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
+@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
+        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
+        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
 public class MainFragment extends Fragment {
+    public static final int CALENDAR_CODE = 7;
+    public static final int SENSORS_CODE = 8;
+    public static final int LOCATION_CODE = 9;
     private static final int STORAGE_CODE = 1;
     private static final int CALL_CODE = 2;
     private static final int CONTACT_CODE = 3;
@@ -36,6 +47,7 @@ public class MainFragment extends Fragment {
     private Button mCameraButton;
     private Button mSmsButton;
     private Button mAudioButton;
+    private Button mOneButton;
 
     public MainFragment() {
         // Required empty public constructor
@@ -51,6 +63,7 @@ public class MainFragment extends Fragment {
         mCameraButton = (Button) view.findViewById(R.id.btn_camera);
         mSmsButton = (Button) view.findViewById(R.id.btn_sms);
         mAudioButton = (Button) view.findViewById(R.id.btn_audio);
+        mOneButton = (Button) view.findViewById(R.id.btn_one);
 
         // 单个申请
         mContactsButton.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +114,14 @@ public class MainFragment extends Fragment {
             }
         });
 
+        // 同步申请
+        mOneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Permissions4M.syncRequestPermissions(MainFragment.this);
+            }
+        });
+
         return view;
     }
 
@@ -112,7 +133,7 @@ public class MainFragment extends Fragment {
     }
 
     //====================================================================
-    @PermissionsGranted({STORAGE_CODE, CALL_CODE})
+    @PermissionsGranted({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallGranted(int code) {
         switch (code) {
             case STORAGE_CODE:
@@ -121,10 +142,21 @@ public class MainFragment extends Fragment {
             case CALL_CODE:
                 ToastUtil.show("通话权限授权成功 in fragment");
                 break;
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权成功 in fragment");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权成功 in fragment");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权成功 in fragment");
+                break;
+            default:
+                break;
         }
     }
 
-    @PermissionsDenied({STORAGE_CODE, CALL_CODE})
+    @PermissionsDenied({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallDenied(int code) {
         switch (code) {
             case STORAGE_CODE:
@@ -133,10 +165,21 @@ public class MainFragment extends Fragment {
             case CALL_CODE:
                 ToastUtil.show("通话权限授权失败 in fragment");
                 break;
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权失败 in fragment");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权失败 in fragment");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权失败 in fragment");
+                break;
+            default:
+                break;
         }
     }
 
-    @PermissionsRationale({STORAGE_CODE, CALL_CODE})
+    @PermissionsRationale({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallRationale(int code) {
         switch (code) {
             case STORAGE_CODE:
@@ -144,6 +187,17 @@ public class MainFragment extends Fragment {
                 break;
             case CALL_CODE:
                 ToastUtil.show("请开启通话权限授权 in fragment");
+                break;
+            case LOCATION_CODE:
+                ToastUtil.show("请开启地理位置权限 in fragment");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("请开启传感器权限 in fragment");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("请开启读取日历权限 in fragment");
+                break;
+            default:
                 break;
         }
     }

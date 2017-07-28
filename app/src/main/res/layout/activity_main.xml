@@ -21,7 +21,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
             android:text="通话（多个）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -47,11 +46,12 @@
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="0dp"
             android:text="存储（多个）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_contacts"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_contacts"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
 
         <Button
             android:id="@+id/btn_camera"
@@ -61,7 +61,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
             android:text="相机（自定义单个）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -76,7 +75,6 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
             android:text="短信（自定义多个）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -89,28 +87,40 @@
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="0dp"
             android:text="录音（自定义多个）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_camera"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btn_one"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:text="一键申请"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_sms"/>
 
         <fragment
             android:name="com.joker.permissions4m.MainFragment"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="500dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
             android:tag="fragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_sms"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_one"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

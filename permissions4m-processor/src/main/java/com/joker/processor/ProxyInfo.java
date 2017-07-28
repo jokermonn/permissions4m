@@ -14,7 +14,6 @@ class ProxyInfo {
     private static final String PERMISSIONS_PROXY = "PermissionsProxy";
     private static final String CONCAT = "$$";
     private final String packageName;
-    private final String className;
     private final TypeElement element;
     private final String proxyName;
     // methodName -> requestCodes
@@ -27,22 +26,23 @@ class ProxyInfo {
     Map<Integer, String> singleDeniedMap = new HashMap<>();
     Map<Integer, String> singleRationaleMap = new HashMap<>();
     Map<Integer, String> singleCustomRationaleMap = new HashMap<>();
+    // sync request
+//    int[] syncRequestCode;
+//    String[] syncRequestPermissions = new String[];
+
+    Map<int[], String[]> syncPermissions = new HashMap<>(1);
+    private int firstRequestCode;
+    private String firstRequestPermission;
 
     ProxyInfo(Elements util, TypeElement element) {
         this.element = element;
         packageName = util.getPackageOf(element).getQualifiedName().toString();
-        className = getClassName(element, packageName);
+        String className = getClassName(element, packageName);
         proxyName = className + CONCAT + PERMISSIONS_PROXY;
     }
 
     String getProxyName() {
         return proxyName;
-    }
-
-    private String getClassName(TypeElement element, String packageName) {
-        int packageLen = packageName.length() + 1;
-        return element.getQualifiedName().toString().substring(packageLen)
-                .replace('.', '$');
     }
 
     TypeElement getElement() {
@@ -69,6 +69,18 @@ class ProxyInfo {
         generateDeniedMethod(builder);
         generateRationaleMethod(builder);
         generateCustomRationaleMethod(builder);
+        generateSyncRequestPermissionsMethod(builder);
+    }
+
+    private void generateSyncRequestPermissionsMethod(StringBuilder builder) {
+        checkBuilderNonNull(builder);
+        builder.append("@Override\n").append("public void startSyncRequestPermissionsMethod(").append
+                (element.getSimpleName()).append(" object) {\n")
+                .append("Permissions4M.requestPermission(object, \"").append(firstRequestPermission)
+                .append("\", ").append(firstRequestCode).append(");\n")
+//                .append("Permissions4M.requestPermission(object, \"").append(syncRequestPermissions[0])
+//                .append("\", ").append(syncRequestCode[0]).append(");\n")
+                .append("}");
     }
 
     private void generateCustomRationaleMethod(StringBuilder builder) {
@@ -105,12 +117,13 @@ class ProxyInfo {
         for (String methodName : rationaleMap.keySet()) {
             int[] ints = rationaleMap.get(methodName);
             for (int requestCode : ints) {
-                builder.append("case ").append(requestCode).append(":\n");
+                builder.append("case ").append(requestCode).append(":\n{");
+                builder.append("object.").append(methodName).append("(").append(requestCode).append(");\n");
+                builder.append("break;}\n");
                 if (singleRationaleMap.containsKey(requestCode)) {
                     singleRationaleMap.remove(requestCode);
                 }
             }
-            builder.append("{\n").append("object.").append(methodName).append("(code);\nbreak;}\n");
         }
 
         for (Integer requestCode : singleRationaleMap.keySet()) {
@@ -129,12 +142,15 @@ class ProxyInfo {
         for (String methodName : deniedMap.keySet()) {
             int[] ints = deniedMap.get(methodName);
             for (int requestCode : ints) {
-                builder.append("case ").append(requestCode).append(":\n");
+                builder.append("case ").append(requestCode).append(":\n{");
+                builder.append("object.").append(methodName).append("(").append(requestCode).append(");\n");
+                // judge whether need write request permission method
+                addSyncRequestPermissionMethod(builder, requestCode);
+                builder.append("break;}\n");
                 if (singleDeniedMap.containsKey(requestCode)) {
                     singleDeniedMap.remove(requestCode);
                 }
             }
-            builder.append("{\n").append("object.").append(methodName).append("(code);\nbreak;}\n");
         }
 
         for (Integer requestCode : singleDeniedMap.keySet()) {
@@ -153,12 +169,15 @@ class ProxyInfo {
         for (String methodName : grantedMap.keySet()) {
             int[] ints = grantedMap.get(methodName);
             for (int requestCode : ints) {
-                builder.append("case ").append(requestCode).append(":\n");
+                builder.append("case ").append(requestCode).append(":\n{");
+                builder.append("object.").append(methodName).append("(").append(requestCode).append(");\n");
+                // judge whether need write request permission method
+                addSyncRequestPermissionMethod(builder, requestCode);
+                builder.append("break;}\n");
                 if (singleGrantMap.containsKey(requestCode)) {
                     singleGrantMap.remove(requestCode);
                 }
             }
-            builder.append("{\n").append("object.").append(methodName).append("(code);\nbreak;}\n");
         }
 
         for (Integer requestCode : singleGrantMap.keySet()) {
@@ -169,7 +188,39 @@ class ProxyInfo {
         builder.append("default:\nbreak;\n").append("}\n}\n\n");
     }
 
+    private void addSyncRequestPermissionMethod(StringBuilder builder, int targetRequestCode) {
+        // syncPermissions size is 1
+        for (int[] requestCodes : syncPermissions.keySet()) {
+            int length = requestCodes.length;
+            String[] permissions = syncPermissions.get(requestCodes);
+            // when syncRequestPermission size is 1
+            if (length == 1) {
+                firstRequestCode = requestCodes[0];
+                firstRequestPermission = permissions[0];
+//                builder.append("Permissions4M.requestPermission(object,\"").append(firstRequestPermission).append("\",").append(firstRequestCode).append(");\n");
+            } else {
+                // when syncRequestPermission size bigger than 1
+                for (int i = 0; i < length - 1; i++) {
+                    if (i == 0) {
+                        firstRequestCode = requestCodes[0];
+                        firstRequestPermission = permissions[0];
+                    }
+                    if (requestCodes[i] == targetRequestCode) {
+                        builder.append("Permissions4M.requestPermission(object,\"").append(permissions[i +
+                                1]).append("\",").append(requestCodes[i + 1]).append(");\n");
+                    }
+                }
+            }
+        }
+    }
+
     private void checkBuilderNonNull(StringBuilder builder) {
         if (builder == null) return;
+    }
+
+    private String getClassName(TypeElement element, String packageName) {
+        int packageLen = packageName.length() + 1;
+        return element.getQualifiedName().toString().substring(packageLen)
+                .replace('.', '$');
     }
 }

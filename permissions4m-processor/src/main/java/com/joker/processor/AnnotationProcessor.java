@@ -1,10 +1,11 @@
 package com.joker.processor;
 
 import com.google.auto.service.AutoService;
+import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
-import com.joker.annotation.PermissionsCustomRationale;
+import com.joker.annotation.PermissionsRequestSync;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -21,7 +22,6 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -45,10 +45,11 @@ public class AnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         map.clear();
-        if (isIllegal(roundEnv, PermissionsGranted.class)) return false;
-        if (isIllegal(roundEnv, PermissionsDenied.class)) return false;
-        if (isIllegal(roundEnv, PermissionsRationale.class)) return false;
-        if (isIllegal(roundEnv, PermissionsCustomRationale.class)) return false;
+        if (!isAnnotatedWithClass(roundEnv, PermissionsRequestSync.class)) return false;
+        if (!isAnnotatedWithMethod(roundEnv, PermissionsGranted.class)) return false;
+        if (!isAnnotatedWithMethod(roundEnv, PermissionsDenied.class)) return false;
+        if (!isAnnotatedWithMethod(roundEnv, PermissionsRationale.class)) return false;
+        if (!isAnnotatedWithMethod(roundEnv, PermissionsCustomRationale.class)) return false;
 
         Writer writer = null;
         for (ProxyInfo info : map.values()) {
@@ -78,11 +79,55 @@ public class AnnotationProcessor extends AbstractProcessor {
      *
      * @param roundEnv
      * @param clazz    the annotation type
-     * @return true if illegal
+     * @return false if illegal
      */
-    private boolean isIllegal(RoundEnvironment roundEnv, Class<? extends Annotation> clazz) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(clazz)) {
-            if (isValid(element)) return true;
+    private boolean isAnnotatedWithClass(RoundEnvironment roundEnv, Class<? extends Annotation> clazz) {
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(clazz);
+        for (Element element : elements) {
+            if (isValid(element)) {
+                return false;
+            }
+            TypeElement typeElement = (TypeElement) element;
+            String typeName = typeElement.getQualifiedName().toString();
+            ProxyInfo info = map.get(typeName);
+            if (info == null) {
+                info = new ProxyInfo(mUtils, typeElement);
+                map.put(typeName, info);
+            }
+
+            Annotation annotation = element.getAnnotation(clazz);
+            if (annotation instanceof PermissionsRequestSync) {
+                String[] permissions = ((PermissionsRequestSync) annotation).permission();
+                int[] value = ((PermissionsRequestSync) annotation).value();
+                if (permissions.length != value.length) {
+                    error(element, "permissions's length not equals value's length");
+                    return false;
+                }
+                info.syncPermissions.put(value, permissions);
+//                info.syncRequestCode = value;
+//                info.syncRequestPermissions = permissions;
+            } else {
+                error(element, "%s not support.", element);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * check the annotation is illegal or not
+     *
+     * @param roundEnv
+     * @param clazz    the annotation type
+     * @return false if illegal
+     */
+    private boolean isAnnotatedWithMethod(RoundEnvironment roundEnv, Class<? extends Annotation> clazz) {
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(clazz);
+        for (Element element : elements) {
+            if (isValid(element)) {
+                return false;
+            }
             ExecutableElement method = (ExecutableElement) element;
             TypeElement typeElement = (TypeElement) method.getEnclosingElement();
             String typeName = typeElement.getQualifiedName().toString();
@@ -124,24 +169,20 @@ public class AnnotationProcessor extends AbstractProcessor {
                 }
             } else {
                 error(method, "%s not support.", method);
-                return true;
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     /**
-     * check the annotation is annotated with method
+     * check the annotation is public or not
      *
      * @param element the annotation annotated
-     * @return true if element not method
+     * @return true if not public
      */
     private boolean isValid(Element element) {
-        if (element.getKind() != ElementKind.METHOD) {
-            error(element, "%s must be annotated with method", element.getSimpleName());
-            return true;
-        }
         if (element.getModifiers().contains(Modifier.ABSTRACT) || element.getModifiers().contains
                 (Modifier.PRIVATE)) {
             error(element, "%s must could not be abstract or private");
@@ -160,10 +201,12 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> set = new HashSet<>(3);
+        Set<String> set = new HashSet<>(5);
         set.add(PermissionsGranted.class.getCanonicalName());
         set.add(PermissionsDenied.class.getCanonicalName());
         set.add(PermissionsRationale.class.getCanonicalName());
+        set.add(PermissionsCustomRationale.class.getCanonicalName());
+        set.add(PermissionsRequestSync.class.getCanonicalName());
 
         return set;
     }
