@@ -3,7 +3,10 @@
 
 # 如何使用 #
 
-[注意事项](#notice)
+* [注意事项](#notice)
+	* [必加的二次权限申请回调](#must_add)
+	* [单个权限申请格式](#notice_single)
+	* [多个权限申请格式](#multiple_single)
 
 * Activity
     * [单个权限申请](#single_activity)
@@ -17,7 +20,20 @@
     * [单个权限申请自定义](#single_custom_fragment)
     * [多个权限申请自定义](#mutiple_custom_fragment)
 
-<h2 id="notice">注意事项</h2>
+## 注意事项 ##
+
+<h3 id="must_add">必加的二次权限申请回调</h3>
+
+在 Activity 或 Fragment 中，需要手动添加 `onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)` 方法以支持权限申请回调，代码如下即可：
+
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+<h3 id="notice_single">单个权限申请格式</h3>
 
 针对**单个权限申请**，注解所修饰的方法是不含参数的，**应如下**：
 
@@ -35,6 +51,8 @@
     public void contactGranted(int code) {
         ToastUtil.show("读取联系人权限成功");
     }
+
+<h3 id="multiple_single">多个权限申请格式</h3>
 
 针对**多个权限申请**，注解所修饰的方法是含参数的，**应如下**：
 
@@ -81,6 +99,14 @@
         }
     });
 
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 	// 权限申请成功
 	@PermissionsGranted(CONTACT_CODE)
     public void contactGranted() {
@@ -116,6 +142,14 @@
             Permissions4M.requestPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE,STORAGE_CODE);
             }
     });
+
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 	// 权限申请成功
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
@@ -167,6 +201,14 @@
         }
     });
 
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 	// 权限申请成功
 	@PermissionsGranted(CAMERA_CODE)
     public void cameraGranted() {
@@ -216,6 +258,14 @@
             Permissions4M.requestPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO,AUDIO_CODE);
         }
     });
+
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 	// 权限申请成功
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
@@ -304,6 +354,14 @@
        }
     });
 
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 	// 权限申请成功回调
 	@PermissionsGranted(CONTACT_CODE)
     public void contactGranted() {
@@ -339,6 +397,14 @@
             Permissions4M.requestPermission(MainFragment.this, Manifest.permission.WRITE_EXTERNAL_STORAGE,STORAGE_CODE);
         }
     });
+
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 	// 权限申请成功回调
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
@@ -389,6 +455,14 @@
             Permissions4M.requestPermission(MainFragment.this, Manifest.permission.CAMERA, CAMERA_CODE);
         }
     });
+
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 	// 权限申请成功回调
 	@PermissionsGranted(CAMERA_CODE)
@@ -443,6 +517,15 @@
         }
     });
 
+	// 注册回调权限申请函数
+	@Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+	// 权限申请成功回调
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
     public void smsAndAudioGranted(int code) {
         switch (code) {
@@ -457,6 +540,7 @@
         }
     }
 
+	// 权限申请失败回调
     @PermissionsDenied({SMS_CODE, AUDIO_CODE})
     public void smsAndAudioDenied(int code) {
         switch (code) {
@@ -471,6 +555,7 @@
         }
     }
 
+	// 二次申请回调
     @PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
     public void smsAndAudioCustomRationale(int code) {
         switch (code) {
