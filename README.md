@@ -11,9 +11,9 @@
 
 * 注意事项
 	* [必加的二次权限申请回调](#must_add)
-	* [同步请求多个权限申请](#sync_request)
-	* [单个权限申请](#notice_single)
-	* [多个权限申请](#multiple_single)
+	* [同步请求多个权限申请注意事项](#sync_request)
+	* [单个权限申请注意事项](#notice_single)
+	* [多个权限申请注意事项](#multiple_single)
 
 * Activity
     * [单个权限申请](#single_activity)
@@ -21,7 +21,7 @@
     * [同步请求多个权限申请](#sync_activity)
     * [单个权限申请自定义](#single_custom_activity)
     * [多个权限申请自定义](#mutiple_custom_activity)
-    * [同步多个请求申请自定义](#sync_request_activity)
+    * [同步多个权限申请自定义](#sync_request_activity)
  
 * Fragment
     * [单个权限申请](#single_fragment)
@@ -29,7 +29,7 @@
     * [同步请求多个权限申请](#sync_fragment)
     * [单个权限申请自定义](#single_custom_fragment)
     * [多个权限申请自定义](#mutiple_custom_fragment)
-    * [同步多个请求申请自定义](#sync_request_fragment)
+    * [同步多个权限申请自定义](#sync_request_fragment)
 
 ## 注意事项 ##
 
@@ -44,7 +44,7 @@
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-<h3 id="sync_request">同步请求多个权限申请</h3>
+<h3 id="sync_request">同步请求多个权限申请注意事项</h3>
 
 同步请求多个权限时，回调函数请使用[多个权限申请](#multiple_single)格式，即应将回调结果放至同一函数中，以 `code` 区别：
 
@@ -77,7 +77,7 @@
         ToastUtil.show("录音权限申请成功 in fragment");
     }
 
-<h3 id="notice_single">单个权限申请</h3>
+<h3 id="notice_single">单个权限申请注意事项</h3>
 
 针对**单个权限申请**，注解所修饰的方法是不含参数的，**应如下**：
 
@@ -94,7 +94,7 @@
         ToastUtil.show("读取联系人权限成功");
     }
 
-<h3 id="multiple_single">多个权限申请</h3>
+<h3 id="multiple_single">多个权限申请注意事项</h3>
 
 针对**多个权限申请**，注解所修饰的方法是含参数的，**应如下**：
 
@@ -450,7 +450,7 @@
         }
     }
 
-<h3 id="sync_request_activity">同步多个请求申请自定义</h3>
+<h3 id="sync_request_activity">同步多个权限申请自定义</h3>
 
 同[多个权限申请自定义](#mutiple_custom_activity)，参考代码如下：
 
@@ -845,7 +845,7 @@
         }
     }
 
-<h3 id="sync_request_fragment">同步多个请求申请自定义</h3>
+<h3 id="sync_request_fragment">同步多个权限申请自定义</h3>
 
 请参考 Activity 版本：[同步多个请求申请自定义](#sync_request_activity)
 
