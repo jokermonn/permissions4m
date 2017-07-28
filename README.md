@@ -1,5 +1,11 @@
 # Permissions4M #
-意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，项目使用编译时注解，较运行时注解效率更高。权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
+意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。另较原有项目有以下升级：
+
+- 支持 java8
+- 支持一行代码同步请求多个权限申请
+- 支持多种回调函数，代码可以更简洁
+
+权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
 
 # 如何使用 #
 
