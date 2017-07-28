@@ -10,7 +10,7 @@ import android.content.Context;
 public class App extends Application {
     private static App instance;
 
-    public static Context getAppContetxt() {
+    public static Context getAppContext() {
         return instance.getApplicationContext();
     }
 
