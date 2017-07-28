@@ -9,6 +9,26 @@
 
 # 如何使用 #
 
+1.使用 jar/aar 包，请先下载此[链接](https://github.com/jokermonn/Permissions4M/tree/master/jars)下三个包，放入 libs 目录中，在 app 的 `app.gradle` 中添加如下代码
+
+	android {
+		// 无需改动
+	}
+
+	repositories {
+	    flatDir {
+	        dirs 'libs'
+	    }
+	}
+
+	dependencies {
+		// 添加如下三行
+		compile(name: 'permissions4m-api', ext: 'aar')
+		compile files('libs/permissions4m-annotation.jar')
+		annotationProcessor files('libs/permissions4m-processor.jar')
+	}
+
+
 * 注意事项
 	* [必加的二次权限申请回调](#must_add)
 	* [同步请求多个权限申请注意事项](#sync_request)
