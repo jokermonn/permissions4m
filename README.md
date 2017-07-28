@@ -12,6 +12,7 @@
 * Activity
     * [单个权限申请](#single_activity)
     * [多个权限申请](#multiple_activity)
+    * [同步请求多个权限申请](#sync_activity)
     * [单个权限申请自定义](#single_custom_activity)
     * [多个权限申请自定义](#mutiple_custom_activity)
     * [同步多个请求申请自定义](#sync_request_activity)
@@ -517,6 +518,23 @@
         }
     }
 
+<h3 id="sync_activity">同步请求多个权限申请</h3>
+
+- 首先在 Activity 上添加注解，如下：
+
+	@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
+	        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
+	        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
+	public class MainActivity extends AppCompatActivity
+
+注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
+
+- 添加如下代码：
+
+	Permissions4M.syncRequestPermissions(MainActivity.this);
+
+申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`
+
 <h3 id="single_custom_fragment">单个权限申请自定义</h3>
 
 	private static final int CAMERA_CODE = 4;
@@ -673,3 +691,19 @@
                 break;
         }
     }
+
+## License ##
+
+	Copyright 2016 joker
+	
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+	
+	    http://www.apache.org/licenses/LICENSE-2.0
+	
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
