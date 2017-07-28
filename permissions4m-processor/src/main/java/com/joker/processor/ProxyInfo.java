@@ -27,9 +27,6 @@ class ProxyInfo {
     Map<Integer, String> singleRationaleMap = new HashMap<>();
     Map<Integer, String> singleCustomRationaleMap = new HashMap<>();
     // sync request
-//    int[] syncRequestCode;
-//    String[] syncRequestPermissions = new String[];
-
     Map<int[], String[]> syncPermissions = new HashMap<>(1);
     private int firstRequestCode;
     private String firstRequestPermission;

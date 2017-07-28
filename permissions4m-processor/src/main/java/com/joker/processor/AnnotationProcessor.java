@@ -104,8 +104,6 @@ public class AnnotationProcessor extends AbstractProcessor {
                     return false;
                 }
                 info.syncPermissions.put(value, permissions);
-//                info.syncRequestCode = value;
-//                info.syncRequestPermissions = permissions;
             } else {
                 error(element, "%s not support.", element);
                 return false;
