@@ -46,7 +46,7 @@
 
 <h3 id="sync_request">同步请求多个权限申请</h3>
 
-同步请求多个权限时，回调函数请使用[多个权限申请](#multiple_activity)的格式，即应将回调结果放至同一函数中，以 `code` 区别：
+同步请求多个权限时，回调函数请使用[多个权限申请](#multiple_single)格式，即应将回调结果放至同一函数中，以 `code` 区别：
 
 	// 权限申请成功回调
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
@@ -224,20 +224,80 @@
 
 <h3 id="sync_activity">同步请求多个权限申请</h3>
 
-- 首先在 Activity 上添加注解，如下：
+1.首先在 Activity 上添加注解，如下：
 
-	@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
-	        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
-	        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
-	public class MainActivity extends AppCompatActivity
+	@PermissionsRequestSync(
+		permission = {Manifest.permission.BODY_SENSORS,
+						Manifest.permission.ACCESS_FINE_LOCATION,
+							Manifest.permission.READ_CALENDAR},
+		value = {SENSORS_CODE,
+					LOCATION_CODE,
+						CALENDAR_CODE})
+	public class MainActivity extends AppcompatActivity
 
 注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
 
-- 添加如下代码：
+2.使用如下代码开始同步申请权限：
 
-	Permissions4M.syncRequestPermissions(MainActivity.this);
+	Permissions4M.syncRequestPermissions(MainFragment.this);
 
-申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。请求回调函数请参考使用[同步请求多个权限申请](#sync_request)。
+申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
+
+3.请求回调函数请使用以下格式撰写（**不支持将回调函数分开**）：
+
+	// 权限申请成功时回调
+	@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncGranted(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权成功 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权成功 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权成功 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+	// 权限申请失败时回调
+    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncDenied(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权失败 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权失败 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权失败 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+	// 二次权限申请时回调
+    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncRationale(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                ToastUtil.show("请开启地理位置权限 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("请开启传感器权限 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("请开启读取日历权限 in activity");
+                break;
+            default:
+                break;
+        }
+    }
 
 <h3 id="single_custom_activity">单个权限申请自定义</h3>
 
@@ -394,6 +454,14 @@
 
 同[多个权限申请自定义](#mutiple_custom_activity)，参考代码如下：
 
+	// 同步申请
+        mOneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Permissions4M.syncRequestPermissions(MainActivity.this);
+            }
+        });
+
 	@PermissionsCustomRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void syncCustomRationale(int code) {
         switch (code) {
@@ -545,20 +613,80 @@
 
 <h3 id="sync_fragment">同步请求多个权限申请</h3>
 
-- 首先在 Fragment 上添加注解，如下：
+1.首先在 Fragment 上添加注解，如下：
 
-	@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
-	        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
-	        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
+	@PermissionsRequestSync(
+		permission = {Manifest.permission.BODY_SENSORS,
+						Manifest.permission.ACCESS_FINE_LOCATION,
+							Manifest.permission.READ_CALENDAR},
+		value = {SENSORS_CODE,
+					LOCATION_CODE,
+						CALENDAR_CODE})
 	public class MainFragment extends Fragment
 
 注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
 
-- 添加如下代码：
+2.使用如下代码开始同步申请权限：
 
 	Permissions4M.syncRequestPermissions(MainFragment.this);
 
-申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。请求回调函数请参考使用[同步请求多个权限申请](#sync_request)。
+申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
+
+3.请求回调函数请使用以下格式撰写（**不支持将回调函数分开**）：
+
+	// 权限申请成功时回调
+	@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncGranted(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权成功 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权成功 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权成功 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+	// 权限申请失败时回调
+    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncDenied(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                ToastUtil.show("地理位置权限授权失败 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("传感器权限授权失败 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("读取日历权限授权失败 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+	// 二次权限申请时回调
+    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncRationale(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                ToastUtil.show("请开启地理位置权限 in activity");
+                break;
+            case SENSORS_CODE:
+                ToastUtil.show("请开启传感器权限 in activity");
+                break;
+            case CALENDAR_CODE:
+                ToastUtil.show("请开启读取日历权限 in activity");
+                break;
+            default:
+                break;
+        }
+    }
 
 <h3 id="single_custom_fragment">单个权限申请自定义</h3>
 

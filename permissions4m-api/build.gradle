@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 25
@@ -11,7 +12,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -22,9 +22,49 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.android.support:appcompat-v7:25.3.1'
 }
+
+// Jar
+//task androidJar(type: Jar) {
+//    dependsOn assemble
+//    group 'Build'
+//    description 'api'
+//    from zipTree(
+//            'build/intermediates/bundles/debug/classes.jar')
+//    from zipTree(
+//            '../permissions4m-processor/build/libs/permissions4m-annotation.jar')
+//    from zipTree(
+//            '../permissions4m-annotation/build/libs/permissions4m-processor.jar')
+//
+//}
+
+// javadoc tasks
+//android.libraryVariants.all { variant ->
+//    task("javadoc${variant.name.capitalize()}", type: Javadoc) {
+//        description "Generates Javadoc for $variant.name."
+//        group 'Docs'
+//        source = variant.javaCompile.source
+//        source "../permission-annotation/src/main/java"
+//
+//        exclude '**/BuildConfig.java'
+//        exclude '**/R.java'
+//    }
+//}
+
+//publish {
+//    artifactId = 'permissions4m-api'
+//    userOrg = rootProject.userOrg
+//    groupId = rootProject.groupId
+//    uploadName = rootProject.uploadName
+//    publishVersion = rootProject.publishVersion
+//    desc = rootProject.description
+//    website = rootProject.website
+//    licences = rootProject.licences
+//}
+
+//task copyJar(type: Copy) {
+//    from('build/libs/permissions4m-api.jar')
+//    into('../output/')
+//    rename ('permissions4m-api.jar', 'permissions4m.jar')
+//}

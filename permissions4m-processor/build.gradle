@@ -1,9 +1,20 @@
 apply plugin: 'java'
+apply plugin: 'com.novoda.bintray-release'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':permissions4m-annotation')
     compile 'com.google.auto.service:auto-service:1.0-rc3'
+}
+
+publish {
+    artifactId = 'permissions4m-processor'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
 }
 
 sourceCompatibility = "1.7"

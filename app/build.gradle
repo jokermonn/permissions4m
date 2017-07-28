@@ -20,15 +20,17 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile project(":permissions4m-annotation")
-    compile project(':permissions4m-api')
+    compile project(':permissions4m-annotation')
+    //    compile project(':permissions4m-api')
     annotationProcessor project(":permissions4m-processor")
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile project(':permissions4m-processor')
+    compile project(':permissions4m-api')
 }
