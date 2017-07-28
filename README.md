@@ -20,6 +20,7 @@
 * Fragment
     * [单个权限申请](#single_fragment)
     * [多个权限申请](#multiple_fragment)
+    * [同步请求多个权限申请](#sync_fragment)
     * [单个权限申请自定义](#single_custom_fragment)
     * [多个权限申请自定义](#mutiple_custom_fragment)
 
@@ -213,6 +214,23 @@
                 break;
         }
     }
+
+<h3 id="sync_activity">同步请求多个权限申请</h3>
+
+- 首先在 Activity 上添加注解，如下：
+
+	@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
+	        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
+	        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
+	public class MainActivity extends AppCompatActivity
+
+注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
+
+- 添加如下代码：
+
+	Permissions4M.syncRequestPermissions(MainActivity.this);
+
+申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。请求回调函数请参考使用[同步请求多个权限申请](#sync_request)。
 
 <h3 id="single_custom_activity">单个权限申请自定义</h3>
 
@@ -518,23 +536,6 @@
         }
     }
 
-<h3 id="sync_activity">同步请求多个权限申请</h3>
-
-- 首先在 Activity 上添加注解，如下：
-
-	@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
-	        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
-	        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
-	public class MainActivity extends AppCompatActivity
-
-注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
-
-- 添加如下代码：
-
-	Permissions4M.syncRequestPermissions(MainActivity.this);
-
-申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`
-
 <h3 id="single_custom_fragment">单个权限申请自定义</h3>
 
 	private static final int CAMERA_CODE = 4;
@@ -587,6 +588,23 @@
                 })
                 .show();
     }
+
+<h3 id="sync_fragment">同步请求多个权限申请</h3>
+
+- 首先在 Fragment 上添加注解，如下：
+
+	@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
+	        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
+	        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
+	public class MainFragment extends Fragment
+
+注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
+
+- 添加如下代码：
+
+	Permissions4M.syncRequestPermissions(MainFragment.this);
+
+申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。请求回调函数请参考使用[同步请求多个权限申请](#sync_request)。
 
 <h3 id="mutiple_custom_fragment">多个权限申请自定义</h3>
 
