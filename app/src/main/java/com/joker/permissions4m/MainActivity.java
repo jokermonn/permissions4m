@@ -103,15 +103,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mOneButton.setOnClickListener(v ->
+                Permissions4M.syncRequestPermissions(MainActivity.this)
+        );
         // 同步申请
-        mOneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        mOneButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.BODY_SENSORS,
 //                        SENSORS_CODE);
-                Permissions4M.syncRequestPermissions(MainActivity.this);
-            }
-        });
+//                Permissions4M.syncRequestPermissions(MainActivity.this);
+//            }
+//        });
     }
 
     @Override
