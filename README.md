@@ -5,8 +5,9 @@
 
 * 注意事项
 	* [必加的二次权限申请回调](#must_add)
-	* [单个权限申请格式](#notice_single)
-	* [多个权限申请格式](#multiple_single)
+	* [同步请求多个权限申请](#sync_request)
+	* [单个权限申请](#notice_single)
+	* [多个权限申请](#multiple_single)
 
 * Activity
     * [单个权限申请](#single_activity)
@@ -33,7 +34,40 @@
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-<h3 id="notice_single">单个权限申请格式</h3>
+<h3 id="sync_request">同步请求多个权限申请</h3>
+
+同步请求多个权限时，回调函数请使用[多个权限申请](#multiple_activity)的格式，即应将回调结果放至同一函数中，以 `code` 区别：
+
+	// 权限申请成功回调
+	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
+    public void smsAndAudioGranted(int code) {
+        switch (code) {
+            case SMS_CODE:
+                ToastUtil.show("短信权限申请成功 in fragment");
+                break;
+            case AUDIO_CODE:
+                ToastUtil.show("录音权限申请成功 in fragment");
+                break;
+            default:
+                break;
+        }
+    }
+
+而不可如下：
+
+	// 权限申请成功回调
+	@PermissionsGranted(SMS_CODE)
+    public void smsGranted() {
+        ToastUtil.show("短信权限申请成功 in fragment");
+    }
+
+	// 权限申请成功回调
+	@PermissionsGranted(AUDIO_CODE)
+    public void audioGranted() {
+        ToastUtil.show("录音权限申请成功 in fragment");
+    }
+
+<h3 id="notice_single">单个权限申请</h3>
 
 针对**单个权限申请**，注解所修饰的方法是不含参数的，**应如下**：
 
@@ -50,7 +84,7 @@
         ToastUtil.show("读取联系人权限成功");
     }
 
-<h3 id="multiple_single">多个权限申请格式</h3>
+<h3 id="multiple_single">多个权限申请</h3>
 
 针对**多个权限申请**，注解所修饰的方法是含参数的，**应如下**：
 
