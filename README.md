@@ -3,7 +3,7 @@
 
 # 如何使用 #
 
-* [注意事项](#notice)
+* 注意事项
 	* [必加的二次权限申请回调](#must_add)
 	* [单个权限申请格式](#notice_single)
 	* [多个权限申请格式](#multiple_single)
@@ -37,7 +37,6 @@
 
 针对**单个权限申请**，注解所修饰的方法是不含参数的，**应如下**：
 
-	// 权限申请成功
 	@PermissionsGranted(CONTACT_CODE)
     public void contactGranted() {
         ToastUtil.show("读取联系人权限成功");
@@ -45,9 +44,8 @@
 
 而如下是**不可取**的：
 
-	// 权限申请成功
-	@PermissionsGranted(CONTACT_CODE)
 	// 注意方法体中含有形式参数
+	@PermissionsGranted(CONTACT_CODE)
     public void contactGranted(int code) {
         ToastUtil.show("读取联系人权限成功");
     }
@@ -56,7 +54,6 @@
 
 针对**多个权限申请**，注解所修饰的方法是含参数的，**应如下**：
 
-	// 权限申请成功
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
     public void storageAndCallGranted(int code) {
         switch (code) {
@@ -71,18 +68,9 @@
 
 而如下是**不可取**的：
 
-	// 权限申请成功
-	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
 	// 注意方法体中不含形式参数
+	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
     public void storageAndCallGranted() {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权成功");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权成功");
-                break;
-        }
     }
 
 ## Activity ##
