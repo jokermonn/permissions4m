@@ -7,9 +7,15 @@
 
 权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
 
-# 如何使用 #
+# 引入依赖 #
 
-1.使用 jar/aar 包，请先下载此[链接](https://github.com/jokermonn/Permissions4M/tree/master/jars)下三个包，放入 libs 目录中，在 app 的 `app.gradle` 中添加如下代码
+## Gradle 依赖 ##
+
+审核中...
+
+## 本地依赖 ##
+
+使用 jar/aar 包，请先下载此[链接](https://github.com/jokermonn/Permissions4M/tree/master/jars)下三个包，放入 libs 目录中，在 app 的 `app.gradle` 中添加如下代码
 
 	android {
 		// 无需改动
@@ -28,6 +34,7 @@
 		annotationProcessor files('libs/permissions4m-processor.jar')
 	}
 
+# 使用文档 #
 
 * 注意事项
 	* [必加的二次权限申请回调](#must_add)
