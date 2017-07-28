@@ -14,6 +14,7 @@
     * [多个权限申请](#multiple_activity)
     * [单个权限申请自定义](#single_custom_activity)
     * [多个权限申请自定义](#mutiple_custom_activity)
+    * [同步多个请求申请自定义](#sync_request_activity)
  
 * Fragment
     * [单个权限申请](#single_fragment)
@@ -362,6 +363,55 @@
                 break;
         }
     }
+
+<h3 id="sync_request_activity">同步多个请求申请自定义</h3>
+
+同[多个权限申请自定义](#mutiple_custom_activity)，参考代码如下：
+
+	@PermissionsCustomRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncCustomRationale(int code) {
+        switch (code) {
+            case LOCATION_CODE:
+                new AlertDialog.Builder(this)
+                        .setMessage("地理位置权限申请：\n我们需要您开启地理位置权限(in activity)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
+                                        String[]{Manifest
+                                        .permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
+                            }
+                        })
+                        .show();
+                break;
+            case SENSORS_CODE:
+                new AlertDialog.Builder(this)
+                        .setMessage("传感器权限申请：\n我们需要您开启传感器权限(in activity)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
+                                        String[]{Manifest
+                                        .permission.BODY_SENSORS}, SENSORS_CODE);
+                            }
+                        })
+                        .show();
+                break;
+            case CALENDAR_CODE:
+                new AlertDialog.Builder(this)
+                        .setMessage("读取日历权限申请：\n我们需要您开启读取日历权限(in activity)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
+                                        String[]{Manifest
+                                        .permission.READ_CALENDAR}, CALENDAR_CODE);
+                            }
+                        })
+                        .show();
+                break;
+        }
+	}
 
 ## Fragment ##
 

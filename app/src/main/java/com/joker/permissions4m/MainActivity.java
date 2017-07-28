@@ -122,15 +122,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //====================================================================
-    @PermissionsGranted({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void storageAndCallGranted(int code) {
+    @PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncGranted(int code) {
         switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权成功 in activity");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权成功 in activity");
-                break;
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权成功 in activity");
                 break;
@@ -145,15 +139,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @PermissionsDenied({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void storageAndCallDenied(int code) {
+    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncDenied(int code) {
         switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权失败 in activity");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权失败 in activity");
-                break;
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权失败 in activity");
                 break;
@@ -168,15 +156,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @PermissionsRationale({STORAGE_CODE, CALL_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void storageAndCallRationale(int code) {
+    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void syncRationale(int code) {
         switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("请开启设备存储权限授权 in activity");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("请开启通话权限授权 in activity");
-                break;
             case LOCATION_CODE:
                 ToastUtil.show("请开启地理位置权限 in activity");
                 break;
@@ -185,6 +167,49 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case CALENDAR_CODE:
                 ToastUtil.show("请开启读取日历权限 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+    //====================================================================
+    @PermissionsGranted({STORAGE_CODE, CALL_CODE})
+    public void storageAndCallGranted(int code) {
+        switch (code) {
+            case STORAGE_CODE:
+                ToastUtil.show("设备存储权限授权成功 in activity");
+                break;
+            case CALL_CODE:
+                ToastUtil.show("通话权限授权成功 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @PermissionsDenied({STORAGE_CODE, CALL_CODE})
+    public void storageAndCallDenied(int code) {
+        switch (code) {
+            case STORAGE_CODE:
+                ToastUtil.show("设备存储权限授权失败 in activity");
+                break;
+            case CALL_CODE:
+                ToastUtil.show("通话权限授权失败 in activity");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @PermissionsRationale({STORAGE_CODE, CALL_CODE})
+    public void storageAndCallRationale(int code) {
+        switch (code) {
+            case STORAGE_CODE:
+                ToastUtil.show("请开启设备存储权限授权 in activity");
+                break;
+            case CALL_CODE:
+                ToastUtil.show("请开启通话权限授权 in activity");
                 break;
             default:
                 break;
