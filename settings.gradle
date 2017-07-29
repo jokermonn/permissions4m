@@ -1,1 +1,1 @@
-include ':app', ':permissions4m-api'
+include ':app', ':permissions4m-api', ':permissions4m-annotation', ':permissions4m-processor'
