@@ -1,4 +1,4 @@
-package com.joker.permissions4m;
+package com.joker.sample;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -15,11 +15,12 @@ import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
-import com.joker.permissions4m.other.ToastUtil;
+import com.joker.permissions4m.R;
+import com.joker.sample.other.ToastUtil;
 
-import static com.joker.permissions4m.MainActivity.CALENDAR_CODE;
-import static com.joker.permissions4m.MainActivity.LOCATION_CODE;
-import static com.joker.permissions4m.MainActivity.SENSORS_CODE;
+import static com.joker.sample.MainActivity.CALENDAR_CODE;
+import static com.joker.sample.MainActivity.LOCATION_CODE;
+import static com.joker.sample.MainActivity.SENSORS_CODE;
 
 @PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
         .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},

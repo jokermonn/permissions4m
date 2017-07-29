@@ -33,6 +33,10 @@
 
 ## 注意事项 ##
 
+- **请不要忘了在 `AndroidManifest.xml` 中添加权限声明！！！**
+- **请不要忘了在 `AndroidManifest.xml` 中添加权限声明！！！**
+- **请不要忘了在 `AndroidManifest.xml` 中添加权限声明！！！**
+
 <h3 id="must_add">必加的二次权限申请回调</h3>
 
 在 Activity 或 Fragment 中，需要手动添加 `onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)` 方法以支持权限申请回调，代码如下即可：

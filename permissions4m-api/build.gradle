@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 25
@@ -22,6 +22,7 @@ android {
 }
 
 dependencies {
+    compile project(':permissions4m-annotation')
     compile 'com.android.support:appcompat-v7:25.3.1'
 }
 
@@ -52,16 +53,16 @@ dependencies {
 //    }
 //}
 
-//publish {
-//    artifactId = 'permissions4m-api'
-//    userOrg = rootProject.userOrg
-//    groupId = rootProject.groupId
-//    uploadName = rootProject.uploadName
-//    publishVersion = rootProject.publishVersion
-//    desc = rootProject.description
-//    website = rootProject.website
-//    licences = rootProject.licences
-//}
+publish {
+    artifactId = 'permissions4m-api'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
+}
 
 //task copyJar(type: Copy) {
 //    from('build/libs/permissions4m-api.jar')

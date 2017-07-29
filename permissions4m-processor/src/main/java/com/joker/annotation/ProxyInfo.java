@@ -1,4 +1,4 @@
-package com.joker.processor;
+package com.joker.annotation;
 
 import java.util.HashMap;
 import java.util.Map;

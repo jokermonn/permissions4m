@@ -1,11 +1,6 @@
-package com.joker.processor;
+package com.joker.annotation;
 
 import com.google.auto.service.AutoService;
-import com.joker.annotation.PermissionsCustomRationale;
-import com.joker.annotation.PermissionsDenied;
-import com.joker.annotation.PermissionsGranted;
-import com.joker.annotation.PermissionsRationale;
-import com.joker.annotation.PermissionsRequestSync;
 
 import java.io.IOException;
 import java.io.Writer;

@@ -1,4 +1,4 @@
-package com.joker.permissions4m.other;
+package com.joker.sample.other;
 
 import android.widget.Toast;
 

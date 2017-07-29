@@ -1,4 +1,4 @@
-package com.joker.permissions4m;
+package com.joker.sample;
 
 
 import android.Manifest;
@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,12 @@ import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
-import com.joker.permissions4m.other.ToastUtil;
+import com.joker.permissions4m.R;
+import com.joker.sample.other.ToastUtil;
 
-import static com.joker.permissions4m.MainFragment.CALENDAR_CODE;
-import static com.joker.permissions4m.MainFragment.LOCATION_CODE;
-import static com.joker.permissions4m.MainFragment.SENSORS_CODE;
+import static com.joker.sample.MainFragment.CALENDAR_CODE;
+import static com.joker.sample.MainFragment.LOCATION_CODE;
+import static com.joker.sample.MainFragment.SENSORS_CODE;
 
 /**
  * A simple {@link Fragment} subclass.

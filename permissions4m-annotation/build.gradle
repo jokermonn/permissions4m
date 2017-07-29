@@ -1,19 +1,19 @@
 apply plugin: 'java'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 
 dependencies {
 }
 
-//publish {
-//    artifactId = 'permissions4m-annotation'
-//    userOrg = rootProject.userOrg
-//    groupId = rootProject.groupId
-//    uploadName = rootProject.uploadName
-//    publishVersion = rootProject.publishVersion
-//    desc = rootProject.description
-//    website = rootProject.website
-//    licences = rootProject.licences
-//}
+publish {
+    artifactId = 'permissions4m-annotation'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
+}
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
