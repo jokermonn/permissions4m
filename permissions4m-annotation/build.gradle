@@ -1,18 +1,9 @@
 apply plugin: 'java'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.jokermonn'
 
 dependencies {
-}
-
-publish {
-    artifactId = 'permissions4m-annotation'
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    uploadName = rootProject.uploadName
-    publishVersion = rootProject.publishVersion
-    desc = rootProject.description
-    website = rootProject.website
-    licences = rootProject.licences
 }
 
 sourceCompatibility = "1.7"

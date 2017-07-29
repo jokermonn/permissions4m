@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.jokermonn'
 
 android {
     compileSdkVersion 25
@@ -25,47 +27,3 @@ dependencies {
     compile project(':permissions4m-annotation')
     compile 'com.android.support:appcompat-v7:25.3.1'
 }
-
-// Jar
-//task androidJar(type: Jar) {
-//    dependsOn assemble
-//    group 'Build'
-//    description 'api'
-//    from zipTree(
-//            'build/intermediates/bundles/debug/classes.jar')
-//    from zipTree(
-//            '../permissions4m-processor/build/libs/permissions4m-annotation.jar')
-//    from zipTree(
-//            '../permissions4m-annotation/build/libs/permissions4m-processor.jar')
-//
-//}
-
-// javadoc tasks
-//android.libraryVariants.all { variant ->
-//    task("javadoc${variant.name.capitalize()}", type: Javadoc) {
-//        description "Generates Javadoc for $variant.name."
-//        group 'Docs'
-//        source = variant.javaCompile.source
-//        source "../permission-annotation/src/main/java"
-//
-//        exclude '**/BuildConfig.java'
-//        exclude '**/R.java'
-//    }
-//}
-
-publish {
-    artifactId = 'permissions4m-api'
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    uploadName = rootProject.uploadName
-    publishVersion = rootProject.publishVersion
-    desc = rootProject.description
-    website = rootProject.website
-    licences = rootProject.licences
-}
-
-//task copyJar(type: Copy) {
-//    from('build/libs/permissions4m-api.jar')
-//    into('../output/')
-//    rename ('permissions4m-api.jar', 'permissions4m.jar')
-//}
