@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
-//group='com.github.jokermonn'
+group='com.github.jokermonn'
 
 android {
     compileSdkVersion 25
@@ -24,6 +24,5 @@ android {
 }
 
 dependencies {
-    compile project(':permissions4m-annotation')
     compile 'com.android.support:appcompat-v7:25.3.1'
 }
