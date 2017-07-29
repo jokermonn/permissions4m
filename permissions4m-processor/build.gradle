@@ -1,10 +1,10 @@
 apply plugin: 'java'
-//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.github.dcendents.android-maven'
 
-//group='com.github.jokermonn'
+group='com.github.jokermonn'
 
 dependencies {
-    compile project(':permissions4m-annotation')
+    compile 'com.github.jokermonn:Permissions4M:1.0.0-annotation'
     compile 'com.google.auto.service:auto-service:1.0-rc3'
 }
 
