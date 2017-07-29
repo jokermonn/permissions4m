@@ -262,7 +262,7 @@
 						CALENDAR_CODE})
 	public class MainActivity extends AppcompatActivity
 
-注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
+注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，数组顺序无关，数组内部顺序有关请求的顺序
 
 2.使用如下代码开始同步申请权限：
 
@@ -651,7 +651,7 @@
 						CALENDAR_CODE})
 	public class MainFragment extends Fragment
 
-注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，顺序无关
+注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，数组顺序无关，数组内部顺序有关请求的顺序
 
 2.使用如下代码开始同步申请权限：
 
