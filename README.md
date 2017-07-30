@@ -1,3 +1,12 @@
+[![apk](https://img.shields.io/badge/apk-download-orange.svg)](https://github.com/jokermonn/permissions4m/blob/master/jars/app-debug.apk)
+
+[![platform](https://img.shields.io/badge/platfrom-android-green.svg)]()
+[![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
+
+[![lib](https://img.shields.io/badge/lib-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
+[![processor](https://img.shields.io/badge/processor-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-processor)
+[![annotation](https://img.shields.io/badge/annotation-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-annotation)
+
 # Permissions4M #
 意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。另较原有项目有以下升级：
 
