@@ -11,7 +11,25 @@
 
 ## Gradle 依赖 ##
 
-审核中...
+`project` 中的 `build.gradle`：
+
+	buildscript {
+    	// ...
+	}
+
+	allprojects {
+    	repositories {
+			// 请添加如下一行
+    	    maven { url 'https://jitpack.io' }
+    	}
+	}
+
+`app` 中的 `build.gradle`：
+
+	dependencies {
+		compile 'com.github.jokermonn:Permissions4M:1.0.0-lib'
+    	annotationProcessor 'com.github.jokermonn:Permissions4M:1.0.0-processor'
+	}
 
 ## 本地依赖 ##
 
