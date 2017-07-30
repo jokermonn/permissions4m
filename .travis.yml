@@ -14,5 +14,8 @@ jdk:
 notifications:
   email: false
 
+before_script:
+  - chmod +x gradlew
+
 script:
-  - ./gradlew assemble check
+  ./gradlew build
