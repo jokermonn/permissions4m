@@ -15,7 +15,7 @@ notifications:
   email: false
 
 install:
-  - travis_wait mvn install
+  - travis_wait 30 mvn install
 
 before_script:
   - chmod +x gradlew
