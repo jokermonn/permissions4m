@@ -27,8 +27,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-		compile 'com.github.jokermonn:Permissions4M:1.0.0-lib'
-    	annotationProcessor 'com.github.jokermonn:Permissions4M:1.0.0-processor'
+      compile 'com.github.jokermonn:permissions4m:1.0.0-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.0-processor'
 	}
 
 ## 本地依赖 ##
