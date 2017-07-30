@@ -20,4 +20,4 @@ before_script:
   - $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
 
 script:
-  ./gradlew build
+  - ./gradlew assemble check
