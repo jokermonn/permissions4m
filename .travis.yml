@@ -16,6 +16,8 @@ notifications:
 
 before_script:
   - chmod +x gradlew
+  - $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2"
+  - $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
 
 script:
   ./gradlew build
