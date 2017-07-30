@@ -1,4 +1,4 @@
-[![apk](https://img.shields.io/badge/apk-download-orange.svg)](https://github.com/jokermonn/permissions4m/blob/master/jars/app-debug.apk)
+[![apk](https://img.shields.io/badge/apk-download-orange.svg)](https://github.com/jokermonn/permissions4m/blob/master/jars/app-debug.apk?raw=true)
 
 [![platform](https://img.shields.io/badge/platfrom-android-green.svg)]()
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
