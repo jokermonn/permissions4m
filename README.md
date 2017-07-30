@@ -14,14 +14,14 @@
 `project` 中的 `build.gradle`：
 
 	buildscript {
-    	// ...
+      // ...
 	}
 
 	allprojects {
-    	repositories {
-			// 请添加如下一行
-    	    maven { url 'https://jitpack.io' }
-    	}
+      repositories {
+        // 请添加如下一行
+        maven { url 'https://jitpack.io' }
+      }
 	}
 
 `app` 中的 `build.gradle`：
