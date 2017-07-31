@@ -48,7 +48,7 @@
 使用 jar/aar 包，请先下载此[链接](https://github.com/jokermonn/Permissions4M/tree/master/jars)下三个包，放入 libs 目录中，在 app 的 `app.gradle` 中添加如下代码
 
 	android {
-		// 无需改动
+		// ...
 	}
 
 	repositories {

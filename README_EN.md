@@ -47,7 +47,7 @@ Official doc for permission requests ：[Runtime Permissions](https://developer.
 jar/aar is being used here, you can download the following jars[link](https://github.com/jokermonn/Permissions4M/tree/master/jars), then put them into your lib, and add the following codes in `app.gradle`:
 
 	android {
-		// keep as former one
+		// ...
 	}
 
 	repositories {
