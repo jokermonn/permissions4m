@@ -21,6 +21,7 @@ import static com.joker.permissions4m.MainActivity.CALENDAR_CODE;
 import static com.joker.permissions4m.MainActivity.LOCATION_CODE;
 import static com.joker.permissions4m.MainActivity.SENSORS_CODE;
 
+// TODO: 更改单个权限为权限数组
 @PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
         .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
         value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})

@@ -1,7 +1,7 @@
 [![apk](https://img.shields.io/badge/apk-download-orange.svg)](https://github.com/jokermonn/permissions4m/blob/master/jars/app-debug.apk?raw=true)
 [![GitHub stars](https://img.shields.io/github/stars/jokermonn/permissions4m.svg?style=social)](https://img.shields.io/github/stars/jokermonn/permissions4m.svg?style=social)
 
-[![platform](https://img.shields.io/badgea/platfrom-android-green.svg)](https://github.com/jokermonn/permissions4m)
+[![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
 [![lib](https://img.shields.io/badge/lib-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
