@@ -198,19 +198,19 @@ follows are being forbidden:
 	// granted
 	@PermissionsGranted(CONTACT_CODE)
     public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功");
+        ToastUtil.show("CONTACT granted");
     }
 
 	// denied
     @PermissionsDenied(CONTACT_CODE)
     public void contactDenied() {
-        ToastUtil.show("读取联系人权限失败");
+        ToastUtil.show("CONTACT denied");
     }
 
 	// show rationale
     @PermissionsRationale(CONTACT_CODE)
     public void contactRationale() {
-        ToastUtil.show("请开启读取联系人权限");
+        ToastUtil.show("please open CONTACT permission");
     }
 
 <h3 id="multiple_activity">multi permissions requests</h3>
