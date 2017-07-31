@@ -11,14 +11,14 @@
 # [中文](https://github.com/jokermonn/permissions4m/blob/master/README.md)|ENGLISH #
 
 # Permissions4M #
-Permissions for M,which is based on the secondary development of hongyangAndroid [MPermissions](https://github.com/hongyangAndroid/MPermissions),and applies Compile-time annotations,so it is more effective than Run-time annotationss.Conpared to the former version,this one improves as follows:
+Permissions for M,which is based on the secondary development of hongyangAndroid [MPermissions](https://github.com/hongyangAndroid/MPermissions), and applies Compile-time annotations, so it is more effective than Run-time annotationss. Compared to the former version, this one improves as follows:
 
 - java8 supported
 - multi permission requests, synchronously  
 - multi callbacks supported, clean code
 Official doc for permission requests ：[Runtime Permissions](https://developer.android.google.cn/training/permissions/requesting.html)
 
-#Dependencies#
+# Dependencies #
 
 ## Jitpack Dependencies ##
 
@@ -44,7 +44,7 @@ Official doc for permission requests ：[Runtime Permissions](https://developer.
 
 ## jar/aar Dependencies ##
 
-jar/aar is being used here,you can download the following jars[link](https://github.com/jokermonn/Permissions4M/tree/master/jars), then put them into your lib，and add the following codes in `app.gradle`:
+jar/aar is being used here, you can download the following jars[link](https://github.com/jokermonn/Permissions4M/tree/master/jars), then put them into your lib, and add the following codes in `app.gradle`:
 
 	android {
 		// keep as former one
@@ -102,7 +102,7 @@ jar/aar is being used here,you can download the following jars[link](https://git
 
 <h3 id="sync_request">tips for sync multi permission requests</h3>
 
-When you are requesting multi sync custom permissions ,please use this form of callback function [multi permission requests](#multiple_single), which requires that we should put the result into the same function, show by `code` :
+When you are requesting multi sync custom permissions, please use this form of callback function [multi permission requests](#multiple_single), which requires that we should put the result into the same function, show by `code` :
 
 	// successful permission request callback
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
@@ -135,7 +135,7 @@ follows are being forbidden:
 
 <h3 id="notice_single">tips for single permission request</h3>
 
-**single permission request**，no params exists in functions decorated by annotations,**just as follows**：
+**single permission request**, no params exists in functions decorated by annotations, **just as follows**：
 
 	@PermissionsGranted(CONTACT_CODE)
     public void contactGranted() {
@@ -152,7 +152,7 @@ follows are being forbidden:
 
 <h3 id="multiple_single">tips for multi permissions requests</h3>
 
-**multi permission requests**,functions decorated by annotations contain params，**just as follows**：
+**multi permission requests**, functions decorated by annotations contain params, **just as follows**：
 
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
     public void storageAndCallGranted(int code) {
@@ -287,13 +287,13 @@ follows are being forbidden:
 						CALENDAR_CODE})
 	public class MainActivity extends AppcompatActivity
 
-annotations require two arraies;permission array requires the sync request authority;value array requires its corresponding result code;the order of elements in the array is linked with the order of request.
+annotations require two arraies; permission array requires the sync request authority; value array requires its corresponding result code;the order of elements in the array is linked with the order of request.
 
 2.let's begin sync permission request wit the following code:
 
 	Permissions4M.syncRequestPermissions(MainFragment.this);
 
-the request order is refered to the order of your authority,e.g: `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
+the request order is refered to the order of your authority, e.g: `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
 
 3.the following format is being used in the request callback function.（**split callbacks unsupported**）：
 
@@ -492,7 +492,7 @@ the request order is refered to the order of your authority,e.g: `Manifest.permi
 
 <h3 id="sync_request_activity">multi sync custom permission requests</h3>
 
-reference:[multi custom permissions requests](#mutiple_custom_activity)，codes are as follows：
+reference:[multi custom permissions requests](#mutiple_custom_activity), codes are as follows：
 
 	// sync request
         mOneButton.setOnClickListener(new View.OnClickListener() {
@@ -656,12 +656,12 @@ reference:[multi custom permissions requests](#mutiple_custom_activity)，codes 
 						CALENDAR_CODE})
 	public class MainFragment extends Fragment
 
- annotations require two arraies;permission array requires the sync request authority;value array requires its corresponding result code;the order of elements in the array is linked with the order of request.
+ annotations require two arraies; permission array requires the sync request authority; value array requires its corresponding result code; the order of elements in the array is linked with the order of request.
 
 2.let's begin sync permission request using the following code:
 
 	Permissions4M.syncRequestPermissions(MainFragment.this);
-the request order is refered to the order of your authority,e.g:  `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
+the request order is refered to the order of your authority, e.g:  `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
 
 3.the following format is being used in the request callback function.（**callback split unsupported**）：
 
