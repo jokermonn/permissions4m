@@ -11,16 +11,25 @@
 # [中文](https://github.com/jokermonn/permissions4m/blob/master/README.md)|ENGLISH #
 
 # Permissions4M #
-Permissions for M,which is based on the secondary development of hongyangAndroid [MPermissions](https://github.com/hongyangAndroid/MPermissions), and applies Compile-time annotations, so it is more effective than Run-time annotationss. Compared to the former version, this one improves as follows:
+Permissions for M, which is based on the secondary development of hongyangAndroid [MPermissions](https://github.com/hongyangAndroid/MPermissions), and applies Compiling-time annotations, so it is more effective than Run-time annotations. Compared to the former version, this one improves as follows:
 
-- java8 supported
+- java 8 supported
 - multi permission requests, synchronously  
 - multi callbacks supported, clean code
-Official doc for permission requests ：[Runtime Permissions](https://developer.android.google.cn/training/permissions/requesting.html)
+Official doc for permission requests ：[Requesting Permissions at Run Time](https://developer.android.com/training/permissions/requesting.html)
+
+# Feature #
+- one line code, multi permission requests, synchronously：
+
+![](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
+
+- custom dialog when request permission second time：
+
+![](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
 
 # Dependencies #
 
-## Jitpack Dependencies ##
+## jitpack Dependencies ##
 
 `build.gradle` in `project`：
 
@@ -44,7 +53,7 @@ Official doc for permission requests ：[Runtime Permissions](https://developer.
 
 ## jar/aar Dependencies ##
 
-jar/aar is being used here, you can download the following jars[link](https://github.com/jokermonn/Permissions4M/tree/master/jars), then put them into your lib, and add the following codes in `app.gradle`:
+jar/aar is being used here, you can download the following jars[link](https://github.com/jokermonn/Permissions4M/tree/master/jars), then put them into your `lib` folder, and add the following codes in `app.gradle`:
 
 	android {
 		// ...
@@ -67,9 +76,9 @@ jar/aar is being used here, you can download the following jars[link](https://gi
 
 * tips
 	* [multi permissions request callbacks](#must_add)
-	* [tips for sync multi permission requests](#sync_request)
+	* [tips for sync multi permissions requests](#sync_request)
 	* [tips for single permission request](#notice_single)
-	* [tips for multi permission requests](#multiple_single)
+	* [tips for multi permissions requests func](#multiple_single)
 
 * Activity
     * [single permission request](#single_activity)
@@ -150,7 +159,7 @@ follows are being forbidden:
         ToastUtil.show("CONTACTS granted");
     }
 
-<h3 id="multiple_single">tips for multi permissions requests</h3>
+<h3 id="multiple_single">tips for multi permissions requests func</h3>
 
 **multi permission requests**, functions decorated by annotations contain params, **just as follows**：
 
@@ -172,6 +181,8 @@ follows are being forbidden:
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
     public void storageAndCallGranted() {
     }
+
+other way, u could use the func of [tips for single permission request](#notice_single) for every permission.
 
 ## Activity ##
 

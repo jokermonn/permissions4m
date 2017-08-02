@@ -19,6 +19,19 @@
 
 权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
 
+# 特点 #
+- 一行代码同步申请多个权限：
+
+如果访问缓慢，建议直点链接：[http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
+
+![](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
+
+- 二次申请时自定义 dialog：
+
+如果访问缓慢，建议直点链接：[http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
+
+![](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
+
 # 引入依赖 #
 
 ## Gradle 依赖 ##
@@ -70,7 +83,7 @@
 	* [必加的二次权限申请回调](#must_add)
 	* [同步请求多个权限申请注意事项](#sync_request)
 	* [单个权限申请注意事项](#notice_single)
-	* [多个权限申请注意事项](#multiple_single)
+	* [多个权限申请函数写法注意事项](#multiple_single)
 
 * Activity
     * [单个权限申请](#single_activity)
@@ -151,9 +164,9 @@
         ToastUtil.show("读取联系人权限成功");
     }
 
-<h3 id="multiple_single">多个权限申请注意事项</h3>
+<h3 id="multiple_single">多个权限申请函数写法注意事项</h3>
 
-针对**多个权限申请**，注解所修饰的方法是含参数的，**应如下**：
+针对**多个权限申请**，可以选择使用多个[单个权限申请注意事项](#notice_single)中所提到的方法，也可以选择更简洁的方法，统一回调接口，注解所修饰的方法是含参数的，**应如下**：
 
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
     public void storageAndCallGranted(int code) {
