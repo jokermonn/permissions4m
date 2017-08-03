@@ -19,29 +19,26 @@ public class Permissions4M {
 
     // sync request ==============================================
     public static void syncRequestPermissions(Activity activity) {
-        initProxy(activity);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+        initProxy(activity);
         syncRequest(activity);
     }
 
     public static void syncRequestPermissions(android.app.Fragment fragment) {
-        initProxy(fragment);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+        initProxy(fragment);
         syncRequest(fragment);
     }
 
     public static void syncRequestPermissions(android.support.v4.app.Fragment fragment) {
-        initProxy(fragment);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+        initProxy(fragment);
         syncRequest(fragment);
     }
 
@@ -57,31 +54,28 @@ public class Permissions4M {
 
     // normal request ===========================================================================
     public static void requestPermission(Activity activity, String permission, int requestCode) {
-        initProxy(activity);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+        initProxy(activity);
         request(activity, permission, requestCode);
     }
 
     public static void requestPermission(android.app.Fragment fragment, String permission, int
             requestCode) {
-        initProxy(fragment);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+        initProxy(fragment);
         request(fragment, permission, requestCode);
     }
 
     public static void requestPermission(android.support.v4.app.Fragment fragment, String permission, int
             requestCode) {
-        initProxy(fragment);
-
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+        initProxy(fragment);
         request(fragment, permission, requestCode);
     }
 
