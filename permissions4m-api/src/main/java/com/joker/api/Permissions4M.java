@@ -29,7 +29,7 @@ public class Permissions4M {
     public static void syncRequestPermissions(android.app.Fragment fragment) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
-        }
+        } 
         initProxy(fragment);
         syncRequest(fragment);
     }
