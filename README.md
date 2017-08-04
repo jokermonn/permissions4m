@@ -22,13 +22,13 @@
 # 特点 #
 - 一行代码同步申请多个权限：
 
-如果访问缓慢，建议直点链接：[http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
+如果访问缓慢，建议直点链接：[图片](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
 
 ![](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
 
 - 二次申请时自定义 dialog：
 
-如果访问缓慢，建议直点链接：[http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
+如果访问缓慢，建议直点链接：[图片2](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
 
 ![](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
 
@@ -100,6 +100,10 @@
     * [单个权限申请自定义](#single_custom_fragment)
     * [多个权限申请自定义](#mutiple_custom_fragment)
     * [同步多个权限申请自定义](#sync_request_fragment)
+
+# 版本迭代 #
+
+截止于第37次 commits，v1.0.0 发布，[37 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
 
 ## 注意事项 ##
 
