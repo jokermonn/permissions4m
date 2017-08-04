@@ -16,6 +16,7 @@ import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
+import com.joker.api.util.PermissionsSettingContext;
 import com.joker.permissions4m.other.ToastUtil;
 
 import static com.joker.permissions4m.MainActivity.CALENDAR_CODE;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mAudioButton;
     private Button mOneButton;
     private Button mSingleButton;
+    private Button mManagerButton;
+    private Button mPermissionPageButton;
+    private Button mAndroidSettingPageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,11 @@ public class MainActivity extends AppCompatActivity {
         mAudioButton = (Button) findViewById(R.id.btn_audio);
         mSmsButton = (Button) findViewById(R.id.btn_sms);
         mOneButton = (Button) findViewById(R.id.btn_one);
+        mSingleButton = (Button) findViewById(R.id.btn_single);
+        mManagerButton = (Button) findViewById(R.id.btn_manager);
+        mPermissionPageButton = (Button) findViewById(R.id.btn_permission_page);
+        mAndroidSettingPageButton = (Button) findViewById(R.id.android_setting_page);
+
         mSingleButton = (Button) findViewById(R.id.btn_single);
         // 多个申请
         mCallButton.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +106,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SingleActivity.class));
+            }
+        });
+
+        mManagerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(PermissionsSettingContext.getIntent(MainActivity.this, false));
+            }
+        });
+
+        mPermissionPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(PermissionsSettingContext.getIntent(MainActivity.this, true));
+            }
+        });
+
+        mAndroidSettingPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(PermissionsSettingContext.getIntent());
             }
         });
     }
