@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +36,10 @@ public class MainFragment extends Fragment {
     public static final int LOCATION_CODE = 9;
     private static final int STORAGE_CODE = 1;
     private static final int CALL_CODE = 2;
-    private static final int CONTACT_CODE = 3;
-    private static final int CAMERA_CODE = 4;
     private static final int SMS_CODE = 5;
     private static final int AUDIO_CODE = 6;
     private Button mCallButton;
-    private Button mContactsButton;
     private Button mStorageButton;
-    private Button mCameraButton;
     private Button mSmsButton;
     private Button mAudioButton;
     private Button mOneButton;
@@ -58,21 +53,10 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         mCallButton = (Button) view.findViewById(R.id.btn_call);
-        mContactsButton = (Button) view.findViewById(R.id.btn_contacts);
         mStorageButton = (Button) view.findViewById(R.id.btn_storage);
-        mCameraButton = (Button) view.findViewById(R.id.btn_camera);
         mSmsButton = (Button) view.findViewById(R.id.btn_sms);
         mAudioButton = (Button) view.findViewById(R.id.btn_audio);
         mOneButton = (Button) view.findViewById(R.id.btn_one);
-
-        // 单个申请
-        mContactsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.requestPermission(MainFragment.this, Manifest.permission.READ_CONTACTS,
-                        CONTACT_CODE);
-            }
-        });
 
         // 多个申请
         mCallButton.setOnClickListener(new View.OnClickListener() {
@@ -88,14 +72,6 @@ public class MainFragment extends Fragment {
                 Permissions4M.requestPermission(MainFragment.this, Manifest.permission
                                 .WRITE_EXTERNAL_STORAGE,
                         STORAGE_CODE);
-            }
-        });
-
-        // 自定义单个申请
-        mCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.requestPermission(MainFragment.this, Manifest.permission.CAMERA, CAMERA_CODE);
             }
         });
 
@@ -202,54 +178,8 @@ public class MainFragment extends Fragment {
         }
     }
 
-    //====================================================================
-    @PermissionsGranted(CONTACT_CODE)
-    public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功 in fragment");
-    }
 
-    @PermissionsDenied(CONTACT_CODE)
-    public void contactDenied() {
-        ToastUtil.show("读取联系人权限失败 in fragment");
-    }
 
-    @PermissionsRationale(CONTACT_CODE)
-    public void contactRationale() {
-        ToastUtil.show("请开启读取联系人权限 in fragment");
-    }
-
-    //====================================================================
-    @PermissionsGranted(CAMERA_CODE)
-    public void cameraGranted() {
-        ToastUtil.show("相机权限授权成功 in fragment");
-    }
-
-    @PermissionsDenied(CAMERA_CODE)
-    public void cameraDenied() {
-        ToastUtil.show("相机权限授权失败 in fragment");
-    }
-
-    @PermissionsCustomRationale(CAMERA_CODE)
-    public void cameraCustomRationale() {
-        new AlertDialog.Builder(getActivity())
-                .setMessage("相机权限申请：\n我们需要您开启相机信息权限(in fragment)")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 请自行处理申请权限，两种方法等价
-                        // 方法1，使用框架已封装的方法
-                        Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
-                                String[]{Manifest
-                                .permission.CAMERA}, CAMERA_CODE);
-                        // 方法2，使用自身方法
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                            MainFragment.this.requestPermissions(new String[]{Manifest
-//                                    .permission.CAMERA}, CAMERA_CODE);
-//                        }
-                    }
-                })
-                .show();
-    }
 
     //====================================================================
     @PermissionsGranted({SMS_CODE, AUDIO_CODE})

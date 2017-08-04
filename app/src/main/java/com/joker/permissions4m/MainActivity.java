@@ -2,6 +2,7 @@ package com.joker.permissions4m;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -31,39 +32,25 @@ public class MainActivity extends AppCompatActivity {
     public static final int LOCATION_CODE = 9;
     private static final int STORAGE_CODE = 1;
     private static final int CALL_CODE = 2;
-    private static final int CONTACT_CODE = 3;
-    private static final int CAMERA_CODE = 4;
     private static final int SMS_CODE = 5;
     private static final int AUDIO_CODE = 6;
     private Button mCallButton;
     private Button mStorageButton;
-    private Button mContactsButton;
-    private Button mCameraButton;
     private Button mSmsButton;
     private Button mAudioButton;
     private Button mOneButton;
+    private Button mSingleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mCallButton = (Button) findViewById(R.id.btn_call);
-        mContactsButton = (Button) findViewById(R.id.btn_contacts);
         mStorageButton = (Button) findViewById(R.id.btn_storage);
-        mCameraButton = (Button) findViewById(R.id.btn_camera);
-        mSmsButton = (Button) findViewById(R.id.btn_sms);
         mAudioButton = (Button) findViewById(R.id.btn_audio);
+        mSmsButton = (Button) findViewById(R.id.btn_sms);
         mOneButton = (Button) findViewById(R.id.btn_one);
-
-        // 单个申请
-        mContactsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.READ_CONTACTS,
-                        CONTACT_CODE);
-            }
-        });
-
+        mSingleButton = (Button) findViewById(R.id.btn_single);
         // 多个申请
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,14 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 Permissions4M.requestPermission(MainActivity.this, Manifest.permission
                                 .WRITE_EXTERNAL_STORAGE,
                         STORAGE_CODE);
-            }
-        });
-
-        // 自定义单个申请
-        mCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.CAMERA, CAMERA_CODE);
             }
         });
 
@@ -111,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
 //                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.BODY_SENSORS,
 //                        SENSORS_CODE);
                 Permissions4M.syncRequestPermissions(MainActivity.this);
+            }
+        });
+
+        mSingleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SingleActivity.class));
             }
         });
     }
@@ -215,53 +201,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 break;
         }
-    }
-
-    //====================================================================
-    @PermissionsGranted(CONTACT_CODE)
-    public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功 in activity");
-    }
-
-    @PermissionsDenied(CONTACT_CODE)
-    public void contactDenied() {
-        ToastUtil.show("读取联系人权限失败 in activity");
-    }
-
-    @PermissionsRationale(CONTACT_CODE)
-    public void contactRationale() {
-        ToastUtil.show("请开启读取联系人权限 in activity");
-    }
-
-    //====================================================================
-    @PermissionsGranted(CAMERA_CODE)
-    public void cameraGranted() {
-        ToastUtil.show("相机权限授权成功 in activity");
-    }
-
-    @PermissionsDenied(CAMERA_CODE)
-    public void cameraDenied() {
-        ToastUtil.show("相机权限授权失败 in activity");
-    }
-
-    @PermissionsCustomRationale(CAMERA_CODE)
-    public void cameraCustomRationale() {
-        new AlertDialog.Builder(this)
-                .setMessage("相机权限申请：\n我们需要您开启相机信息权限(in activity)")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 请自行处理申请权限，两者方法等价
-                        // 方法1.使用框架封装方法
-                        Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
-                                String[]{Manifest
-                                .permission.CAMERA}, CAMERA_CODE);
-                        // 方法2.使用自身方法
-//                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
-//                                .permission.CAMERA}, CAMERA_CODE);
-                    }
-                })
-                .show();
     }
 
     //====================================================================

@@ -25,9 +25,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.github.jokermonn:permissions4m:1.0.0-lib'
-    annotationProcessor 'com.github.jokermonn:permissions4m:1.0.0-processor'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.github.jokermonn:permissions4m:1.0.0-processor'
 }
