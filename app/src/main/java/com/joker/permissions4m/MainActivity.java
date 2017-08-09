@@ -15,8 +15,14 @@ import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
+import com.joker.annotation.groupPermissions.CALENDARGroup;
+import com.joker.annotation.groupPermissions.LOCATIONGroup;
+import com.joker.annotation.groupPermissions.PermissionsGroupRequestSync;
+import com.joker.annotation.groupPermissions.SENSORSGroup;
 import com.joker.api.Permissions4M;
-import com.joker.api.util.PermissionsSettingContext;
+import com.joker.api.stream.SupportPermissions4M;
+import com.joker.api.stream.wrapper.Wrapper;
+import com.joker.api.support.PermissionsPageManager;
 import com.joker.permissions4m.other.ToastUtil;
 
 import static com.joker.permissions4m.MainActivity.CALENDAR_CODE;
@@ -27,6 +33,8 @@ import static com.joker.permissions4m.MainActivity.SENSORS_CODE;
 @PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
         .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
         value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
+@PermissionsGroupRequestSync(permissions = {SENSORSGroup.class, LOCATIONGroup.class, CALENDARGroup
+        .class}, value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
 public class MainActivity extends AppCompatActivity {
     public static final int CALENDAR_CODE = 7;
     public static final int SENSORS_CODE = 8;
@@ -64,16 +72,15 @@ public class MainActivity extends AppCompatActivity {
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.CALL_PHONE,
-                        CALL_CODE);
+                Permissions4M.requestPermission(MainActivity.this, Manifest.permission
+                        .CALL_PHONE, CALL_CODE);
             }
         });
         mStorageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(MainActivity.this, Manifest.permission
-                                .WRITE_EXTERNAL_STORAGE,
-                        STORAGE_CODE);
+                Permissions4M.requestPermission(MainActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE, STORAGE_CODE);
             }
         });
 
@@ -87,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
         mAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO,
-                        AUDIO_CODE);
+                Permissions4M.requestPermission(MainActivity.this, Manifest.permission
+                        .RECORD_AUDIO, AUDIO_CODE);
             }
         });
 
@@ -112,21 +119,56 @@ public class MainActivity extends AppCompatActivity {
         mManagerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PermissionsSettingContext.getIntent(MainActivity.this, false));
+                startActivity(PermissionsPageManager.getIntent(MainActivity.this));
             }
         });
 
         mPermissionPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PermissionsSettingContext.getIntent(MainActivity.this, true));
+                startActivity(PermissionsPageManager.getIntent(MainActivity.this));
             }
         });
 
         mAndroidSettingPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PermissionsSettingContext.getIntent());
+                SupportPermissions4M.get(MainActivity.this)
+                        .requestPermission(Manifest.permission.READ_CONTACTS)
+                        .requestCode(100)
+                        .requestForce(true)
+                        .requestCallback(new Wrapper.PermissionRequestListener() {
+                            @Override
+                            public void permissionGranted() {
+                                ToastUtil.show("授权成功");
+                            }
+
+                            @Override
+                            public void permissionDenied() {
+                                ToastUtil.show("授权失败");
+                            }
+
+                            @Override
+                            public void permissionRationale() {
+                                ToastUtil.show("提示信息");
+                            }
+                        })
+                        .requestPageType(SupportPermissions4M.PageType.MANAGER_PAGE)
+                        .requestPage(new Wrapper.PermissionPageListener() {
+                            @Override
+                            public void pageIntent(final Intent intent) {
+                                new AlertDialog.Builder(MainActivity.this)
+                                        .setMessage("读取联系人权限申请：\n我们需要您开启读取联系人权限(in activity)")
+                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                startActivity(intent);
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .request();
             }
         });
     }
@@ -134,7 +176,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
-        Permissions4M.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+//        Permissions4M.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        SupportPermissions4M.onRequestPermissionsResult(this, requestCode, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 

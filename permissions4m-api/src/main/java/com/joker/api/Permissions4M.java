@@ -8,8 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
 import com.joker.api.request.ActivityRequest;
-import com.joker.api.request.FragmentRequest;
-import com.joker.api.request.SupportFragmentRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +21,7 @@ public class Permissions4M {
     private static Map<String, PermissionsProxy> map = new HashMap<>();
     private static PermissionsProxy instance;
 
-    // sync request ==============================================
+    // sync requestPermission ==============================================
     public static void syncRequestPermissions(Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
@@ -58,22 +56,22 @@ public class Permissions4M {
         }
     }
 
-    // normal request ===========================================================================
+    // normal requestPermission ===========================================================================
     public static void requestPermission(Activity activity, String permission, int requestCode) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
         initProxy(activity);
-        ActivityRequest.getInstance(instance).request(activity, permission, requestCode);
+        new ActivityRequest().requestPermission(activity, permission, requestCode, instance);
     }
 
-    public static void requestPermission(android.app.Fragment fragment, String permission, int
-            requestCode) {
+    public static void requestPermission(android.app.Fragment fragment, String
+            permission, int requestCode) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
         initProxy(fragment);
-        FragmentRequest.getInstance(instance).request(fragment, permission, requestCode);
+//        new FragmentRequest().requestPermission(fragment, permission, requestCode, instance);
     }
 
     public static void requestPermission(android.support.v4.app.Fragment fragment, String permission, int
@@ -82,7 +80,8 @@ public class Permissions4M {
             return;
         }
         initProxy(fragment);
-        SupportFragmentRequest.getInstance(instance).request(fragment, permission, requestCode);
+//        new SupportFragmentRequest().requestPermission(fragment, permission.clone(), requestCode,
+// instance);
     }
 
     // custom rationale ==================================================================================
@@ -126,8 +125,7 @@ public class Permissions4M {
     @SuppressWarnings("unchecked")
     public static void onRequestPermissionsResult(Object object, int requestCode, @NonNull String[]
             permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             instance.granted(object, requestCode);
         } else {
             instance.denied(object, requestCode);

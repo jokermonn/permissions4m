@@ -1,4 +1,4 @@
-package com.joker.api.util.manufacturer;
+package com.joker.api.support.manufacturer;
 
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  * support:
  * 1.hongmi 5X android:6.0.1/miui 8.2
  * <p>
- * manager home page, or {@link Protogenesis#settingIntent(boolean)}
+ * manager home page, or {@link Protogenesis#settingIntent()}
  * <p>
  * Created by joker on 2017/8/4.
  */
@@ -41,6 +41,7 @@ public class XIAOMI implements PermissionsPage {
             line = input.readLine();
         } catch (IOException ex) {
             ex.printStackTrace();
+            return "";
         } finally {
             if (input != null) {
                 try {
@@ -54,7 +55,7 @@ public class XIAOMI implements PermissionsPage {
     }
 
     @Override
-    public Intent settingIntent(boolean androidSetting) throws ActivityNotFoundException {
+    public Intent settingIntent() throws ActivityNotFoundException {
         Intent intent = new Intent();
         String miuiInfo = getSystemProperty();
         if (miuiInfo.contains("7") || miuiInfo.contains("6")) {

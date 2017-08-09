@@ -1,36 +1,20 @@
 package com.joker.api.request;
 
-import com.joker.api.PermissionsProxy;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.joker.api.PermissionsProxy;
 
 /**
  * Created by joker on 2017/8/3.
  */
 
 public class SupportFragmentRequest implements Requestable {
-    private static Map<PermissionsProxy, SupportFragmentRequest> map = new HashMap<>();
-    private final PermissionsProxy instance;
-
-    private SupportFragmentRequest(PermissionsProxy instance) {
-        this.instance = instance;
-    }
-
-    public static SupportFragmentRequest getInstance(PermissionsProxy instance) {
-        SupportFragmentRequest request = map.get(instance);
-        if (request == null) {
-            request = new SupportFragmentRequest(instance);
-            map.put(instance, request);
-        }
-
-        return request;
-    }
-
-    @SuppressWarnings("unchecked")
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-
-    public void request(Object object, String permission, int requestCode) {
+    @SuppressWarnings("unchecked")
+    public void requestPermission(Object object, String permission, int requestCode, PermissionsProxy
+            instance) {
         if (((android.support.v4.app.Fragment) object).shouldShowRequestPermissionRationale
                 (permission)) {
             if (!instance.customRationale(object, requestCode)) {

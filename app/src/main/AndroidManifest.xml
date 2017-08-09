@@ -2,9 +2,16 @@
 <manifest package="com.joker.permissions4m"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- umeng -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -29,6 +36,14 @@
         </activity>
         <activity android:name=".SingleActivity">
         </activity>
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5983ff06c89576319b0002b1"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="Test"/>
+
     </application>
 
 </manifest>

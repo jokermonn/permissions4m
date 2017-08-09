@@ -1,4 +1,4 @@
-package com.joker.api.util.manufacturer;
+package com.joker.api.support.manufacturer;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.content.Intent;
  * 1. oppo a57 android 6.0.1/coloros3.0
  * <p>
  * manager home page, permissions manage page does not work!!!, or
- * {@link Protogenesis#settingIntent(boolean)}
+ * {@link Protogenesis#settingIntent()}
  * <p>
  * Created by joker on 2017/8/4.
  */
@@ -25,7 +25,7 @@ public class OPPO implements PermissionsPage {
     }
 
     @Override
-    public Intent settingIntent(boolean androidSetting) throws Exception {
+    public Intent settingIntent() throws Exception {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(PACK_TAG, context.getPackageName());

@@ -1,4 +1,4 @@
-package com.joker.api.util.manufacturer;
+package com.joker.api.support.manufacturer;
 
 import android.content.Intent;
 
@@ -10,5 +10,5 @@ public interface PermissionsPage {
     String PACK_TAG = "packageName";
 
     // normally, ActivityNotFoundException
-    Intent settingIntent(boolean androidSetting) throws Exception;
+    Intent settingIntent() throws Exception;
 }

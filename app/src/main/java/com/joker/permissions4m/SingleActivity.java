@@ -42,8 +42,8 @@ public class SingleActivity extends AppCompatActivity {
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(SingleActivity.this, Manifest.permission.CAMERA,
-                        CAMERA_CODE);
+                Permissions4M.requestPermission(SingleActivity.this, Manifest.permission
+                        .CAMERA, CAMERA_CODE);
             }
         });
     }

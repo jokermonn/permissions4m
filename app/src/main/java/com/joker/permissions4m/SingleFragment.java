@@ -44,8 +44,8 @@ public class SingleFragment extends Fragment {
         mContactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(SingleFragment.this, Manifest.permission.READ_CONTACTS,
-                        CONTACT_CODE);
+                Permissions4M.requestPermission(SingleFragment.this, Manifest.permission
+                        .READ_CONTACTS, CONTACT_CODE);
             }
         });
 
@@ -53,8 +53,8 @@ public class SingleFragment extends Fragment {
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(SingleFragment.this, Manifest.permission.CAMERA,
-                        CAMERA_CODE);
+                Permissions4M.requestPermission(SingleFragment.this, Manifest.permission
+                        .CAMERA, CAMERA_CODE);
             }
         });
 

@@ -1,4 +1,4 @@
-package com.joker.api.util.manufacturer;
+package com.joker.api.support.manufacturer;
 
 import android.content.Intent;
 import android.provider.Settings;
@@ -10,7 +10,7 @@ import android.provider.Settings;
 public class Protogenesis implements PermissionsPage {
     // system setting page
     @Override
-    public Intent settingIntent(boolean androidSetting) {
+    public Intent settingIntent() {
         return new Intent(Settings.ACTION_SETTINGS);
     }
 }

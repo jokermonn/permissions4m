@@ -1,4 +1,4 @@
-package com.joker.api.util.manufacturer;
+package com.joker.api.support.manufacturer;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.content.Intent;
  * 1.Y55A androi:6.0.1/Funtouch 2.6
  * 2.Xplay5A android: 5.1.1/Funtouch 3
  *
- * manager home page, or {@link Protogenesis#settingIntent(boolean)}
+ * manager home page, or {@link Protogenesis#settingIntent()}
  *
  * Created by joker on 2017/8/4.
  */
@@ -24,7 +24,7 @@ public class VIVO implements PermissionsPage {
     }
 
     @Override
-    public Intent settingIntent(boolean androidSetting) throws Exception {
+    public Intent settingIntent() throws Exception {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(PACK_TAG, context.getPackageName());

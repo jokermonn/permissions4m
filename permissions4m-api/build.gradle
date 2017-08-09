@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
-    compile 'com.jokermonn:permissions4m-annotation:1.0.0'
+    compile project (':permissions4m-annotation')
     compile 'com.android.support:appcompat-v7:25.3.1'
 }

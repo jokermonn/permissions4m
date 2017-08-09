@@ -1,16 +1,20 @@
-package com.joker.api.util.manufacturer;
+package com.joker.api.support.manufacturer;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 /**
  * support:
  * 1.mate7 android:6.0/emui 4.0.1
  * 2.畅享7 android:7.0/emui 5.1
  * <p>
- * manager permissions page, permissions manage page, or {@link Protogenesis#settingIntent(boolean)}
+ * manager permissions page, permissions manage page, or {@link Protogenesis#settingIntent()}
  * <p>
  * Created by joker on 2017/8/4.
  */
@@ -27,11 +31,28 @@ public class HUAWEI implements PermissionsPage {
     }
 
     @Override
-    public Intent settingIntent(boolean androidSetting) throws ActivityNotFoundException {
-        Intent intent = new Intent();
+    public Intent settingIntent() throws ActivityNotFoundException {
+        Intent intent = new Protogenesis().settingIntent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(PACK_TAG, context.getPackageName());
-        ComponentName comp = new ComponentName(PKG, MANAGER_OUT_CLS);
+        ComponentName comp = null;
+        try {
+            PackageInfo pi = context.getPackageManager().getPackageInfo(PKG,
+                    PackageManager.GET_ACTIVITIES);
+            for (ActivityInfo activityInfo : pi.activities) {
+                if (activityInfo.name.equals(MANAGER_OUT_CLS)) {
+                    comp = new ComponentName(PKG, MANAGER_OUT_CLS);
+                }
+            }
+            if (comp != null) {
+                intent.setComponent(comp);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return intent;
+        }
+
+        return intent;
 
         // need "com.huawei.systemmanager.permission.ACCESS_INTERFACE" permission
 //        try {
@@ -45,9 +66,5 @@ public class HUAWEI implements PermissionsPage {
 //        } catch (PackageManager.NameNotFoundException e) {
 //            e.printStackTrace();
 //        }
-
-        intent.setComponent(comp);
-
-        return intent;
     }
 }

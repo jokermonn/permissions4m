@@ -85,8 +85,8 @@ public class MainFragment extends Fragment {
         mAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(MainFragment.this, Manifest.permission.RECORD_AUDIO,
-                        AUDIO_CODE);
+                Permissions4M.requestPermission(MainFragment.this, Manifest.permission
+                        .RECORD_AUDIO, AUDIO_CODE);
             }
         });
 
@@ -177,8 +177,6 @@ public class MainFragment extends Fragment {
                 break;
         }
     }
-
-
 
 
     //====================================================================
