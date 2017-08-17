@@ -61,7 +61,7 @@ public class PermissionsPageManager {
         return getManufacturer().equalsIgnoreCase(MANUFACTURER_XIAOMI) || getManufacturer()
                 .equalsIgnoreCase(MANUFACTURER_OPPO);
     }
-
+    
     public static Intent getIntent() {
         return new Protogenesis().settingIntent();
     }
