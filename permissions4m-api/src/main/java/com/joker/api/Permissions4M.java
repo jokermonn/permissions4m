@@ -1,134 +1,125 @@
 package com.joker.api;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 
-import com.joker.api.request.ActivityRequest;
+import com.joker.api.apply.ForceApplyPermissions;
+import com.joker.api.apply.NormalApplyPermissions;
+import com.joker.api.wrapper.AbstractWrapper;
+import com.joker.api.wrapper.ActivityWrapper;
+import com.joker.api.wrapper.FragmentWrapper;
+import com.joker.api.wrapper.SupportFragmentWrapper;
+import com.joker.api.wrapper.Wrapper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static com.joker.api.Permissions4M.PageType.ANDROID_SETTING_PAGE;
+import static com.joker.api.Permissions4M.PageType.MANAGER_PAGE;
 
 /**
- * Created by joker on 2017/7/26.
+ * Created by joker on 2017/8/5.
  */
 
 public class Permissions4M {
-    private static final String PERMISSIONS_PROXY = "$$PermissionsProxy";
-    private static Map<String, PermissionsProxy> map = new HashMap<>();
-    private static PermissionsProxy instance;
-
-    // sync requestPermission ==============================================
-    public static void syncRequestPermissions(Activity activity) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(activity);
-        syncRequest(activity);
+    public static Wrapper get(Activity activity) {
+        return new ActivityWrapper(activity);
     }
 
-    public static void syncRequestPermissions(android.app.Fragment fragment) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(fragment);
-        syncRequest(fragment);
+    public static Wrapper get(android.app.Fragment fragment) {
+        return new FragmentWrapper(fragment);
     }
 
-    public static void syncRequestPermissions(android.support.v4.app.Fragment fragment) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(fragment);
-        syncRequest(fragment);
+    public static Wrapper get(android.support.v4.app.Fragment fragment) {
+        return new SupportFragmentWrapper(fragment);
     }
 
     @SuppressWarnings("unchecked")
-    private static void syncRequest(Object object) {
-        if ((object instanceof Activity) || (object instanceof android.app.Fragment) || (object
-                instanceof android.support.v4.app.Fragment)) {
-            instance.startSyncRequestPermissionsMethod(object);
+    public static void onRequestPermissionsResult(Activity activity, int
+            requestCode, @NonNull int[] grantResults) {
+        onPrivateRequestPermissionsResult(activity, requestCode, grantResults);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void onRequestPermissionsResult(android.app.Fragment fragment, int
+            requestCode, @NonNull int[] grantResults) {
+        onPrivateRequestPermissionsResult(fragment, requestCode, grantResults);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void onRequestPermissionsResult(android.support.v4.app.Fragment fragment, int
+            requestCode, @NonNull int[] grantResults) {
+        onPrivateRequestPermissionsResult(fragment, requestCode, grantResults);
+    }
+
+    private static void onPrivateRequestPermissionsResult(Object object, int
+            requestCode, @NonNull int[] grantResults) {
+        AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
+        Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key);
+        // because SupportFragment request permissions will call Activity callback first and then call SupportFragment callback
+        // and the first time will throw NullPointerException
+        if (wrapper == null) {
+            return;
+        }
+        Wrapper.PermissionRequestListener requestListener = wrapper
+                .getPermissionRequestListener();
+        // listener callback
+        if (requestListener != null) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (wrapper.isRequestForce()) {
+                    ForceApplyPermissions.grantedOnResultWithListener(wrapper);
+                } else {
+                    NormalApplyPermissions.grantedOnResultWithListener(wrapper);
+                }
+            } else {
+                NormalApplyPermissions.deniedOnResultWithListener(wrapper);
+            }
         } else {
-            throw new IllegalArgumentException(object.getClass().getName() + " is not supported!");
+            // annotation callback
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (wrapper.isRequestForce()) {
+                    ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
+                } else {
+                    NormalApplyPermissions.grantedOnResultWithAnnotation(wrapper);
+                }
+            } else {
+                NormalApplyPermissions.deniedOnResultWithAnnotation(wrapper);
+            }
         }
     }
 
-    // normal requestPermission ===========================================================================
     public static void requestPermission(Activity activity, String permission, int requestCode) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(activity);
-        new ActivityRequest().requestPermission(activity, permission, requestCode, instance);
+        new ActivityWrapper(activity)
+                .requestForce(true)
+                .requestPermission(permission)
+                .requestCode(requestCode)
+                .request();
     }
 
     public static void requestPermission(android.app.Fragment fragment, String
             permission, int requestCode) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(fragment);
-//        new FragmentRequest().requestPermission(fragment, permission, requestCode, instance);
+        new FragmentWrapper(fragment)
+                .requestForce(true)
+                .requestPermission(permission)
+                .requestCode(requestCode)
+                .request();
     }
 
     public static void requestPermission(android.support.v4.app.Fragment fragment, String permission, int
             requestCode) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(fragment);
-//        new SupportFragmentRequest().requestPermission(fragment, permission.clone(), requestCode,
-// instance);
+        new SupportFragmentWrapper(fragment)
+                .requestForce(true)
+                .requestPermission(permission)
+                .requestCode(requestCode)
+                .request();
     }
 
-    // custom rationale ==================================================================================
-    public static void requestPermissionOnCustomRationale(Activity activity, String[]
-            permissions, int requestCode) {
-        ActivityCompat.requestPermissions(activity, permissions, requestCode);
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public static void requestPermissionOnCustomRationale(android.app.Fragment fragment, String[]
-            permissions, int requestCode) {
-        fragment.requestPermissions(permissions, requestCode);
-    }
-
-    @TargetApi(Build.VERSION_CODES.M)
-    public static void requestPermissionOnCustomRationale(android.support.v4.app.Fragment fragment, String[]
-            permissions, int requestCode) {
-        fragment.requestPermissions(permissions, requestCode);
-    }
-
-    private static void initProxy(Object object) {
-        String name = object.getClass().getName();
-        String proxyName = name + PERMISSIONS_PROXY;
-        PermissionsProxy proxy = map.get(proxyName);
-        try {
-            if (proxy == null) {
-                instance = (PermissionsProxy) Class.forName(proxyName).newInstance();
-                map.put(proxyName, instance);
-            } else {
-                instance = proxy;
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void onRequestPermissionsResult(Object object, int requestCode, @NonNull String[]
-            permissions, @NonNull int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            instance.granted(object, requestCode);
-        } else {
-            instance.denied(object, requestCode);
-        }
+    @IntDef({MANAGER_PAGE, ANDROID_SETTING_PAGE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface PageType {
+        int MANAGER_PAGE = 0;
+        int ANDROID_SETTING_PAGE = 1;
     }
 }

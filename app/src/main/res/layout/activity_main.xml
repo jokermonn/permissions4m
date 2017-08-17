@@ -73,11 +73,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="0dp"
             android:text="一键申请"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_sms"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_page_listener"/>
 
         <Button
             android:id="@+id/btn_single"
@@ -87,7 +87,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="查看单个权限申请"
+            android:text="单个权限申请页面"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -101,7 +101,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="管家页面"
+            android:text="手机管家页面"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -115,25 +115,26 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="系统设置页面"
+            android:text="系统原生设置页面"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_manager"/>
 
         <Button
-            android:id="@+id/android_setting_page"
+            android:id="@+id/btn_page_listener"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="Test"
+            android:text="含 pageListener 的权限申请（读取通讯录权限）"
+            android:textAllCaps="false"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_permission_page"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_sms"/>
 
         <fragment
             android:name="com.joker.permissions4m.MainFragment"
@@ -148,7 +149,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/android_setting_page"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_permission_page"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -8,7 +8,7 @@
     tools:context="com.joker.permissions4m.SingleActivity">
 
     <Button
-        android:id="@+id/btn_contacts"
+        android:id="@+id/btn_location"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginEnd="8dp"
@@ -16,7 +16,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="联系人（单个）"
+        android:text="地理位置（单个）"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -33,19 +33,31 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_contacts"/>
+        app:layout_constraintTop_toBottomOf="@+id/btn_location"/>
 
-    <fragment
-        android:name="com.joker.permissions4m.SingleFragment"
+    <!--<fragment-->
+    <!--android:name="com.joker.permissions4m.SingleFragment"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:tag="tag"-->
+    <!--android:layout_marginTop="0dp"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/btn_camera"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginLeft="8dp"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--android:layout_marginRight="8dp"-->
+    <!--app:layout_constraintRight_toRightOf="parent"/>-->
+
+    <FrameLayout
+        android:id="@+id/fl_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:tag="tag"
-        android:layout_marginTop="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_camera"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:layout_marginLeft="8dp"/>
 </android.support.constraint.ConstraintLayout>

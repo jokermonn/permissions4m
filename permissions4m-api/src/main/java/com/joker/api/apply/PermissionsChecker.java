@@ -1,7 +1,8 @@
-package com.joker.api.stream.apply;
+package com.joker.api.apply;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -12,8 +13,11 @@ import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
+
+import com.joker.api.apply.util.AudioRecordManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +30,10 @@ import static android.content.Context.TELEPHONY_SERVICE;
  * Created by joker on 2017/8/9.
  */
 
-public class PermissionsCheck {
+public class PermissionsChecker {
+    private static final String TAG = "permissions4m";
+    private static final String TAG_NUMBER = "110";
+
     /**
      * ensure whether permission granted
      *
@@ -43,6 +50,7 @@ public class PermissionsCheck {
                     return checkWriteContacts(activity);
                 case Manifest.permission.GET_ACCOUNTS:
                     return true;
+
                 case Manifest.permission.READ_CALL_LOG:
                     return checkReadCallLog(activity);
                 case Manifest.permission.READ_PHONE_STATE:
@@ -50,26 +58,38 @@ public class PermissionsCheck {
                 case Manifest.permission.CALL_PHONE:
                     return true;
                 case Manifest.permission.WRITE_CALL_LOG:
-                    return true;
+                    return checkWriteCallLog(activity);
                 case Manifest.permission.USE_SIP:
                     return true;
+                // can not apply
                 case Manifest.permission.PROCESS_OUTGOING_CALLS:
                     return true;
                 case Manifest.permission.ADD_VOICEMAIL:
                     return true;
+
                 case Manifest.permission.READ_CALENDAR:
+                    return checkReadCalendar(activity);
+                case Manifest.permission.WRITE_CALENDAR:
                     return true;
+
                 case Manifest.permission.BODY_SENSORS:
                     return checkBodySensors(activity);
+
+                case Manifest.permission.CAMERA:
+                    return true;
+
                 case Manifest.permission.ACCESS_COARSE_LOCATION:
                 case Manifest.permission.ACCESS_FINE_LOCATION:
                     return checkLocation(activity);
+
                 case Manifest.permission.READ_EXTERNAL_STORAGE:
                     return checkReadStorage(activity);
                 case Manifest.permission.WRITE_EXTERNAL_STORAGE:
                     return checkWriteStorage(activity);
+
                 case Manifest.permission.RECORD_AUDIO:
-                    return true;
+                    return checkRecordAudio(activity);
+
                 case Manifest.permission.READ_SMS:
                     return checkReadSms(activity);
                 case Manifest.permission.SEND_SMS:
@@ -78,18 +98,54 @@ public class PermissionsCheck {
                 case Manifest.permission.RECEIVE_SMS:
                     return true;
                 default:
-                    break;
+                    return true;
             }
         } catch (Exception e) {
             return false;
         }
-        return false;
+    }
+
+    private static boolean checkRecordAudio(Activity activity) {
+        try {
+            AudioRecordManager.getInstance().startRecord(activity.getCacheDir().getPath() + TAG +
+                    ".3gp");
+            AudioRecordManager.getInstance().stopRecord();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean checkReadCalendar(Activity activity) {
+        Cursor cursor = activity.getContentResolver().query(Uri.parse("content://com" +
+                ".android.calendar/calendars"), null, null, null, null);
+        if (cursor != null) {
+            cursor.close();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean checkWriteCallLog(Activity activity) {
+        ContentResolver contentResolver = activity.getContentResolver();
+        ContentValues content = new ContentValues();
+        content.put(CallLog.Calls.TYPE, CallLog.Calls.INCOMING_TYPE);
+        content.put(CallLog.Calls.NUMBER, "13333333");
+        content.put(CallLog.Calls.DATE, 20140808);
+        content.put(CallLog.Calls.NEW, "0");
+        contentResolver.insert(Uri.parse("content://call_log/calls"), content);
+
+        contentResolver.delete(Uri.parse("content://call_log/calls"), "number = ?", new
+                String[]{"13333333"});
+
+        return true;
     }
 
     private static boolean checkReadSms(Activity activity) throws Exception {
         Uri uri = Uri.parse("content://sms/");
-        String[] projection = new String[]{"_id", "address", "person", "body", "date", "type"};
-        Cursor cur = activity.getContentResolver().query(uri, projection, null, null, "date desc");
+        Cursor cur = activity.getContentResolver().query(uri, null, null, null, null);
         if (cur != null) {
             cur.close();
             return true;
@@ -100,7 +156,7 @@ public class PermissionsCheck {
 
     private static boolean checkWriteStorage(Activity activity) throws Exception {
         File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES).getPath(), "permission");
+                Environment.DIRECTORY_PICTURES).getPath(), TAG);
         if (!file.exists()) {
             boolean newFile;
             try {
@@ -139,11 +195,11 @@ public class PermissionsCheck {
 
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
             }
         };
         sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.unregisterListener(listener, sensor);
+
         return true;
     }
 
@@ -155,7 +211,6 @@ public class PermissionsCheck {
     }
 
     private static boolean checkReadCallLog(Activity activity) throws Exception {
-        activity.getContentResolver();
         Cursor cursor = activity.getContentResolver().query(Uri.parse
                         ("content://call_log/calls"), null, null,
                 null, null);
@@ -168,25 +223,41 @@ public class PermissionsCheck {
     }
 
     private static boolean checkWriteContacts(Activity activity) throws Exception {
-        ContentValues values = new ContentValues();
+        if (checkReadContacts(activity)) {
+            ContentValues values = new ContentValues();
+            ContentResolver contentResolver = activity.getContentResolver();
+            Uri rawContactUri = contentResolver.insert(ContactsContract.RawContacts
+                    .CONTENT_URI, values);
+            long rawContactId = ContentUris.parseId(rawContactUri);
+            values.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, rawContactId);
+            values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, TAG);
+            values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, TAG_NUMBER);
+            contentResolver.insert(ContactsContract.Data.CONTENT_URI, values);
 
-        Uri rawContactUri = activity.getContentResolver().insert(ContactsContract.RawContacts
-                .CONTENT_URI, values);
-        long rawContactId = ContentUris.parseId(rawContactUri);
-        values.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, rawContactId);
-        values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, "");
-        activity.getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
-
-        // TODO:delete contacts
-        return false;
+            Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
+            ContentResolver resolver = activity.getContentResolver();
+            Cursor cursor = resolver.query(uri, new String[]{ContactsContract.Contacts.Data._ID},
+                    "display_name=?", new String[]{TAG}, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    int id = cursor.getInt(0);
+                    resolver.delete(uri, "display_name=?", new String[]{TAG});
+                    uri = Uri.parse("content://com.android.contacts/data");
+                    resolver.delete(uri, "raw_contact_id=?", new String[]{id + ""});
+                }
+                cursor.close();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private static boolean checkReadContacts(Activity activity) throws Exception {
-        Cursor phoneCursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
-                        .CONTENT_URI,
-                null, null, null, null);
-        if (phoneCursor != null) {
-            phoneCursor.close();
+        Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
+                .CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            cursor.close();
             return true;
         } else {
             return false;

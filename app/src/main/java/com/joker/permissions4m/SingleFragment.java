@@ -4,6 +4,7 @@ package com.joker.permissions4m;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -18,13 +19,10 @@ import com.joker.annotation.PermissionsRationale;
 import com.joker.api.Permissions4M;
 import com.joker.permissions4m.other.ToastUtil;
 
-
+// support Fragment
 public class SingleFragment extends Fragment {
-    public static final int CALENDAR_CODE = 7;
-    public static final int SENSORS_CODE = 8;
-    public static final int LOCATION_CODE = 9;
-    private static final int CONTACT_CODE = 3;
-    private static final int CAMERA_CODE = 4;
+    private static final int CONTACT_CODE = 13;
+    private static final int CAMERA_CODE = 14;
     private Button mContactsButton;
     private Button mCameraButton;
 
@@ -44,8 +42,11 @@ public class SingleFragment extends Fragment {
         mContactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(SingleFragment.this, Manifest.permission
-                        .READ_CONTACTS, CONTACT_CODE);
+                Permissions4M.get(SingleFragment.this)
+                        .requestForce(true)
+                        .requestPermission(Manifest.permission.READ_CONTACTS)
+                        .requestCode(CONTACT_CODE)
+                        .request();
             }
         });
 
@@ -53,12 +54,22 @@ public class SingleFragment extends Fragment {
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.requestPermission(SingleFragment.this, Manifest.permission
-                        .CAMERA, CAMERA_CODE);
+                Permissions4M.get(SingleFragment.this)
+                        .requestForce(true)
+                        .requestPermission(Manifest.permission.CAMERA)
+                        .requestCode(CAMERA_CODE)
+                        .request();
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        Permissions4M.onRequestPermissionsResult(SingleFragment.this, requestCode, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     //====================================================================
@@ -97,9 +108,11 @@ public class SingleFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // 请自行处理申请权限，两种方法等价
                         // 方法1，使用框架已封装的方法
-                        Permissions4M.requestPermissionOnCustomRationale(SingleFragment.this, new
-                                String[]{Manifest
-                                .permission.CAMERA}, CAMERA_CODE);
+                        Permissions4M.get(SingleFragment.this)
+                                .requestForce(true)
+                                .requestPermission(Manifest.permission.CAMERA)
+                                .requestCode(CAMERA_CODE)
+                                .request();
                         // 方法2，使用自身方法
 //                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                            MainFragment.this.requestPermissions(new String[]{Manifest

@@ -15,11 +15,11 @@ Permissions for M, which is based on the secondary development of hongyangAndroi
 
 - java 8 supported
 - multi permission requests, synchronously  
-- multi callbacks supported, clean code
+- multi callbacks supported, clean requestCode
 Official doc for permission requests ：[Requesting Permissions at Run Time](https://developer.android.com/training/permissions/requesting.html)
 
 # Feature #
-- one line code, multi permission requests, synchronously：
+- one line requestCode, multi permission requests, synchronously：
 
 ![](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
 
@@ -111,12 +111,12 @@ jar/aar is being used here, you can download the following jars[link](https://gi
 
 <h3 id="sync_request">tips for sync multi permission requests</h3>
 
-When you are requesting multi sync custom permissions, please use this form of callback function [multi permission requests](#multiple_single), which requires that we should put the result into the same function, show by `code` :
+When you are requesting multi sync custom permissions, please use this form of callback function [multi permission requests](#multiple_single), which requires that we should put the result into the same function, show by `requestCode` :
 
 	// successful permission request callback
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
+    public void smsAndAudioGranted(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 ToastUtil.show("successful request of msg in fragment");
                 break;
@@ -155,7 +155,7 @@ follows are being forbidden:
 
 	// notice the formal params:
     @PermissionsGranted(CONTACT_CODE)
-    public void contactGranted(int code) {
+    public void contactGranted(int requestCode) {
         ToastUtil.show("CONTACTS granted");
     }
 
@@ -164,8 +164,8 @@ follows are being forbidden:
 **multi permission requests**, functions decorated by annotations contain params, **just as follows**：
 
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
+    public void storageAndCallGranted(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("success in device reservation's authorization");
                 break;
@@ -250,8 +250,8 @@ other way, u could use the func of [tips for single permission request](#notice_
     }
 
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
+    public void storageAndCallGranted(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("STORAGE granted");
                 break;
@@ -262,8 +262,8 @@ other way, u could use the func of [tips for single permission request](#notice_
     }
 
     @PermissionsDenied({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallDenied(int code) {
-        switch (code) {
+    public void storageAndCallDenied(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("STORAGE denied");
                 break;
@@ -274,8 +274,8 @@ other way, u could use the func of [tips for single permission request](#notice_
     }
 
     @PermissionsRationale({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallRationale(int code) {
-        switch (code) {
+    public void storageAndCallRationale(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("please open STORAGE");
                 break;
@@ -298,9 +298,9 @@ other way, u could use the func of [tips for single permission request](#notice_
 						CALENDAR_CODE})
 	public class MainActivity extends AppcompatActivity
 
-annotations require two arraies; permission array requires the sync request authority; value array requires its corresponding result code;the order of elements in the array is linked with the order of request.
+annotations require two arraies; permission array requires the sync request authority; value array requires its corresponding result requestCode;the order of elements in the array is linked with the order of request.
 
-2.let's begin sync permission request wit the following code:
+2.let's begin sync permission request wit the following requestCode:
 
 	Permissions4M.syncRequestPermissions(MainFragment.this);
 
@@ -309,8 +309,8 @@ the request order is refered to the order of your authority, e.g: `Manifest.perm
 3.the following format is being used in the request callback function.（**split callbacks unsupported**）：
 
 	@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncGranted(int code) {
-        switch (code) {
+    public void syncGranted(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 ToastUtil.show("LOCATION granted in activity");
                 break;
@@ -326,8 +326,8 @@ the request order is refered to the order of your authority, e.g: `Manifest.perm
     }
 
     @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncDenied(int code) {
-        switch (code) {
+    public void syncDenied(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 ToastUtil.show("LOCATED denied in activity");
                 break;
@@ -343,8 +343,8 @@ the request order is refered to the order of your authority, e.g: `Manifest.perm
     }
 
     @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncRationale(int code) {
-        switch (code) {
+    public void syncRationale(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 ToastUtil.show("please open LOCATION in activity");
                 break;
@@ -432,8 +432,8 @@ the request order is refered to the order of your authority, e.g: `Manifest.perm
     }
 
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
+    public void smsAndAudioGranted(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 ToastUtil.show("SMS granted");
                 break;
@@ -446,8 +446,8 @@ the request order is refered to the order of your authority, e.g: `Manifest.perm
     }
 
     @PermissionsDenied({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioDenied(int code) {
-        switch (code) {
+    public void smsAndAudioDenied(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 ToastUtil.show("SMS denied");
                 break;
@@ -460,8 +460,8 @@ the request order is refered to the order of your authority, e.g: `Manifest.perm
     }
 
     @PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioCustomRationale(int code) {
-        switch (code) {
+    public void smsAndAudioCustomRationale(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 new AlertDialog.Builder(this)
                         .setMessage("SMS PERMISSION request：\n we need it")
@@ -514,8 +514,8 @@ reference:[multi custom permissions requests](#mutiple_custom_activity), codes a
         });
 
 	@PermissionsCustomRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncCustomRationale(int code) {
-        switch (code) {
+    public void syncCustomRationale(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 new AlertDialog.Builder(this)
                         .setMessage("LOCATION PERMISSION request：\n we need it(in activity)")
@@ -619,8 +619,8 @@ reference:[multi custom permissions requests](#mutiple_custom_activity), codes a
     }
 
 	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
+    public void storageAndCallGranted(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("STORAGE granted in fragment");
                 break;
@@ -631,8 +631,8 @@ reference:[multi custom permissions requests](#mutiple_custom_activity), codes a
     }
 
     @PermissionsDenied({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallDenied(int code) {
-        switch (code) {
+    public void storageAndCallDenied(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("STORAGE denied in fragment");
                 break;
@@ -643,8 +643,8 @@ reference:[multi custom permissions requests](#mutiple_custom_activity), codes a
     }
 
     @PermissionsRationale({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallRationale(int code) {
-        switch (code) {
+    public void storageAndCallRationale(int requestCode) {
+        switch (requestCode) {
             case STORAGE_CODE:
                 ToastUtil.show("please open STORAGE permission in fragment");
                 break;
@@ -667,9 +667,9 @@ reference:[multi custom permissions requests](#mutiple_custom_activity), codes a
 						CALENDAR_CODE})
 	public class MainFragment extends Fragment
 
- annotations require two arraies; permission array requires the sync request authority; value array requires its corresponding result code; the order of elements in the array is linked with the order of request.
+ annotations require two arraies; permission array requires the sync request authority; value array requires its corresponding result requestCode; the order of elements in the array is linked with the order of request.
 
-2.let's begin sync permission request using the following code:
+2.let's begin sync permission request using the following requestCode:
 
 	Permissions4M.syncRequestPermissions(MainFragment.this);
 the request order is refered to the order of your authority, e.g:  `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
@@ -677,8 +677,8 @@ the request order is refered to the order of your authority, e.g:  `Manifest.per
 3.the following format is being used in the request callback function.（**callback split unsupported**）：
 
 	@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncGranted(int code) {
-        switch (code) {
+    public void syncGranted(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 ToastUtil.show("LOCATION granted in activity");
                 break;
@@ -694,8 +694,8 @@ the request order is refered to the order of your authority, e.g:  `Manifest.per
     }
 
     @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncDenied(int code) {
-        switch (code) {
+    public void syncDenied(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 ToastUtil.show("LOCATION denied in activity");
                 break;
@@ -711,8 +711,8 @@ the request order is refered to the order of your authority, e.g:  `Manifest.per
     }
 
     @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncRationale(int code) {
-        switch (code) {
+    public void syncRationale(int requestCode) {
+        switch (requestCode) {
             case LOCATION_CODE:
                 ToastUtil.show("please open LOCATION permission in activity");
                 break;
@@ -801,8 +801,8 @@ the request order is refered to the order of your authority, e.g:  `Manifest.per
     }
 
 	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
+    public void smsAndAudioGranted(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 ToastUtil.show("SMS granted in fragment");
                 break;
@@ -815,8 +815,8 @@ the request order is refered to the order of your authority, e.g:  `Manifest.per
     }
 
     @PermissionsDenied({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioDenied(int code) {
-        switch (code) {
+    public void smsAndAudioDenied(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 ToastUtil.show("SMS denied in fragment");
                 break;
@@ -829,8 +829,8 @@ the request order is refered to the order of your authority, e.g:  `Manifest.per
     }
 
     @PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioCustomRationale(int code) {
-        switch (code) {
+    public void smsAndAudioCustomRationale(int requestCode) {
+        switch (requestCode) {
             case SMS_CODE:
                 new AlertDialog.Builder(getActivity())
                         .setMessage("SMS PERMISSION request：\n we need it(in fragment)")

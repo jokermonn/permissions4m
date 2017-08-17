@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.joker.api.stream.SupportPermissions4M;
 import com.umeng.analytics.MobclickAgent;
 
 /**
