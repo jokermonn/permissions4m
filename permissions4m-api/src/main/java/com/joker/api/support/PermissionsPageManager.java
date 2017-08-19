@@ -61,7 +61,12 @@ public class PermissionsPageManager {
         return getManufacturer().equalsIgnoreCase(MANUFACTURER_XIAOMI) || getManufacturer()
                 .equalsIgnoreCase(MANUFACTURER_OPPO);
     }
-    
+
+    public static boolean isAndroidMXiaoMi() {
+        return getManufacturer().equals(MANUFACTURER_XIAOMI) && Build.VERSION.SDK_INT > Build
+                .VERSION_CODES.M;
+    }
+
     public static Intent getIntent() {
         return new Protogenesis().settingIntent();
     }

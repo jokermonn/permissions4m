@@ -16,8 +16,10 @@ import android.os.Environment;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.joker.api.apply.util.AudioRecordManager;
+import com.joker.api.support.PermissionsPageManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -255,12 +257,29 @@ public class PermissionsChecker {
 
     private static boolean checkReadContacts(Activity activity) throws Exception {
         Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
-                .CONTENT_URI, null, null, null, null);
+                .CONTENT_URI, new String[] { }, null, null, null);
         if (cursor != null) {
+            if (PermissionsPageManager.isAndroidMXiaoMi()) {
+                if (checkXiaoMiReadContacts(cursor)) return false;
+            }
             cursor.close();
             return true;
         } else {
             return false;
         }
+    }
+
+    private static boolean checkXiaoMiReadContacts(Cursor cursor) {
+        String s = "";
+        int i = 0;
+        while (cursor.moveToNext()) {
+            i++;
+            if (i == 2) {
+                break;
+            }
+            s = cursor.getString(0) + cursor.getString(1);
+        }
+
+        return TextUtils.isEmpty(s);
     }
 }

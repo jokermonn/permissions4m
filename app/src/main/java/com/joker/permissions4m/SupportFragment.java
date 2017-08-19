@@ -21,9 +21,9 @@ import com.joker.permissions4m.other.ToastUtil;
 
 // support Fragment
 public class SingleFragment extends Fragment {
-    private static final int CONTACT_CODE = 13;
+    private static final int LOCATION_CODE = 13;
     private static final int CAMERA_CODE = 14;
-    private Button mContactsButton;
+    private Button mLocationButton;
     private Button mCameraButton;
 
     public SingleFragment() {
@@ -35,17 +35,17 @@ public class SingleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_single, container, false);
-        mContactsButton = (Button) view.findViewById(R.id.btn_contacts);
+        mLocationButton = (Button) view.findViewById(R.id.btn_location);
         mCameraButton = (Button) view.findViewById(R.id.btn_camera);
 
         // 单个申请
-        mContactsButton.setOnClickListener(new View.OnClickListener() {
+        mLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(SingleFragment.this)
                         .requestForce(true)
-                        .requestPermission(Manifest.permission.READ_CONTACTS)
-                        .requestCode(CONTACT_CODE)
+                        .requestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                        .requestCode(LOCATION_CODE)
                         .request();
             }
         });
@@ -73,19 +73,19 @@ public class SingleFragment extends Fragment {
     }
 
     //====================================================================
-    @PermissionsGranted(CONTACT_CODE)
+    @PermissionsGranted(LOCATION_CODE)
     public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功 in fragment");
+        ToastUtil.show("读取地理位置权限成功 in fragment");
     }
 
-    @PermissionsDenied(CONTACT_CODE)
+    @PermissionsDenied(LOCATION_CODE)
     public void contactDenied() {
-        ToastUtil.show("读取联系人权限失败 in fragment");
+        ToastUtil.show("读取地理位置权限失败 in fragment");
     }
 
-    @PermissionsRationale(CONTACT_CODE)
+    @PermissionsRationale(LOCATION_CODE)
     public void contactRationale() {
-        ToastUtil.show("请开启读取联系人权限 in fragment");
+        ToastUtil.show("请开启读取地理位置权限 in fragment");
     }
 
     //====================================================================
@@ -106,18 +106,11 @@ public class SingleFragment extends Fragment {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // 请自行处理申请权限，两种方法等价
-                        // 方法1，使用框架已封装的方法
                         Permissions4M.get(SingleFragment.this)
-                                .requestForce(true)
+                                .requestOnRationale()
                                 .requestPermission(Manifest.permission.CAMERA)
                                 .requestCode(CAMERA_CODE)
                                 .request();
-                        // 方法2，使用自身方法
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                            MainFragment.this.requestPermissions(new String[]{Manifest
-//                                    .permission.CAMERA}, CAMERA_CODE);
-//                        }
                     }
                 })
                 .show();
