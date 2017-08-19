@@ -2,7 +2,6 @@ apply plugin: 'java'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    // FIXME: should use jcenter module
     compile project(':permissions4m-annotation')
     compile 'com.google.auto.service:auto-service:1.0-rc3'
 }
