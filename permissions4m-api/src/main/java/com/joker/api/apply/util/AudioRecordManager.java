@@ -57,6 +57,7 @@ public class AudioRecordManager {
         }
 
     };
+    private String path;
 
     public AudioRecordManager() {
         bufferSize = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat
@@ -122,6 +123,7 @@ public class AudioRecordManager {
      * @throws IOException
      */
     private void setPath(String path) throws IOException {
+        this.path = path;
         File file = new File(path);
         if (file.exists()) {
             file.delete();
@@ -159,4 +161,10 @@ public class AudioRecordManager {
         }
     }
 
+    public void deleteFile() {
+        File file = new File(path);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 }

@@ -1,10 +1,13 @@
 package com.joker.api.apply;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.joker.api.Permissions4M;
+import com.joker.api.PermissionsProxy;
+import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
 import com.joker.api.wrapper.Wrapper;
 
@@ -15,54 +18,53 @@ import com.joker.api.wrapper.Wrapper;
 
 public class NormalApplyPermissions {
     @SuppressWarnings("unchecked")
-    public static void grantedOnResultWithAnnotation(Wrapper wrapper) {
-        grantedWithAnn(wrapper);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void deniedOnResultWithAnnotation(Wrapper wrapper) {
-        deniedWithAnn(wrapper);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void grantedWithAnn(Wrapper wrapper) {
+    public static void grantedWithAnnotation(Wrapper wrapper) {
         wrapper.getProxy(wrapper.getContext().getClass().getName()).granted(wrapper.getContext(), wrapper
                 .getRequestCode());
     }
 
     @SuppressWarnings("unchecked")
-    private static void deniedWithAnn(Wrapper wrapper) {
-        wrapper.getProxy(wrapper.getContext().getClass().getName()).denied(wrapper.getContext(), wrapper
-                .getRequestCode());
+    public static void deniedWithAnnotation(Wrapper wrapper) {
+        PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
+
+        proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
+        Log.e("TAG", "deniedWithAnnotation: 1 ");
+        if (SupportUtil.nonShowRationale(wrapper) || PermissionsPageManager.isNonRationaleManufacturer()) {
+            proxy.intent(wrapper.getContext(), wrapper.getRequestCode());
+        }
     }
 
-    public static void grantedOnResultWithListener(Wrapper wrapper) {
+    public static void grantedWithListener(Wrapper wrapper) {
         if (wrapper.getPermissionRequestListener() != null) {
             wrapper.getPermissionRequestListener().permissionGranted();
         }
     }
 
     public static void deniedOnResultWithListener(Wrapper wrapper) {
-        deniedWithListener(wrapper);
-    }
-
-    private static void deniedWithListener(Wrapper wrapper) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
 
-        if (wrapper.getPermissionRequestListener() != null) {
-            wrapper.getPermissionRequestListener().permissionDenied();
+        if (wrapper.getPermissionRequestListener() == null) {
+            return;
         }
 
-        Log.e("TAG", "deniedWithListener: 1 ");
-        if (pageListenerNonNull(wrapper) || PermissionsPageManager.isNonRationaleManufacturer()) {
-            Log.e("TAG", "deniedWithListener: 2 ");
-            wrapper.getPermissionPageListener().pageIntent(PermissionsPageManager.getIntent());
+        wrapper.getPermissionRequestListener().permissionDenied();
+
+        if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper) ||
+                PermissionsPageManager
+                .isNonRationaleManufacturer()) {
+            Activity activity = getActivity(wrapper);
+
+            boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
+                    .ANDROID_SETTING_PAGE;
+            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                    PermissionsPageManager.getIntent(activity);
+            wrapper.getPermissionPageListener().pageIntent(intent);
         }
     }
 
-    private static boolean pageListenerNonNull(Wrapper wrapper) {
+    private static Activity getActivity(Wrapper wrapper) {
         Activity activity;
         if (wrapper.getContext() instanceof android.app.Fragment) {
             activity = ((android.app.Fragment) wrapper.getContext()).getActivity();
@@ -72,7 +74,6 @@ public class NormalApplyPermissions {
             activity = (Activity) wrapper.getContext();
         }
 
-        return !ActivityCompat.shouldShowRequestPermissionRationale(activity, wrapper.getPermission()) &&
-                wrapper.getPermissionPageListener() != null;
+        return activity;
     }
 }

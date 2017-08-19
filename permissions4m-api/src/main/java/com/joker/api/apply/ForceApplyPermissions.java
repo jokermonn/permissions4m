@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.joker.api.Permissions4M;
+import com.joker.api.PermissionsProxy;
+import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
 import com.joker.api.wrapper.Wrapper;
+
 
 /**
  * Created by joker on 2017/8/9.
@@ -31,7 +34,8 @@ public class ForceApplyPermissions {
         } else {
             requestListener.permissionDenied();
             Wrapper.PermissionPageListener pageListener = wrapper.getPermissionPageListener();
-            if (pageListener != null) {
+            if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper) ||
+                    PermissionsPageManager.isNonRationaleManufacturer()) {
                 boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                         .ANDROID_SETTING_PAGE;
                 Intent intent = androidPage ? PermissionsPageManager.getIntent() :
@@ -44,17 +48,17 @@ public class ForceApplyPermissions {
     // annotation module ================================================================
     @SuppressWarnings("unchecked")
     public static void grantedOnResultWithAnnotation(Wrapper wrapper) {
-        grantedWithAnnotation(wrapper);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static void grantedWithAnnotation(Wrapper wrapper) {
         Activity activity = getActivity(wrapper);
 
+        PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
         if (PermissionsChecker.isPermissionGranted(activity, wrapper.getPermission())) {
-            wrapper.getProxy(wrapper.getContext().getClass().getName()).granted(wrapper.getContext(), wrapper.getRequestCode());
+            proxy.granted(wrapper.getContext(), wrapper.getRequestCode());
         } else {
-            wrapper.getProxy(wrapper.getContext().getClass().getName()).denied(wrapper.getContext(), wrapper.getRequestCode());
+            proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
+            if (SupportUtil.nonShowRationale(wrapper) || PermissionsPageManager
+                    .isNonRationaleManufacturer()) {
+                proxy.intent(wrapper.getContext(), wrapper.getRequestCode());
+            }
         }
     }
 

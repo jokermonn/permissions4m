@@ -10,6 +10,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
@@ -17,6 +18,7 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.joker.api.apply.util.AudioRecordManager;
 import com.joker.api.support.PermissionsPageManager;
@@ -112,6 +114,7 @@ public class PermissionsChecker {
             AudioRecordManager.getInstance().startRecord(activity.getCacheDir().getPath() + TAG +
                     ".3gp");
             AudioRecordManager.getInstance().stopRecord();
+            AudioRecordManager.getInstance().deleteFile();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,9 +150,12 @@ public class PermissionsChecker {
 
     private static boolean checkReadSms(Activity activity) throws Exception {
         Uri uri = Uri.parse("content://sms/");
-        Cursor cur = activity.getContentResolver().query(uri, null, null, null, null);
-        if (cur != null) {
-            cur.close();
+        Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            if (PermissionsPageManager.isXiaoMi() && checkReadContactsContent(activity, cursor)) {
+                return false;
+            }
+            cursor.close();
             return true;
         } else {
             return false;
@@ -183,7 +189,8 @@ public class PermissionsChecker {
     private static boolean checkLocation(Activity activity) throws Exception {
         LocationManager locationManager = (LocationManager) activity.getSystemService
                 (LOCATION_SERVICE);
-        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        // fuck XIAOMI!
+        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLatitude();
         return true;
     }
 
@@ -217,6 +224,9 @@ public class PermissionsChecker {
                         ("content://call_log/calls"), null, null,
                 null, null);
         if (cursor != null) {
+            if (PermissionsPageManager.isXiaoMi() && checkReadContactsContent(activity, cursor)) {
+                return false;
+            }
             cursor.close();
             return true;
         } else {
@@ -226,6 +236,7 @@ public class PermissionsChecker {
 
     private static boolean checkWriteContacts(Activity activity) throws Exception {
         if (checkReadContacts(activity)) {
+            // write some info
             ContentValues values = new ContentValues();
             ContentResolver contentResolver = activity.getContentResolver();
             Uri rawContactUri = contentResolver.insert(ContactsContract.RawContacts
@@ -236,6 +247,7 @@ public class PermissionsChecker {
             values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, TAG_NUMBER);
             contentResolver.insert(ContactsContract.Data.CONTENT_URI, values);
 
+            // delete info
             Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
             ContentResolver resolver = activity.getContentResolver();
             Cursor cursor = resolver.query(uri, new String[]{ContactsContract.Contacts.Data._ID},
@@ -257,10 +269,10 @@ public class PermissionsChecker {
 
     private static boolean checkReadContacts(Activity activity) throws Exception {
         Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
-                .CONTENT_URI, new String[] { }, null, null, null);
+                .CONTENT_URI, null, null, null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isAndroidMXiaoMi()) {
-                if (checkXiaoMiReadContacts(cursor)) return false;
+            if (PermissionsPageManager.isXiaoMi() && checkReadContactsContent(activity, cursor)) {
+                return false;
             }
             cursor.close();
             return true;
@@ -269,7 +281,7 @@ public class PermissionsChecker {
         }
     }
 
-    private static boolean checkXiaoMiReadContacts(Cursor cursor) {
+    private static boolean checkReadContactsContent(Activity activity, Cursor cursor) {
         String s = "";
         int i = 0;
         while (cursor.moveToNext()) {
@@ -277,7 +289,7 @@ public class PermissionsChecker {
             if (i == 2) {
                 break;
             }
-            s = cursor.getString(0) + cursor.getString(1);
+            s += cursor.getString(0) + cursor.getString(1);
         }
 
         return TextUtils.isEmpty(s);
