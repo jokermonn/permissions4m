@@ -32,9 +32,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int CALENDAR_CODE = 7;
     public static final int SENSORS_CODE = 8;
     public static final int LOCATION_CODE = 9;
-    private static final int STORAGE_CODE = 1;
     private static final int CALL_LOG_CODE = 2;
-    private static final int SMS_CODE = 5;
     private static final int AUDIO_CODE = 6;
     private static final int READ_CONTACTS_CODE = 10;
     private Button mCallButton;
@@ -48,19 +46,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCallButton = (Button) findViewById(R.id.btn_call);
+        mCallButton = (Button) findViewById(R.id.btn_call_log);
         mAudioButton = (Button) findViewById(R.id.btn_audio);
         mOneButton = (Button) findViewById(R.id.btn_one);
         mManagerButton = (Button) findViewById(R.id.btn_manager);
         mPermissionPageButton = (Button) findViewById(R.id.btn_permission_page);
         mPageListenerButton = (Button) findViewById(R.id.btn_page_listener);
 
-        // 通话
+        // 通话记录
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
                         .requestForce(true)
+                        .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .requestCode(CALL_LOG_CODE)
                         .requestPermission(Manifest.permission.READ_CALL_LOG)
                         .request();
@@ -73,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
                         .requestForce(true)
+                        .requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
                         .requestPermission(Manifest.permission.RECORD_AUDIO)
                         .requestCode(AUDIO_CODE)
                         .request();
@@ -212,50 +212,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //====================================================================
-    @PermissionsGranted({STORAGE_CODE, CALL_LOG_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权成功 in activity with annotation");
-                break;
-            case CALL_LOG_CODE:
-                ToastUtil.show("读取通话记录权限授权成功 in activity with annotation");
-                break;
-            default:
-                break;
-        }
+    @PermissionsGranted(CALL_LOG_CODE)
+    public void storageAndCallGranted() {
+        ToastUtil.show("读取通话记录权限授权成功 in activity with annotation");
     }
 
-    @PermissionsDenied({STORAGE_CODE, CALL_LOG_CODE})
-    public void storageAndCallDenied(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权失败 in activity with annotation");
-                break;
-            case CALL_LOG_CODE:
-                ToastUtil.show("读取通话记录权限授权失败 in activity with annotation");
-                break;
-            default:
-                break;
-        }
+    @PermissionsDenied(CALL_LOG_CODE)
+    public void storageAndCallDenied() {
+        ToastUtil.show("读取通话记录权限授权失败 in activity with annotation");
     }
 
-    @PermissionsRationale({STORAGE_CODE, CALL_LOG_CODE})
-    public void storageAndCallNonRationale(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("请开启设备存储权限授权 in activity with annotation");
-                break;
-            case CALL_LOG_CODE:
-                ToastUtil.show("请开启读取通话记录权限授权 in activity with annotation");
-                break;
-            default:
-                break;
-        }
+    @PermissionsRationale(CALL_LOG_CODE)
+    public void storageAndCallNonRationale() {
+        ToastUtil.show("请开启读取通话记录权限授权 in activity with annotation");
     }
 
-    @PermissionsNonRationale(value = {AUDIO_CODE, CALL_LOG_CODE}, pageType = {Permissions4M.PageType
-            .ANDROID_SETTING_PAGE, Permissions4M.PageType.MANAGER_PAGE})
+    //====================================================================
+    @PermissionsGranted(AUDIO_CODE)
+    public void smsAndAudioGranted() {
+        ToastUtil.show("录音权限申请成功 in activity with annotation");
+    }
+
+    @PermissionsDenied(AUDIO_CODE)
+    public void smsAndAudioDenied() {
+        ToastUtil.show("录音权限申请失败 in activity with annotation");
+    }
+
+
+    @PermissionsCustomRationale(AUDIO_CODE)
+    public void smsAndAudioCustomRationale() {
+        new AlertDialog.Builder(this)
+                .setMessage("录音权限申请：\n我们需要您开启录音权限(in activity with annotation)")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Permissions4M.get(MainActivity.this)
+                                .requestOnRationale()
+                                .requestPermission(Manifest.permission.RECORD_AUDIO)
+                                .requestCode(AUDIO_CODE)
+                                .request();
+                    }
+                })
+                .show();
+    }
+
+    //===================================================================
+    @PermissionsNonRationale({AUDIO_CODE, CALL_LOG_CODE})
     public void storageAndCallRationale(int code, final Intent intent) {
         switch (code) {
             case AUDIO_CODE:
@@ -288,73 +290,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-                            }
-                        })
-                        .show();
-                break;
-            default:
-                break;
-        }
-    }
-
-    //====================================================================
-    @PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请成功 in activity with annotation");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请成功 in activity with annotation");
-                break;
-            default:
-                break;
-        }
-    }
-
-    @PermissionsDenied({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioDenied(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请失败 in activity with annotation");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请失败 in activity with annotation");
-                break;
-            default:
-                break;
-        }
-    }
-
-    @PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioCustomRationale(int code) {
-        switch (code) {
-            case SMS_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("短信权限申请：\n我们需要您开启短信权限(in activity with annotation)")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.get(MainActivity.this)
-                                        .requestOnRationale()
-                                        .requestPermission(Manifest.permission.READ_SMS)
-                                        .requestCode(SMS_CODE)
-                                        .request();
-                            }
-                        })
-                        .show();
-                break;
-            case AUDIO_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("录音权限申请：\n我们需要您开启录音权限(in activity with annotation)")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.get(MainActivity.this)
-                                        .requestOnRationale()
-                                        .requestPermission(Manifest.permission.RECORD_AUDIO)
-                                        .requestCode(AUDIO_CODE)
-                                        .request();
                             }
                         })
                         .show();

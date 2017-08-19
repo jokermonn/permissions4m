@@ -40,24 +40,26 @@ public class SupportFragment extends Fragment {
         mLocationButton = (Button) view.findViewById(R.id.btn_location);
         mCameraButton = (Button) view.findViewById(R.id.btn_camera);
 
-        // 单个申请
+        // 地理位置申请
         mLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(SupportFragment.this)
                         .requestForce(true)
+                        .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .requestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                         .requestCode(LOCATION_CODE)
                         .request();
             }
         });
 
-        // 自定义单个申请
+        // 相机申请
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(SupportFragment.this)
                         .requestForce(true)
+                        .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .requestPermission(Manifest.permission.CAMERA)
                         .requestCode(CAMERA_CODE)
                         .request();
@@ -118,8 +120,7 @@ public class SupportFragment extends Fragment {
                 .show();
     }
 
-    @PermissionsNonRationale(value = {LOCATION_CODE, CAMERA_CODE}, pageType = {Permissions4M.PageType
-            .ANDROID_SETTING_PAGE, Permissions4M.PageType.ANDROID_SETTING_PAGE})
+    @PermissionsNonRationale({LOCATION_CODE, CAMERA_CODE})
     public void non(int code, final Intent intent) {
         switch (code) {
             case LOCATION_CODE:

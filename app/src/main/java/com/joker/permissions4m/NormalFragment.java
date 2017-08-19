@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +59,7 @@ public class NormalFragment extends Fragment {
         mSmsButton = (Button) view.findViewById(R.id.btn_sms);
         mOneButton = (Button) view.findViewById(R.id.btn_one);
         mStorageButton = (Button) view.findViewById(R.id.btn_storage);
-        mCallButton = (Button) view.findViewById(R.id.btn_call);
+        mCallButton = (Button) view.findViewById(R.id.btn_call_log);
 
         // 通话申请
         mCallButton.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +68,7 @@ public class NormalFragment extends Fragment {
                 Permissions4M.get(NormalFragment.this)
                         .requestPermission(Manifest.permission.READ_CALL_LOG)
                         .requestForce(true)
+                        .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .requestCode(READ_CALL_LOG)
                         .request();
             }
@@ -79,6 +81,7 @@ public class NormalFragment extends Fragment {
                 Permissions4M.get(NormalFragment.this)
                         .requestPermission(Manifest.permission.READ_SMS)
                         .requestForce(true)
+                        .requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
                         .requestCode(SMS_CODE)
                         .request();
             }
@@ -276,12 +279,12 @@ public class NormalFragment extends Fragment {
                         .show();
                 break;
             default:
+
                 break;
         }
     }
 
-    @PermissionsNonRationale(value = {SMS_CODE, READ_CALL_LOG}, pageType = {Permissions4M.PageType
-            .MANAGER_PAGE, Permissions4M.PageType.ANDROID_SETTING_PAGE})
+    @PermissionsNonRationale({SMS_CODE, READ_CALL_LOG})
     public void nonRationale(int code, final Intent intent) {
         switch (code) {
             case SMS_CODE:
@@ -308,7 +311,6 @@ public class NormalFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(intent);
-
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

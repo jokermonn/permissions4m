@@ -28,14 +28,14 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <Button
-            android:id="@+id/btn_call"
+            android:id="@+id/btn_call_log"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="通话（多参数注解回调函数）"
+            android:text="通话记录（多参数注解回调函数）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_top"/>
@@ -52,7 +52,7 @@
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_call"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_call_log"/>
 
         <Button
             android:id="@+id/btn_audio"

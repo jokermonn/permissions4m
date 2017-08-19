@@ -12,6 +12,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 public @interface PermissionsNonRationale {
     int[] value();
-
-    int[] pageType() default {0};
 }

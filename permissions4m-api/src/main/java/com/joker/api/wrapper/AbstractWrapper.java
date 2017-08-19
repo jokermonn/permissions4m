@@ -16,7 +16,7 @@ import java.util.Map;
 public abstract class AbstractWrapper implements Wrapper {
     private static final String PERMISSIONS_PROXY = "$$PermissionsProxy";
     @Permissions4M.PageType
-    private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.MANAGER_PAGE;
+    private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
     private static final int DEFAULT_REQUEST_CODE = -1;
     protected static PermissionsProxy proxy;
     private static Map<String, PermissionsProxy> map = new HashMap<>();
@@ -180,6 +180,16 @@ public abstract class AbstractWrapper implements Wrapper {
         }
         initProxy(object);
         proxy.startSyncRequestPermissionsMethod(object);
+    }
+
+    protected Activity getActivity() {
+        if (getContext() instanceof android.app.Fragment) {
+            return ((android.app.Fragment)getContext()).getActivity();
+        } else if (getContext() instanceof android.support.v4.app.Fragment) {
+            return ((android.support.v4.app.Fragment) getContext()).getActivity();
+        } else {
+            return (Activity) getContext();
+        }
     }
 
     abstract void requestPermissionWithAnnotation();

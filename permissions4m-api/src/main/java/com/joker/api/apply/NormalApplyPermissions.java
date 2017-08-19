@@ -3,7 +3,6 @@ package com.joker.api.apply;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
@@ -28,9 +27,14 @@ public class NormalApplyPermissions {
         PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
 
         proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
-        Log.e("TAG", "deniedWithAnnotation: 1 ");
-        if (SupportUtil.nonShowRationale(wrapper) || PermissionsPageManager.isNonRationaleManufacturer()) {
-            proxy.intent(wrapper.getContext(), wrapper.getRequestCode());
+
+        if (SupportUtil.nonShowRationale(wrapper)) {
+            boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
+                    .ANDROID_SETTING_PAGE;
+            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                    PermissionsPageManager.getIntent(getActivity(wrapper));
+
+            proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
         }
     }
 
@@ -51,9 +55,7 @@ public class NormalApplyPermissions {
 
         wrapper.getPermissionRequestListener().permissionDenied();
 
-        if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper) ||
-                PermissionsPageManager
-                .isNonRationaleManufacturer()) {
+        if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
             Activity activity = getActivity(wrapper);
 
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType

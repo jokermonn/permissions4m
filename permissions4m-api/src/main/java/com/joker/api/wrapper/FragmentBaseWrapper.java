@@ -1,9 +1,11 @@
 package com.joker.api.wrapper;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
+import com.joker.api.Permissions4M;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
 import com.joker.api.apply.PermissionsChecker;
@@ -75,9 +77,13 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
                         getContext()).getActivity(), permission)) {
                     proxy.granted(getContext(), getRequestCode());
                 } else {
-                    proxy.denied(getContext(), getRequestCode());
-                    if (SupportUtil.nonShowRationale(this) || PermissionsPageManager.isNonRationaleManufacturer()) {
-                        proxy.intent(getContext(), getRequestCode());
+                    if (SupportUtil.nonShowRationale(this)) {
+                        boolean androidPage = getPageType() == Permissions4M.PageType
+                                .ANDROID_SETTING_PAGE;
+                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                                PermissionsPageManager.getIntent(getActivity());
+
+                        proxy.intent(getContext(), getRequestCode(), intent);
                     }
                 }
             } else {
@@ -117,8 +123,13 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
                     proxy.granted(getContext(), getRequestCode());
                 } else {
                     proxy.denied(getContext(), getRequestCode());
-                    if (SupportUtil.nonShowRationale(this) || PermissionsPageManager.isNonRationaleManufacturer()) {
-                        proxy.intent(getContext(), getRequestCode());
+                    if (SupportUtil.nonShowRationale(this)) {
+                        boolean androidPage = getPageType() == Permissions4M.PageType
+                                .ANDROID_SETTING_PAGE;
+                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                                PermissionsPageManager.getIntent(getActivity());
+
+                        proxy.intent(getContext(), getRequestCode(), intent);
                     }
                 }
             } else {

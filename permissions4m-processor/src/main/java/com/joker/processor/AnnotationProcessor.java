@@ -169,18 +169,11 @@ public class AnnotationProcessor extends AbstractProcessor {
                 }
             } else if (annotation instanceof PermissionsNonRationale) {
                 int[] value = ((PermissionsNonRationale) annotation).value();
-                int[] pageType = ((PermissionsNonRationale) annotation).pageType();
-                if (pageType.length != value.length) {
-                    error(element, "pageType's length not equals value's length");
-                    return false;
+                if (value.length > 1) {
+                    info.nonRationaleMap.put(methodName, value);
+                } else {
+                    info.singleNonRationaleMap.put(value[0], methodName);
                 }
-
-                ProxyInfo.NonRationalePermissionBean bean = new ProxyInfo
-                        .NonRationalePermissionBean();
-                bean.setPageType(pageType);
-                bean.setValue(value);
-
-                info.nonRationaleMap.put(methodName, bean);
             } else {
                 error(method, "%s not support.", method);
                 return false;

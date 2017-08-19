@@ -34,8 +34,7 @@ public class ForceApplyPermissions {
         } else {
             requestListener.permissionDenied();
             Wrapper.PermissionPageListener pageListener = wrapper.getPermissionPageListener();
-            if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper) ||
-                    PermissionsPageManager.isNonRationaleManufacturer()) {
+            if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
                 boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                         .ANDROID_SETTING_PAGE;
                 Intent intent = androidPage ? PermissionsPageManager.getIntent() :
@@ -55,9 +54,14 @@ public class ForceApplyPermissions {
             proxy.granted(wrapper.getContext(), wrapper.getRequestCode());
         } else {
             proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
-            if (SupportUtil.nonShowRationale(wrapper) || PermissionsPageManager
-                    .isNonRationaleManufacturer()) {
-                proxy.intent(wrapper.getContext(), wrapper.getRequestCode());
+
+            if (SupportUtil.nonShowRationale(wrapper)) {
+                boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
+                        .ANDROID_SETTING_PAGE;
+                Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                        PermissionsPageManager.getIntent(getActivity(wrapper));
+
+                proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
             }
         }
     }

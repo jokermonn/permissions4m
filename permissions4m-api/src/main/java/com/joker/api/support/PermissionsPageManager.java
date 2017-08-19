@@ -56,18 +56,8 @@ public class PermissionsPageManager {
     }
 
     /**
-     * special manufacturer, can only request permissions once by default
-     * like {@link XIAOMI}, {@link OPPO}, and there is no rationale
-     *
-     * @return true if special
-     */
-    public static boolean isNonRationaleManufacturer() {
-        return getManufacturer().equalsIgnoreCase(MANUFACTURER_XIAOMI) || getManufacturer()
-                .equalsIgnoreCase(MANUFACTURER_OPPO);
-    }
-
-    /**
      * whether is xiaomi
+     *
      * @return true if it is
      */
     public static boolean isXiaoMi() {

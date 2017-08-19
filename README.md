@@ -14,23 +14,11 @@
 意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。另较原有项目有以下升级：
 
 - 支持 java8
-- 支持一行代码同步请求多个权限申请
+- **支持一行代码同步请求多个权限**
 - 支持多种回调函数，代码可以更简洁
+- **支持大量国产机型适配**
 
 权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
-
-# 特点 #
-- 一行代码同步申请多个权限：
-
-如果访问缓慢，建议直点链接：[图片](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
-
-![](http://imglf0.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdjVJN1Y2TzRsS1NkTkw3YXVUR0xHMGZ6bkdONXpQZU5nPT0.gif)
-
-- 二次申请时自定义 dialog：
-
-如果访问缓慢，建议直点链接：[图片2](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
-
-![](http://imglf.nosdn.127.net/img/MXFneHJjVkcvalFpQTlzdEQxZWZSdUdNY0xKWklvc3E0OTQ2Z2VQSytKQTAvLzUvaGc2dDN3PT0.gif)
 
 # 引入依赖 #
 
@@ -80,32 +68,31 @@
 # 使用文档 #
 
 * 注意事项
-	* [必加的二次权限申请回调](#must_add)
-	* [同步请求多个权限申请注意事项](#sync_request)
-	* [单个权限申请注意事项](#notice_single)
-	* [多个权限申请函数写法注意事项](#multiple_single)
-
-* Activity
-    * [单个权限申请](#single_activity)
-    * [多个权限申请](#multiple_activity)
-    * [同步请求多个权限申请](#sync_activity)
-    * [单个权限申请自定义](#single_custom_activity)
-    * [多个权限申请自定义](#mutiple_custom_activity)
-    * [同步多个权限申请自定义](#sync_request_activity)
- 
-* Fragment
-    * [单个权限申请](#single_fragment)
-    * [多个权限申请](#multiple_fragment)
-    * [同步请求多个权限申请](#sync_fragment)
-    * [单个权限申请自定义](#single_custom_fragment)
-    * [多个权限申请自定义](#mutiple_custom_fragment)
-    * [同步多个权限申请自定义](#sync_request_fragment)
+	* [**必加的二次权限申请回调**](#must_add)
+	* [小米读取通讯录权限回调](#xiaomi_contacts)
+* [接口回调](#annotation)
+* [Listener 回调](#listener)
+* [同步申请](#sync)
+* 关于项目
+	* [help me](#help)
+	* [国产畸形权限适配扩展](#extend)
+	* [项目问题](#problem)
 
 # 版本迭代 #
 
-截止于第37次 commits，v1.0.0 发布，[37 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
+- TODO:[help me](#help)
 
-## 注意事项 ##
+- v1.0.1
+
+	- 适配大量国产机型，包括小米、OPPO、华为等
+	- 更改为流式 API
+	- 支持 Listener 接口回调
+
+- v1.0.0
+
+	截止于[第37次 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
+
+# 注意事项 #
 
 <h3 id="must_add">必加的二次权限申请回调</h3>
 
@@ -118,798 +105,196 @@
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-<h3 id="sync_request">同步请求多个权限申请注意事项</h3>
+<h3 id="xiaomi_contacts"></h3>
 
-同步请求多个权限时，回调函数请使用[多个权限申请](#multiple_single)格式，即应将回调结果放至同一函数中，以 `code` 区别：
+<h1 id="annotation">注解回调</h1>
 
-	// 权限申请成功回调
-	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请成功 in fragment");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请成功 in fragment");
-                break;
-            default:
-                break;
-        }
-    }
+在需要权限申请的地方调用
 
-而不可如下：
+	Permissions4M.get(MainActivity.this)
+				// 是否强制弹出权限申请对话框
+                .requestForce(true)
+				// 权限
+                .requestPermission(Manifest.permission.RECORD_AUDIO)
+				// 权限码
+                .requestCode(AUDIO_CODE)
+				// 如果需要使用 @PermissionNonRationale 注解的话，建议添加如下一行
+				// 返回的 intent 是跳转至**系统设置页面**
+                // .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
+				// 返回的 intent 是跳转至**手机管家页面**
+				// .requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
+                .request();
 
-	// 权限申请成功回调
-	@PermissionsGranted(SMS_CODE)
-    public void smsGranted() {
-        ToastUtil.show("短信权限申请成功 in fragment");
-    }
+如：
 
-	// 权限申请成功回调
-	@PermissionsGranted(AUDIO_CODE)
-    public void audioGranted() {
-        ToastUtil.show("录音权限申请成功 in fragment");
-    }
-
-<h3 id="notice_single">单个权限申请注意事项</h3>
-
-针对**单个权限申请**，注解所修饰的方法是不含参数的，**应如下**：
-
-	@PermissionsGranted(CONTACT_CODE)
-    public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功");
-    }
-
-而如下是**不可取**的：
-
-	// 注意方法体中含有形式参数
-	@PermissionsGranted(CONTACT_CODE)
-    public void contactGranted(int code) {
-        ToastUtil.show("读取联系人权限成功");
-    }
-
-<h3 id="multiple_single">多个权限申请函数写法注意事项</h3>
-
-针对**多个权限申请**，可以选择使用多个[单个权限申请注意事项](#notice_single)中所提到的方法，也可以选择更简洁的方法，统一回调接口，注解所修饰的方法是含参数的，**应如下**：
-
-	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权成功");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权成功");
-                break;
-        }
-    }
-
-而如下是**不可取**的：
-
-	// 注意方法体中不含形式参数
-	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted() {
-    }
-
-## Activity ##
-
-<h3 id="single_activity">单个权限申请</h3>
-	
-	private static final int CONTACT_CODE = 3;
-
-	// 单个申请
-    mContactsButton.setOnClickListener(new View.OnClickListener() {
+    button.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Permissions4M.requestPermission(MainActivity.this, Manifest.permission.READ_CONTACTS,CONTACT_CODE);
+            Permissions4M.get(MainActivity.this)
+                    .requestForce(true)
+					.requestPageType(Permissions4M.PageType.MANAGER_PAGE)
+                    .requestPermission(Manifest.permission.RECORD_AUDIO)
+                    .requestCode(AUDIO_CODE)
+                    .request();
         }
     });
 
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+然后将会回调相应的 [`@PermissionsGranted`](#granted)、[`@PermissionsDenied`](#denied)、[`@PermissionsRationale`](#rationale)/[`PermissionsCustomRationale`](#custom_rationale)、[`@PermissionsNonRationale`](#non_rationale) 所修饰的方法
 
-	// 权限申请成功
-	@PermissionsGranted(CONTACT_CODE)
-    public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功");
-    }
+<h2 id="granted">@PermissionsGranted</h2>
 
-	// 权限申请失败
-    @PermissionsDenied(CONTACT_CODE)
-    public void contactDenied() {
-        ToastUtil.show("读取联系人权限失败");
-    }
+授权**成功**时回调，注解中需要传入参数，分为两种情况：
 
-	// 二次申请权限时调用
-    @PermissionsRationale(CONTACT_CODE)
-    public void contactRationale() {
-        ToastUtil.show("请开启读取联系人权限");
-    }
+- 单参数：`@PermissionsGranted(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+>
 
-<h3 id="multiple_activity">多个权限申请</h3>
-
-	private static final int STORAGE_CODE = 1;
-    private static final int CALL_CODE = 2;
-
-	mCallButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainActivity.this, Manifest.permission.CALL_PHONE,CALL_CODE);
-        }
-    });
-    mStorageButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE,STORAGE_CODE);
-            }
-    });
-
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-	// 权限申请成功
-	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权成功");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权成功");
-                break;
-        }
-    }
-
-	// 权限申请失败
-    @PermissionsDenied({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallDenied(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权失败");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权失败");
-                break;
-        }
-    }
-
-	// 二次申请权限时调用
-    @PermissionsRationale({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallRationale(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("请开启设备存储权限授权");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("请开启通话权限授权");
-                break;
-        }
-    }
-
-<h3 id="sync_activity">同步请求多个权限申请</h3>
-
-1.首先在 Activity 上添加注解，如下：
-
-	@PermissionsRequestSync(
-		permission = {Manifest.permission.BODY_SENSORS,
-						Manifest.permission.ACCESS_FINE_LOCATION,
-							Manifest.permission.READ_CALENDAR},
-		value = {SENSORS_CODE,
-					LOCATION_CODE,
-						CALENDAR_CODE})
-	public class MainActivity extends AppcompatActivity
-
-注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，数组顺序无关，数组内部顺序有关请求的顺序
-
-2.使用如下代码开始同步申请权限：
-
-	Permissions4M.syncRequestPermissions(MainFragment.this);
-
-申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
-
-3.请求回调函数请使用以下格式撰写（**不支持将回调函数分开**）：
-
-	// 权限申请成功时回调
-	@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncGranted(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                ToastUtil.show("地理位置权限授权成功 in activity");
-                break;
-            case SENSORS_CODE:
-                ToastUtil.show("传感器权限授权成功 in activity");
-                break;
-            case CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权成功 in activity");
-                break;
-            default:
-                break;
-        }
-    }
-
-	// 权限申请失败时回调
-    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncDenied(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                ToastUtil.show("地理位置权限授权失败 in activity");
-                break;
-            case SENSORS_CODE:
-                ToastUtil.show("传感器权限授权失败 in activity");
-                break;
-            case CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权失败 in activity");
-                break;
-            default:
-                break;
-        }
-    }
-
-	// 二次权限申请时回调
-    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncRationale(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                ToastUtil.show("请开启地理位置权限 in activity");
-                break;
-            case SENSORS_CODE:
-                ToastUtil.show("请开启传感器权限 in activity");
-                break;
-            case CALENDAR_CODE:
-                ToastUtil.show("请开启读取日历权限 in activity");
-                break;
-            default:
-                break;
-        }
-    }
-
-<h3 id="single_custom_activity">单个权限申请自定义</h3>
-
-	private static final int CAMERA_CODE = 4;
-
-	mCameraButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainActivity.this, Manifest.permission.CAMERA, CAMERA_CODE);
-        }
-    });
-
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-	// 权限申请成功
-	@PermissionsGranted(CAMERA_CODE)
-    public void cameraGranted() {
-        ToastUtil.show("相机权限授权成功");
-    }
-
-	// 权限申请失败
-    @PermissionsDenied(CAMERA_CODE)
-    public void cameraDenied() {
-        ToastUtil.show("相机权限授权失败");
-    }
-
-	// 二次申请权限时回调
-    @PermissionsCustomRationale(CAMERA_CODE)
-    public void cameraCustomRationale() {
-        new AlertDialog.Builder(this)
-                .setMessage("相机权限申请：\n我们需要您开启相机信息权限")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 请自行处理申请权限，两者方法等价
-                        // 方法1.使用框架封装方法
-                        Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new String[]{Manifest
-                                .permission.CAMERA}, CAMERA_CODE);
-                        // 方法2.使用自身方法
-						// ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
-						// .permission.CAMERA}, CAMERA_CODE);
-                    }
-                })
-                .show();
-    }
-
-<h3 id="mutiple_custom_activity">多个权限申请自定义</h3>
-
-	private static final int SMS_CODE = 5;
-    private static final int AUDIO_CODE = 6;
-
-	mSmsButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainActivity.this, Manifest.permission.READ_SMS, SMS_CODE);
-        }
-    });
-    mAudioButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO,AUDIO_CODE);
-        }
-    });
-
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-	// 权限申请成功
-	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请成功");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请成功");
-                break;
-            default:
-                break;
-        }
-    }
-
-	// 权限申请失败
-    @PermissionsDenied({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioDenied(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请失败");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请失败");
-                break;
-            default:
-                break;
-        }
-    }
-
-	// 二次申请权限时回调
-    @PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioCustomRationale(int code) {
-        switch (code) {
-            case SMS_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("短信权限申请：\n我们需要您开启短信权限")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 请自行处理申请权限，两者方法等价
-                                // 方法1.使用框架封装方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new String[]{Manifest
-                                        .permission.READ_SMS}, SMS_CODE);
-                                // 方法2.使用自身方法
-								// ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
-								// .permission.READ_SMS}, SMS_CODE);
-                            }
-                        })
-                        .show();
-                break;
-            case AUDIO_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("录音权限申请：\n我们需要您开启录音权限")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 请自行处理申请权限
-                                // 请自行处理申请权限，两者方法等价
-                                // 方法1.使用框架封装方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new String[]{Manifest
-                                        .permission.RECORD_AUDIO}, AUDIO_CODE);
-                                // 方法2.使用自身方法
-								// ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
-								// .permission.RECORD_AUDIO}, AUDIO_CODE);
-                            }
-                        })
-                        .show();
-                break;
-            default:
-                break;
-        }
-    }
-
-<h3 id="sync_request_activity">同步多个权限申请自定义</h3>
-
-同[多个权限申请自定义](#mutiple_custom_activity)，参考代码如下：
-
-	// 同步申请
-        mOneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.syncRequestPermissions(MainActivity.this);
-            }
-        });
-
-	@PermissionsCustomRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncCustomRationale(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("地理位置权限申请：\n我们需要您开启地理位置权限(in activity)")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
-                                        String[]{Manifest
-                                        .permission.ACCESS_FINE_LOCATION}, LOCATION_CODE);
-                            }
-                        })
-                        .show();
-                break;
-            case SENSORS_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("传感器权限申请：\n我们需要您开启传感器权限(in activity)")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
-                                        String[]{Manifest
-                                        .permission.BODY_SENSORS}, SENSORS_CODE);
-                            }
-                        })
-                        .show();
-                break;
-            case CALENDAR_CODE:
-                new AlertDialog.Builder(this)
-                        .setMessage("读取日历权限申请：\n我们需要您开启读取日历权限(in activity)")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.requestPermissionOnCustomRationale(MainActivity.this, new
-                                        String[]{Manifest
-                                        .permission.READ_CALENDAR}, CALENDAR_CODE);
-                            }
-                        })
-                        .show();
-                break;
-        }
+	@PermissionsGranted(LOCATION_CODE)
+    public void granted() {
+		ToastUtil.show("地理位置授权成功");
 	}
 
-## Fragment ##
+- 多参数：`@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})`，被修饰函数需要传入一个 int 参数，例：
+>
 
-<h3 id="single_fragment">单个权限申请</h3>
-
-	private static final int CONTACT_CODE = 3;
-
-	mContactsButton.setOnClickListener(new View.OnClickListener() {
-       @Override
-       public void onClick(View v) {
-           Permissions4M.requestPermission(MainFragment.this, Manifest.permission.READ_CONTACTS,CONTACT_CODE);
-       }
-    });
-
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-	// 权限申请成功回调
-	@PermissionsGranted(CONTACT_CODE)
-    public void contactGranted() {
-        ToastUtil.show("读取联系人权限成功 in fragment");
-    }
-
-	// 权限申请失败回调
-    @PermissionsDenied(CONTACT_CODE)
-    public void contactDenied() {
-        ToastUtil.show("读取联系人权限失败 in fragment");
-    }
-
-	// 二次申请回调
-    @PermissionsRationale(CONTACT_CODE)
-    public void contactRationale() {
-        ToastUtil.show("请开启读取联系人权限 in fragment");
-    }
-
-<h3 id="multiple_fragment">多个权限申请</h3>
-
-	private static final int STORAGE_CODE = 1;
-    private static final int CALL_CODE = 2;
-
-	mCallButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainFragment.this, Manifest.permission.CALL_PHONE,CALL_CODE);
-        }
-    });
-    mStorageButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainFragment.this, Manifest.permission.WRITE_EXTERNAL_STORAGE,STORAGE_CODE);
-        }
-    });
-
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-	// 权限申请成功回调
-	@PermissionsGranted({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权成功 in fragment");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权成功 in fragment");
-                break;
-        }
-    }
-
-	// 权限申请失败回调
-    @PermissionsDenied({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallDenied(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("设备存储权限授权失败 in fragment");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("通话权限授权失败 in fragment");
-                break;
-        }
-    }
-
-	// 二次申请回调
-    @PermissionsRationale({STORAGE_CODE, CALL_CODE})
-    public void storageAndCallRationale(int code) {
-        switch (code) {
-            case STORAGE_CODE:
-                ToastUtil.show("请开启设备存储权限授权 in fragment");
-                break;
-            case CALL_CODE:
-                ToastUtil.show("请开启通话权限授权 in fragment");
-                break;
-        }
-    }
-
-<h3 id="sync_fragment">同步请求多个权限申请</h3>
-
-1.首先在 Fragment 上添加注解，如下：
-
-	@PermissionsRequestSync(
-		permission = {Manifest.permission.BODY_SENSORS,
-						Manifest.permission.ACCESS_FINE_LOCATION,
-							Manifest.permission.READ_CALENDAR},
-		value = {SENSORS_CODE,
-					LOCATION_CODE,
-						CALENDAR_CODE})
-	public class MainFragment extends Fragment
-
-注解中需要添加两个数组，permission 数组放入需要同步申请的权限，value 数组放入相对应的结果码，数组顺序无关，数组内部顺序有关请求的顺序
-
-2.使用如下代码开始同步申请权限：
-
-	Permissions4M.syncRequestPermissions(MainFragment.this);
-
-申请顺序将会参考你所写的权限的顺序，例如如上的顺序是 `Manifest.permission.BODY_SENSORS` -> `Manifest.permission.ACCESS_FINE_LOCATION` -> `Manifest.permission.READ_CALENDAR`。
-
-3.请求回调函数请使用以下格式撰写（**不支持将回调函数分开**）：
-
-	// 权限申请成功时回调
 	@PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncGranted(int code) {
+    public void granted(int code) {
         switch (code) {
             case LOCATION_CODE:
-                ToastUtil.show("地理位置权限授权成功 in activity");
+                ToastUtil.show("地理位置权限授权成功");
                 break;
             case SENSORS_CODE:
-                ToastUtil.show("传感器权限授权成功 in activity");
+                ToastUtil.show("传感器权限授权成功");
                 break;
             case CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权成功 in activity");
+                ToastUtil.show("读取日历权限授权成功");
                 break;
             default:
                 break;
         }
     }
 
-	// 权限申请失败时回调
-    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncDenied(int code) {
+<h2 id="denied">@PermissionsDenied</h2>
+
+授权**失败**时回调，注解中需要传入参数，分为两种情况：
+
+- 单参数：`@PermissionsDenied(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+>
+
+	@PermissionsDenied(LOCATION_CODE)
+    public void denied() {
+	}
+
+- 多参数：`@PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})`，被修饰函数需要传入一个 int 参数，例：
+>
+
+	@PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void denied(int code) {
         switch (code) {
             case LOCATION_CODE:
-                ToastUtil.show("地理位置权限授权失败 in activity");
+                ToastUtil.show("地理位置权限授权失败");
                 break;
             case SENSORS_CODE:
-                ToastUtil.show("传感器权限授权失败 in activity");
+                ToastUtil.show("传感器权限授权失败");
                 break;
             case CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权失败 in activity");
+                ToastUtil.show("读取日历权限授权失败");
                 break;
             default:
                 break;
         }
     }
 
-	// 二次权限申请时回调
-    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void syncRationale(int code) {
+<h2 id="rationale">@PermissionsRationale</h2>
+二次授权时回调，用于解释为何需要此权限，注解中需要传入参数，分为两种情况：
+
+- 单参数：`@PermissionsRationale(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+>
+
+	@PermissionsRationale(LOCATION_CODE)
+    public void rationale() {
+		ToastUtil.show("请开启读取地理位置权限");
+	}
+
+- 多参数：`@PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})`，被修饰函数需要传入一个 int 参数，例：
+>
+
+	@PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    public void rationale(int code) {
         switch (code) {
             case LOCATION_CODE:
-                ToastUtil.show("请开启地理位置权限 in activity");
+                ToastUtil.show("请开启地理位置权限授权");
                 break;
             case SENSORS_CODE:
-                ToastUtil.show("请开启传感器权限 in activity");
+                ToastUtil.show("请开启传感器权限授权");
                 break;
             case CALENDAR_CODE:
-                ToastUtil.show("请开启读取日历权限 in activity");
+                ToastUtil.show("请开启读取日历权限授权");
                 break;
             default:
                 break;
         }
-    }
 
-<h3 id="single_custom_fragment">单个权限申请自定义</h3>
+**注：系统弹出权限申请 dialog 与 toast 提示是异步操作，所以如果存在希望自行弹出一个 dialog 后（或其他同步需求）再弹出系统对话框，那么请使用 [@PermissionsCustomRationale](#custom_rationale)**
 
-	private static final int CAMERA_CODE = 4;
+<h2 id="custom_rationale">@PermissionsCustomRationale</h2>
 
-	mCameraButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainFragment.this, Manifest.permission.CAMERA, CAMERA_CODE);
-        }
-    });
+二次授权时回调，用于解释为何需要此权限，注解中需要传入参数，分为两种情况：
 
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+- 单参数：`@PermissionsCustomRationale(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+>
 
-	// 权限申请成功回调
-	@PermissionsGranted(CAMERA_CODE)
-    public void cameraGranted() {
-        ToastUtil.show("相机权限授权成功 in fragment");
-    }
-
-	// 权限申请失败回调
-    @PermissionsDenied(CAMERA_CODE)
-    public void cameraDenied() {
-        ToastUtil.show("相机权限授权失败 in fragment");
-    }
-
-	// 二次申请回调
-    @PermissionsCustomRationale(CAMERA_CODE)
-    public void cameraCustomRationale() {
-        new AlertDialog.Builder(getActivity())
-                .setMessage("相机权限申请：\n我们需要您开启相机信息权限(in fragment)")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // 请自行处理申请权限，两种方法等价
-                        // 方法1，使用框架已封装的方法
-                        Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
-                                String[]{Manifest
-                                .permission.CAMERA}, CAMERA_CODE);
-                        // 方法2，使用自身方法
-						// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-						// MainFragment.this.requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_CODE);
-						// }
-                    }
-                })
-                .show();
-    }
-
-<h3 id="mutiple_custom_fragment">多个权限申请自定义</h3>
-
-	private static final int SMS_CODE = 5;
-    private static final int AUDIO_CODE = 6;
-
-	mSmsButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainFragment.this, Manifest.permission.READ_SMS, SMS_CODE);
-        }
-    });
-    mAudioButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Permissions4M.requestPermission(MainFragment.this, Manifest.permission.RECORD_AUDIO,
-                    AUDIO_CODE);
-        }
-    });
-
-	// 注册回调权限申请函数
-	@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-	// 权限申请成功回调
-	@PermissionsGranted({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioGranted(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请成功 in fragment");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请成功 in fragment");
-                break;
-            default:
-                break;
-        }
-    }
-
-	// 权限申请失败回调
-    @PermissionsDenied({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioDenied(int code) {
-        switch (code) {
-            case SMS_CODE:
-                ToastUtil.show("短信权限申请失败 in fragment");
-                break;
-            case AUDIO_CODE:
-                ToastUtil.show("录音权限申请失败 in fragment");
-                break;
-            default:
-                break;
-        }
-    }
-
-	// 二次申请回调
-    @PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
-    public void smsAndAudioCustomRationale(int code) {
-        switch (code) {
-            case SMS_CODE:
-                new AlertDialog.Builder(getActivity())
-                        .setMessage("短信权限申请：\n我们需要您开启短信权限(in fragment)")
+	@PermissionsCustomRationale(LOCATION_CODE)
+    public void cusRationale() {
+		new AlertDialog.Builder(this)
+                        .setMessage("读取地理位置权限申请：\n我们需要您开启读取地理位置权限(in activity with annotation)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 请自行处理申请权限，两种方法等价
-                                // 方法1，使用框架已封装的方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
-                                        String[]{Manifest
-                                        .permission.READ_SMS}, SMS_CODE);
-                                // 方法2，使用自身方法
-								// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-								// MainFragment.this.requestPermissions(new String[]{Manifest.permission.READ_SMS}, SMS_CODE);
-								// }
+                                Permissions4M.get(MainActivity.this)
+										// 注意添加 .requestOnRationale()
+                                        .requestOnRationale()
+                                        .requestPermission(Manifest.permission.READ_SMS)
+                                        .requestCode(SMS_CODE)
+                                        .request();
+                            }
+                        })
+                        .show();
+	}
+
+- 多参数：`@PermissionsCustomRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})`，被修饰函数需要传入一个 int 参数，例：
+>
+
+	@PermissionsCustomRationale({SMS_CODE, AUDIO_CODE})
+    public void cusRationale(int code) {
+        switch (code) {
+            case SMS_CODE:
+                new AlertDialog.Builder(this)
+                        .setMessage("短信权限申请：\n我们需要您开启短信权限(in activity with annotation)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Permissions4M.get(MainActivity.this)
+										// 注意添加 .requestOnRationale()
+                                        .requestOnRationale()
+                                        .requestPermission(Manifest.permission.READ_SMS)
+                                        .requestCode(SMS_CODE)
+                                        .request();
                             }
                         })
                         .show();
                 break;
             case AUDIO_CODE:
-                new AlertDialog.Builder(getActivity())
-                        .setMessage("录音权限申请：\n我们需要您开启录音权限(in fragment)")
+                new AlertDialog.Builder(this)
+                        .setMessage("录音权限申请：\n我们需要您开启录音权限(in activity with annotation)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 请自行处理申请权限，两种方法等价
-                                // 方法1，使用框架已封装的方法
-                                Permissions4M.requestPermissionOnCustomRationale(MainFragment.this, new
-                                        String[]{Manifest
-                                        .permission.RECORD_AUDIO}, AUDIO_CODE);
-                                // 方法2，使用自身方法
-								// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-								// MainFragment.this.requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_CODE);
-								// }
+                                Permissions4M.get(MainActivity.this)
+										// 注意添加 .requestOnRationale()
+                                        .requestOnRationale()
+                                        .requestPermission(Manifest.permission.RECORD_AUDIO)
+                                        .requestCode(AUDIO_CODE)
+                                        .request();
                             }
                         })
                         .show();
@@ -917,11 +302,181 @@
             default:
                 break;
         }
+
+注：除上述以外的 dialog，开发者可以自定义其他展示效果，继续权限申请时请使用： 
+
+	Permissions4M.get(MainActivity.this)
+			// 务必添加下列一行
+          .requestOnRationale()
+          .requestPermission(Manifest.permission.RECORD_AUDIO)
+          .requestCode(AUDIO_CODE)
+          .request();
+
+<h2 id="non_rationale">@PermissionsNonRationale</h2>
+
+用户太傻逼，**拒绝权限**且**不再提示**（[国产畸形权限适配扩展](#extend)）情况下调用，此时意味着无论是 [@PermissionsCustomRationale](#custom_rationale) 或者 [@PermissionsRationale](#rationale) 都不会被调用，无法给予用户提示，此时该注解修饰的函数被调用，注解中需要传入参数，分为两种情况：
+
+- 单参数：`@PermissionsNonRationale(LOCATION_CODE)`，被修饰函数只需传入 Intent 参数，例：
+>
+
+	@PermissionsNonRationale({LOCATION_CODE})
+	public void nonRationale(Intent intent) {
+		startActivity(intent);
+	}
+
+- 多参数：`@PermissionsNonRationale(AUDIO_CODE, CALL_LOG_CODE)`，被修饰函数需传入 int 参数和 Intent 参数，例：
+>
+
+	@PermissionsNonRationale({AUDIO_CODE, CALL_LOG_CODE})
+    public void nonRationale(int code, final Intent intent) {
+        switch (code) {
+            case AUDIO_CODE:
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage("读取录音权限申请：\n我们需要您开启读取录音权限")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+                break;
+            case CALL_LOG_CODE:
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage("读取通话记录权限申请：\n我们需要您开启读取通话记录权限")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+                break;
+            default:
+                break;
+        }
     }
 
-<h3 id="sync_request_fragment">同步多个权限申请自定义</h3>
+Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是跳至**手机管家页面**，而具体的设置方法在 [注解回调](#annotationm)。
 
-请参考 Activity 版本：[同步多个请求申请自定义](#sync_request_activity)
+<h1 id="listener"> Listener 回调</h1>
+
+例：
+
+	Permissions4M.get(MainActivity.this)
+		// 是否强制弹出权限申请对话框
+    	.requestForce(true)
+		// 权限
+    	.requestPermission(Manifest.permission.READ_CONTACTS)
+		// 权限码
+    	.requestCode(READ_CONTACTS_CODE)
+		// 权限请求结果
+    	.requestCallback(new Wrapper.PermissionRequestListener() {
+       		@Override
+        	public void permissionGranted() {
+            	ToastUtil.show("读取通讯录权限成功 in activity with listener");
+        	}
+
+        	@Override
+        	public void permissionDenied() {
+            	ToastUtil.show("读取通讯录权失败 in activity with listener");
+        	}
+
+        	@Override
+        	public void permissionRationale() {
+            	ToastUtil.show("请打开读取通讯录权限 in activity with listener");
+        	}
+    	})
+		// 权限完全被禁时回调函数中返回 intent 类型（手机管家界面）
+    	.requestPageType(Permissions4M.PageType.MANAGER_PAGE)
+		// 系统设置界面
+		//.requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
+		// 权限完全被禁时回调，接口函数中的参数 Intent 是由上一行决定的
+    	.requestPage(new Wrapper.PermissionPageListener() {
+        	@Override
+        	public void pageIntent(final Intent intent) {
+        	    new AlertDialog.Builder(MainActivity.this)
+        	    .setMessage("读取通讯录权限申请：\n我们需要您开启读取通讯录权限(in activity with listener)")
+        	    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        	        @Override
+        	        public void onClick(DialogInterface dialog, int which) {
+        	            startActivity(intent);
+        	        }
+        	    })
+        	    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        	        @Override
+        	        public void onClick(DialogInterface dialog, int which) {
+        	            dialog.cancel();
+        	        }
+        	    })
+        	    .show();
+        	}
+    	})
+    	.request();
+
+<h1 id="sync">同步申请</h1>
+
+- 使用 `@PermissionsRequestSync` 修饰 Activity 或 Fragment
+
+- 传入两组参数
+	- value 数组：请求码
+	- permission 数组：请求权限
+ 
+- 使用 `Permissions4M.get(MainActivity.this).requestSync();` 进行同步权限申请
+
+注：同步申请默认强制申请(`requestForce(true)`)，同步申请不支持 `@PermissionsNonRationale`
+
+<h2 id="help">help me</h2>
+
+**1.**作者司里没有几部测试机，所以写到这一步之后就需要各位开发者共同努力，如果你在开发过程中使用了 vivo、魅族等权限适配也很畸形的手机，请联系作者或提交 issue 或 pull request。需要提交的资料包含：
+
+- 机型、Android 版本
+- 手机管家设置界面的包名（可使用 [AndroidTracker](https://github.com/fashare2015/ActivityTracker)）
+- 权限申请的流程（`ContextCompat.checkSelfPermission(Context, String)` 返回结果是正常结果吗？                                `ActivityCompat.requestPermissions(Activity, String[], int)` 能否正常弹出权限申请对话框？ `Fragment.requestPermissions(String[], int)` 能否正常弹出权限申请对话框？`ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 是否是正常结果，还是说跟小米一样，永远只会 false？
+
+**2.**目前针对主流权限的强制对话框弹出已经基本完成，但苦于作者功力有限，所以对于涉及到使用以下权限的代码暂时并未完善，如果各位开发者知道能够触发以下权限的代码，可以及时联系作者完善项目：
+
+- Manifest.permission.GET_ACCOUNTS
+- Manifest.permission.USE_SIP
+- Manifest.permission.ADD_VOICEMAIL
+- Manifest.permission.WRITE_CALENDAR
+- Manifest.permission.CAMERA
+- Manifest.permission.SEND_SMS
+- Manifest.permission.RECEIVE_WAP_PUSH
+- Manifest.permission.RECEIVE_MMS
+- Manifest.permission.RECEIVE_SMS
+
+<h2 id="extend">国产畸形权限适配扩展</h2>
+
+- 小米
+>
+大概是我最想 f**k 的机型了吧，适配之路异常凶险，此机型 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 永远返回 false，意味着不能够在用户拒绝之后给予提示。且不一定弹出权限申请对话框。
+
+- OPPO
+>
+此机型，针对 `ContextCompat.checkSelfPermission(Context, String)` 判断是根据是否 `AndroidManifest.xml` 中声明了该权限来决定返回值，如果 `AndroidManifest.xml` 中声明了该权限，那么就将直接返回已授予权限（但实际上权限可能授予也可能未授予），且不一定弹出权限申请对话框。
+
+- 华为
+>
+部分权限的 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 返回 false，故权限被拒后将会调用 `@PermissionsNonRationale` 所修饰的函数
+
+<h2 id="problem">项目问题</h2>
+
+**1.**Listener 回调暂不支持自定义 Rationale
+
+**2.**同步申请不支持 `@PermissionsNonRationale` 回调（假设同步申请的权限为 A -> B -> C，那么当 B 被拒时，应该是弹出对话框让用户继续申请还是应该继续 C 权限申请？）
 
 ## License ##
 

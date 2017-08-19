@@ -1,6 +1,5 @@
 package com.joker.processor;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,15 +21,15 @@ class ProxyInfo {
     Map<String, int[]> deniedMap = new HashMap<>();
     Map<String, int[]> rationaleMap = new HashMap<>();
     Map<String, int[]> customRationaleMap = new HashMap<>();
+    Map<String, int[]> nonRationaleMap = new HashMap<>();
     // requestCode -> methodName
     Map<Integer, String> singleGrantMap = new HashMap<>();
     Map<Integer, String> singleDeniedMap = new HashMap<>();
     Map<Integer, String> singleRationaleMap = new HashMap<>();
     Map<Integer, String> singleCustomRationaleMap = new HashMap<>();
+    Map<Integer, String> singleNonRationaleMap = new HashMap<>();
     // sync request
     Map<int[], String[]> syncPermissions = new HashMap<>(1);
-    // non rationale request
-    Map<String, NonRationalePermissionBean> nonRationaleMap = new HashMap<>();
     private int firstRequestCode;
     private String firstRequestPermission;
 
@@ -106,7 +105,7 @@ class ProxyInfo {
 
         for (Map.Entry<Integer, String> entry : singleCustomRationaleMap.entrySet()) {
             int requestCode = entry.getKey();
-            builder.append("case ").append(requestCode).append(": {\n")
+            builder.append("case ").append(requestCode).append(":{\n")
                     .append("object.").append(entry.getValue()).append("();" +
                     "\nreturn true;\n}");
         }
@@ -117,39 +116,28 @@ class ProxyInfo {
     private void generatePageIntent(StringBuilder builder) {
         if (checkBuilderNonNull(builder)) return;
 
-        generatePageType2Intent(builder);
         builder.append("@Override\n").append("public void intent(").append(element.getSimpleName())
-                .append(" object, int code) {\n")
+                .append(" object, int code, Intent intent) {\n")
                 .append("switch(code) {");
 
-        for (Map.Entry<String, NonRationalePermissionBean> entry : nonRationaleMap.entrySet()) {
+        for (Map.Entry<String, int[]> entry : nonRationaleMap.entrySet()) {
             String methodName = entry.getKey();
-            NonRationalePermissionBean bean = entry.getValue();
-            int[] values = bean.getValue();
-            int[] pageType = bean.getPageType();
-            for (int i = 0; i < values.length; i++) {
-                builder.append("case ").append(values[i]).append(":\n{")
-                        .append("Intent intent = pageType2Intent(object, ").append(pageType[i]).append(");")
-                        .append("object.").append(methodName).append("(").append(values[i]).append(", " +
-                        "intent);break;}\n");
+            int[] values = entry.getValue();
+            for (int value : values) {
+                builder.append("case ").append(value).append(":\n");
+                if (singleNonRationaleMap.containsKey(value)) {
+                    singleNonRationaleMap.remove(value);
+                }
             }
+            builder.append("{").append("object.").append(methodName).append("(code, intent);break;}\n");
+        }
+
+        for (Map.Entry<Integer, String> entry : singleNonRationaleMap.entrySet()) {
+            Integer integer = entry.getKey();
+            builder.append("case ").append(integer).append(":{ object.").append(entry.getValue()).append("(intent);break;}");
         }
 
         builder.append("default:\nbreak;\n").append("}\n}\n\n");
-    }
-
-    private void generatePageType2Intent(StringBuilder builder) {
-        builder.append("public Intent pageType2Intent(Object object, int pageType) {\n")
-                .append("Intent intent;")
-                .append("switch(pageType) {\n")
-                .append("case 1: {android.app.Activity activity; if (object instanceof android.app" +
-                        ".Fragment) {activity = ((android.app.Fragment)object).getActivity();}else if" +
-                        "(object instanceof android" +
-                        ".support.v4.app.Fragment){activity = ((android.support.v4.app.Fragment)object)" +
-                        ".getActivity();}else{activity = " +
-                        "(android.app.Activity)object;} return PermissionsPageManager.getIntent" +
-                        "(activity);}")
-                .append("default: return PermissionsPageManager.getIntent();}}");
     }
 
     private void generateRationaleMethod(StringBuilder builder) {
@@ -274,51 +262,5 @@ class ProxyInfo {
         int packageLen = packageName.length() + 1;
         return element.getQualifiedName().toString().substring(packageLen)
                 .replace('.', '$');
-    }
-
-    static class NonRationalePermissionBean {
-        private int[] value;
-        private int[] pageType;
-
-        @Override
-        public boolean equals(Object object) {
-            if (this == object) return true;
-            if (object == null || getClass() != object.getClass()) return false;
-
-            NonRationalePermissionBean that = (NonRationalePermissionBean) object;
-
-            return Arrays.equals(value, that.value) && Arrays.equals(pageType, that.pageType);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = Arrays.hashCode(value);
-            result = 31 * result + Arrays.hashCode(pageType);
-            return result;
-        }
-
-        @Override
-        public String toString() {
-            return "NonRationalePermissionBean{" +
-                    "value=" + Arrays.toString(value) +
-                    ", pageType=" + Arrays.toString(pageType) +
-                    '}';
-        }
-
-        int[] getValue() {
-            return value;
-        }
-
-        void setValue(int[] value) {
-            this.value = value;
-        }
-
-        int[] getPageType() {
-            return pageType;
-        }
-
-        void setPageType(int[] pageType) {
-            this.pageType = pageType;
-        }
     }
 }

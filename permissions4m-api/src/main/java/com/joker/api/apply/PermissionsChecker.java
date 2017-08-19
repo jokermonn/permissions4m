@@ -18,7 +18,6 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.joker.api.apply.util.AudioRecordManager;
 import com.joker.api.support.PermissionsPageManager;
@@ -189,8 +188,11 @@ public class PermissionsChecker {
     private static boolean checkLocation(Activity activity) throws Exception {
         LocationManager locationManager = (LocationManager) activity.getSystemService
                 (LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         // fuck XIAOMI!
-        locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER).getLatitude();
+        if (PermissionsPageManager.isXiaoMi()) {
+            location.getLatitude();
+        }
         return true;
     }
 
