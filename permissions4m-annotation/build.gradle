@@ -1,18 +1,6 @@
 apply plugin: 'java'
-apply plugin: 'com.novoda.bintray-release'
 
 dependencies {
-}
-
-publish {
-    artifactId = 'permissions4m-annotation'
-    userOrg = rootProject.userOrg
-    groupId = rootProject.groupId
-    uploadName = rootProject.uploadName
-    publishVersion = rootProject.publishVersion
-    desc = rootProject.description
-    website = rootProject.website
-    licences = rootProject.licences
 }
 
 sourceCompatibility = "1.7"
