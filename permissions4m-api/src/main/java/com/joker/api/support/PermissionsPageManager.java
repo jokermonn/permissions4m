@@ -51,6 +51,10 @@ public class PermissionsPageManager {
         }
     }
 
+    public static Intent getIntent() {
+        return new Protogenesis().settingIntent();
+    }
+
     /**
      * special manufacturer, can only request permissions once by default
      * like {@link XIAOMI}, {@link OPPO}, and there is no rationale
@@ -62,12 +66,11 @@ public class PermissionsPageManager {
                 .equalsIgnoreCase(MANUFACTURER_OPPO);
     }
 
-    public static boolean isAndroidMXiaoMi() {
-        return getManufacturer().equals(MANUFACTURER_XIAOMI) && Build.VERSION.SDK_INT > Build
-                .VERSION_CODES.M;
-    }
-
-    public static Intent getIntent() {
-        return new Protogenesis().settingIntent();
+    /**
+     * whether is xiaomi
+     * @return true if it is
+     */
+    public static boolean isXiaoMi() {
+        return getManufacturer().equalsIgnoreCase(MANUFACTURER_XIAOMI);
     }
 }
