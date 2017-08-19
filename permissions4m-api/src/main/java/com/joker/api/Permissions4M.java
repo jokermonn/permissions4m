@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
@@ -71,7 +72,7 @@ public class Permissions4M {
                 if (wrapper.isRequestForce()) {
                     ForceApplyPermissions.grantedOnResultWithListener(wrapper);
                 } else {
-                    NormalApplyPermissions.grantedOnResultWithListener(wrapper);
+                    NormalApplyPermissions.grantedWithListener(wrapper);
                 }
             } else {
                 NormalApplyPermissions.deniedOnResultWithListener(wrapper);
@@ -80,12 +81,15 @@ public class Permissions4M {
             // annotation callback
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (wrapper.isRequestForce()) {
+                    Log.e("TAG", "onPrivateRequestPermissionsResult: 1 ");
                     ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
                 } else {
-                    NormalApplyPermissions.grantedOnResultWithAnnotation(wrapper);
+                    Log.e("TAG", "onPrivateRequestPermissionsResult: 2 ");
+                    NormalApplyPermissions.grantedWithAnnotation(wrapper);
                 }
             } else {
-                NormalApplyPermissions.deniedOnResultWithAnnotation(wrapper);
+                Log.e("TAG", "onPrivateRequestPermissionsResult: 3 ");
+                NormalApplyPermissions.deniedWithAnnotation(wrapper);
             }
         }
     }
@@ -119,7 +123,7 @@ public class Permissions4M {
     @IntDef({MANAGER_PAGE, ANDROID_SETTING_PAGE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface PageType {
-        int MANAGER_PAGE = 0;
-        int ANDROID_SETTING_PAGE = 1;
+        int MANAGER_PAGE = 1;
+        int ANDROID_SETTING_PAGE = 0;
     }
 }

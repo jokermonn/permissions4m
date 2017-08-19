@@ -11,6 +11,8 @@ public interface PermissionsProxy<T> {
 
     void granted(T object, int code);
 
+    void intent(T object, int code);
+
     boolean customRationale(T object, int code);
 
     void startSyncRequestPermissionsMethod(T object);
