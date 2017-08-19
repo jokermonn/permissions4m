@@ -3,6 +3,7 @@ package com.joker.permissions4m;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,18 +16,19 @@ import android.widget.Button;
 import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
+import com.joker.annotation.PermissionsNonRationale;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.api.Permissions4M;
 import com.joker.permissions4m.other.ToastUtil;
 
 // support Fragment
-public class SingleFragment extends Fragment {
+public class SupportFragment extends Fragment {
     private static final int LOCATION_CODE = 13;
     private static final int CAMERA_CODE = 14;
     private Button mLocationButton;
     private Button mCameraButton;
 
-    public SingleFragment() {
+    public SupportFragment() {
         // Required empty public constructor
     }
 
@@ -34,7 +36,7 @@ public class SingleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_single, container, false);
+        View view = inflater.inflate(R.layout.fragment_support, container, false);
         mLocationButton = (Button) view.findViewById(R.id.btn_location);
         mCameraButton = (Button) view.findViewById(R.id.btn_camera);
 
@@ -42,7 +44,7 @@ public class SingleFragment extends Fragment {
         mLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.get(SingleFragment.this)
+                Permissions4M.get(SupportFragment.this)
                         .requestForce(true)
                         .requestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                         .requestCode(LOCATION_CODE)
@@ -54,7 +56,7 @@ public class SingleFragment extends Fragment {
         mCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.get(SingleFragment.this)
+                Permissions4M.get(SupportFragment.this)
                         .requestForce(true)
                         .requestPermission(Manifest.permission.CAMERA)
                         .requestCode(CAMERA_CODE)
@@ -68,7 +70,7 @@ public class SingleFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
-        Permissions4M.onRequestPermissionsResult(SingleFragment.this, requestCode, grantResults);
+        Permissions4M.onRequestPermissionsResult(SupportFragment.this, requestCode, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -106,7 +108,7 @@ public class SingleFragment extends Fragment {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Permissions4M.get(SingleFragment.this)
+                        Permissions4M.get(SupportFragment.this)
                                 .requestOnRationale()
                                 .requestPermission(Manifest.permission.CAMERA)
                                 .requestCode(CAMERA_CODE)
@@ -114,5 +116,48 @@ public class SingleFragment extends Fragment {
                     }
                 })
                 .show();
+    }
+
+    @PermissionsNonRationale(value = {LOCATION_CODE, CAMERA_CODE}, pageType = {Permissions4M.PageType
+            .ANDROID_SETTING_PAGE, Permissions4M.PageType.ANDROID_SETTING_PAGE})
+    public void non(int code, final Intent intent) {
+        switch (code) {
+            case LOCATION_CODE:
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("读取地理位置权限申请：\n我们需要您开启读取地理位置权限(in fragment with annotation)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
+            case CAMERA_CODE:
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("读取相机权限申请：\n我们需要您开启读取相机权限(in fragment with annotation)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
+        }
     }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEE8CD"
-    tools:context="com.joker.permissions4m.SingleFragment">
+    tools:context="com.joker.permissions4m.SupportFragment">
 
     <TextView
         android:id="@+id/tv_fragment"

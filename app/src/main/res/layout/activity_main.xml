@@ -13,6 +13,20 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="25dp">
 
+        <TextView
+            android:id="@+id/tv_top"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Activity 中:"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <Button
             android:id="@+id/btn_call"
             android:layout_width="0dp"
@@ -21,10 +35,10 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="通话（多个）"
+            android:text="通话（多参数注解回调函数）"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_top"/>
 
         <Button
             android:id="@+id/btn_storage"
@@ -34,7 +48,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="存储（多个）"
+            android:text="存储（多参数注解回调函数）"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_call"/>
@@ -47,7 +62,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="录音（自定义多个）"
+            android:text="录音（自定义 rationale 多参数注解回调函数）"
+            android:textAllCaps="false"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -61,7 +77,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="短信（自定义多个）"
+            android:text="短信（自定义 rationale 多参数注解）"
+            android:visibility="gone"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -79,16 +96,15 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_page_listener"/>
 
-        <Button
-            android:id="@+id/btn_single"
+        <TextView
+            android:id="@+id/tv_show1"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="单个权限申请页面"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:text="跳转到相应的权限管理界面:\n手机管家界面:"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_one"/>
@@ -105,7 +121,21 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_single"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_show1"/>
+
+        <TextView
+            android:id="@+id/tv_show2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="系统设置界面:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_manager"/>
+
 
         <Button
             android:id="@+id/btn_permission_page"
@@ -119,7 +149,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_manager"/>
+            app:layout_constraintTop_toBottomOf="@+id/tv_show2"/>
 
         <Button
             android:id="@+id/btn_page_listener"
@@ -129,7 +159,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="含 pageListener 的权限申请（读取通讯录权限）"
+            android:text="含 PageListener 的权限申请（读取通讯录权限）"
             android:textAllCaps="false"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -137,19 +167,37 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_sms"/>
 
         <fragment
-            android:name="com.joker.permissions4m.MainFragment"
+            android:id="@+id/fg_main"
+            android:name="com.joker.permissions4m.NormalFragment"
             android:layout_width="0dp"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:tag="@layout/fragment_main"
+            android:layout_marginTop="0dp"
+            android:tag="@layout/fragment_normal"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_permission_page"
+            app:layout_constraintVertical_bias="0.515"/>
+
+        <fragment
+            android:name="com.joker.permissions4m.SupportFragment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:tag="@layout/fragment_support"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_permission_page"/>
+            app:layout_constraintTop_toBottomOf="@+id/fg_main"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

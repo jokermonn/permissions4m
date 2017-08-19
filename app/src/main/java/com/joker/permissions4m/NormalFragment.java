@@ -16,6 +16,7 @@ import android.widget.Button;
 import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
+import com.joker.annotation.PermissionsNonRationale;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
@@ -23,9 +24,9 @@ import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.Wrapper;
 import com.joker.permissions4m.other.ToastUtil;
 
-import static com.joker.permissions4m.MainFragment.CALENDAR_CODE;
-import static com.joker.permissions4m.MainFragment.LOCATION_CODE;
-import static com.joker.permissions4m.MainFragment.SENSORS_CODE;
+import static com.joker.permissions4m.NormalFragment.CALENDAR_CODE;
+import static com.joker.permissions4m.NormalFragment.LOCATION_CODE;
+import static com.joker.permissions4m.NormalFragment.SENSORS_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +34,7 @@ import static com.joker.permissions4m.MainFragment.SENSORS_CODE;
 @PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
         .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
         value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
-public class MainFragment extends Fragment {
+public class NormalFragment extends Fragment {
     public static final int CALENDAR_CODE = 700;
     public static final int SENSORS_CODE = 800;
     public static final int LOCATION_CODE = 900;
@@ -43,29 +44,27 @@ public class MainFragment extends Fragment {
     private static final int STORAGE_CODE = 1000;
     private Button mCallButton;
     private Button mSmsButton;
-    private Button mAudioButton;
     private Button mOneButton;
     private Button mStorageButton;
 
-    public MainFragment() {
+    public NormalFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        mCallButton = (Button) view.findViewById(R.id.btn_call);
+        View view = inflater.inflate(R.layout.fragment_normal, container, false);
         mSmsButton = (Button) view.findViewById(R.id.btn_sms);
-        mAudioButton = (Button) view.findViewById(R.id.btn_audio);
         mOneButton = (Button) view.findViewById(R.id.btn_one);
         mStorageButton = (Button) view.findViewById(R.id.btn_storage);
+        mCallButton = (Button) view.findViewById(R.id.btn_call);
 
-        // 多个申请
+        // 通话申请
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.get(MainFragment.this)
+                Permissions4M.get(NormalFragment.this)
                         .requestPermission(Manifest.permission.READ_CALL_LOG)
                         .requestForce(true)
                         .requestCode(READ_CALL_LOG)
@@ -73,24 +72,14 @@ public class MainFragment extends Fragment {
             }
         });
 
-        // 自定义多个申请
+        // 短信申请
         mSmsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.get(MainFragment.this)
+                Permissions4M.get(NormalFragment.this)
                         .requestPermission(Manifest.permission.READ_SMS)
                         .requestForce(true)
                         .requestCode(SMS_CODE)
-                        .request();
-            }
-        });
-        mAudioButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.get(MainFragment.this)
-                        .requestPermission(Manifest.permission.RECORD_AUDIO)
-                        .requestForce(true)
-                        .requestCode(AUDIO_CODE)
                         .request();
             }
         });
@@ -99,7 +88,7 @@ public class MainFragment extends Fragment {
         mOneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.get(MainFragment.this)
+                Permissions4M.get(NormalFragment.this)
                         .requestSync();
             }
         });
@@ -107,7 +96,7 @@ public class MainFragment extends Fragment {
         mStorageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Permissions4M.get(MainFragment.this)
+                Permissions4M.get(NormalFragment.this)
                         .requestForce(true)
                         .requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                         .requestCode(STORAGE_CODE)
@@ -139,6 +128,12 @@ public class MainFragment extends Fragment {
                                                 startActivity(intent);
                                             }
                                         })
+                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        })
                                         .show();
                             }
                         })
@@ -152,7 +147,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, grantResults);
+        Permissions4M.onRequestPermissionsResult(NormalFragment.this, requestCode, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
@@ -256,7 +251,7 @@ public class MainFragment extends Fragment {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.get(MainFragment.this)
+                                Permissions4M.get(NormalFragment.this)
                                         .requestOnRationale()
                                         .requestPermission(Manifest.permission.READ_SMS)
                                         .requestCode(SMS_CODE)
@@ -271,7 +266,7 @@ public class MainFragment extends Fragment {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Permissions4M.get(MainFragment.this)
+                                Permissions4M.get(NormalFragment.this)
                                         .requestOnRationale()
                                         .requestPermission(Manifest.permission.RECORD_AUDIO)
                                         .requestCode(AUDIO_CODE)
@@ -281,6 +276,48 @@ public class MainFragment extends Fragment {
                         .show();
                 break;
             default:
+                break;
+        }
+    }
+
+    @PermissionsNonRationale(value = {SMS_CODE, READ_CALL_LOG}, pageType = {Permissions4M.PageType
+            .MANAGER_PAGE, Permissions4M.PageType.ANDROID_SETTING_PAGE})
+    public void nonRationale(int code, final Intent intent) {
+        switch (code) {
+            case SMS_CODE:
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("短信权限申请：\n我们需要您开启短信权限(in fragment with annotation)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                break;
+            case READ_CALL_LOG:
+                new AlertDialog.Builder(getActivity())
+                        .setMessage("读取通话记录权限申请：\n我们需要您开启读取通话记录权限(in fragment with annotation)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
                 break;
         }
     }

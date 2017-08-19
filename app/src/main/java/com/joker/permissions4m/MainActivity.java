@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
+import com.joker.annotation.PermissionsNonRationale;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
@@ -38,11 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int AUDIO_CODE = 6;
     private static final int READ_CONTACTS_CODE = 10;
     private Button mCallButton;
-    private Button mStorageButton;
-    private Button mSmsButton;
     private Button mAudioButton;
     private Button mOneButton;
-    private Button mSingleButton;
     private Button mManagerButton;
     private Button mPermissionPageButton;
     private Button mPageListenerButton;
@@ -52,17 +49,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mCallButton = (Button) findViewById(R.id.btn_call);
-        mStorageButton = (Button) findViewById(R.id.btn_storage);
         mAudioButton = (Button) findViewById(R.id.btn_audio);
-        mSmsButton = (Button) findViewById(R.id.btn_sms);
         mOneButton = (Button) findViewById(R.id.btn_one);
-        mSingleButton = (Button) findViewById(R.id.btn_single);
         mManagerButton = (Button) findViewById(R.id.btn_manager);
         mPermissionPageButton = (Button) findViewById(R.id.btn_permission_page);
         mPageListenerButton = (Button) findViewById(R.id.btn_page_listener);
 
-        mSingleButton = (Button) findViewById(R.id.btn_single);
-        // 多个申请
+        // 通话
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,52 +66,26 @@ public class MainActivity extends AppCompatActivity {
                         .request();
             }
         });
-        mStorageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.get(MainActivity.this)
-                        .requestForce(true)
-                        .requestCode(STORAGE_CODE)
-                        .requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        .request();
-            }
-        });
 
-        // 自定义多个申请
-        mSmsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.get(MainActivity.this)
-                        .requestForce(true)
-                        .requestPermission(Manifest.permission.READ_SMS)
-                        .requestCode(SMS_CODE)
-                        .request();
-            }
-        });
+        // 录音
         mAudioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
+                        .requestForce(true)
                         .requestPermission(Manifest.permission.RECORD_AUDIO)
                         .requestCode(AUDIO_CODE)
                         .request();
             }
         });
 
-        // 同步申请
+        // 一键申请
         mOneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M
                         .get(MainActivity.this)
                         .requestSync();
-            }
-        });
-
-        mSingleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SingleActivity.class));
             }
         });
 
@@ -171,6 +138,12 @@ public class MainActivity extends AppCompatActivity {
                                                 startActivity(intent);
                                             }
                                         })
+                                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.cancel();
+                                            }
+                                        })
                                         .show();
                             }
                         })
@@ -192,15 +165,12 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权成功 in activity with annotation");
-                Log.e("TAG", "syncGranted: 地理位置权限授权成功 ");
                 break;
             case SENSORS_CODE:
                 ToastUtil.show("传感器权限授权成功 in activity with annotation");
-                Log.e("TAG", "syncGranted: 传感器权限授权成功 ");
                 break;
             case CALENDAR_CODE:
                 ToastUtil.show("读取日历权限授权成功 in activity with annotation");
-                Log.e("TAG", "syncGranted: 读取日历权限授权成功 ");
                 break;
             default:
                 break;
@@ -212,15 +182,12 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权失败 in activity with annotation");
-                Log.e("TAG", "syncDenied: 地理位置权限授权失败 ");
                 break;
             case SENSORS_CODE:
                 ToastUtil.show("传感器权限授权失败 in activity with annotation");
-                Log.e("TAG", "syncDenied: 传感器权限授权失败 ");
                 break;
             case CALENDAR_CODE:
                 ToastUtil.show("读取日历权限授权失败 in activity with annotation");
-                Log.e("TAG", "syncDenied: 读取日历权限授权失败 ");
                 break;
             default:
                 break;
@@ -274,13 +241,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @PermissionsRationale({STORAGE_CODE, CALL_LOG_CODE})
-    public void storageAndCallRationale(int code) {
+    public void storageAndCallNonRationale(int code) {
         switch (code) {
             case STORAGE_CODE:
                 ToastUtil.show("请开启设备存储权限授权 in activity with annotation");
                 break;
             case CALL_LOG_CODE:
                 ToastUtil.show("请开启读取通话记录权限授权 in activity with annotation");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @PermissionsNonRationale(value = {AUDIO_CODE, CALL_LOG_CODE}, pageType = {Permissions4M.PageType
+            .ANDROID_SETTING_PAGE, Permissions4M.PageType.MANAGER_PAGE})
+    public void storageAndCallRationale(int code, final Intent intent) {
+        switch (code) {
+            case AUDIO_CODE:
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage("读取录音权限申请：\n我们需要您开启读取录音权限(in activity with listener)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
+                break;
+            case CALL_LOG_CODE:
+                new AlertDialog.Builder(MainActivity.this)
+                        .setMessage("读取通话记录权限申请：\n我们需要您开启读取通话记录权限(in activity with listener)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .show();
                 break;
             default:
                 break;
@@ -325,16 +335,11 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 请自行处理申请权限，两者方法等价
-                                // 方法1.使用框架封装方法
                                 Permissions4M.get(MainActivity.this)
-                                        .requestForce(true)
+                                        .requestOnRationale()
                                         .requestPermission(Manifest.permission.READ_SMS)
                                         .requestCode(SMS_CODE)
                                         .request();
-                                // 方法2.使用自身方法
-//                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
-//                                        .permission.READ_SMS}, SMS_CODE);
                             }
                         })
                         .show();
@@ -345,16 +350,11 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // 请自行处理申请权限，两者方法等价
-                                // 方法1.使用框架封装方法
                                 Permissions4M.get(MainActivity.this)
-                                        .requestForce(true)
+                                        .requestOnRationale()
                                         .requestPermission(Manifest.permission.RECORD_AUDIO)
                                         .requestCode(AUDIO_CODE)
                                         .request();
-                                // 方法2.使用自身方法
-//                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest
-//                                        .permission.RECORD_AUDIO}, AUDIO_CODE);
                             }
                         })
                         .show();
