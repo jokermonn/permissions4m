@@ -22,15 +22,4 @@ public class SupportFragmentWrapper extends FragmentBaseWrapper implements Wrapp
     public void requestSync() {
         requestSync(fragment);
     }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    void requestPermissionWithAnnotation() {
-        requestPermissionWithAnnotation(fragment);
-    }
-
-    @Override
-    void requestPermissionWithListener() {
-        requestPermissionWithListener(fragment);
-    }
 }

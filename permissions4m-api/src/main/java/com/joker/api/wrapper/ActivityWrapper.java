@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
 import com.joker.api.apply.PermissionsChecker;
+import com.joker.api.apply.util.SupportUtil;
+import com.joker.api.support.PermissionsPageManager;
 
 /**
  * Created by joker on 2017/8/5.
@@ -29,6 +31,11 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
     @Override
     public void requestSync() {
         requestSync(activity);
+    }
+
+    @Override
+    void normalRequest() {
+        activity.requestPermissions(new String[]{getPermission()}, getRequestCode());
     }
 
     @SuppressWarnings("unchecked")
@@ -61,6 +68,9 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
                     proxy.granted(activity, getRequestCode());
                 } else {
                     proxy.denied(activity, getRequestCode());
+                    if (SupportUtil.nonShowRationale(this) || PermissionsPageManager.isNonRationaleManufacturer()) {
+                        proxy.intent(getContext(), getRequestCode());
+                    }
                 }
             } else {
                 proxy.granted(activity, requestCode);
@@ -80,16 +90,20 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
         // denied
         if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager
                 .PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                requestListener.permissionRationale();
+            if (PermissionsPageManager.isXiaoMi()) {
+                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+                    requestListener.permissionRationale();
+                }
+                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
             }
-            ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
         } else {
             // granted
             if (isRequestForce()) {
                 ForceApplyPermissions.grantedOnResultWithListener(this);
             } else {
-                NormalApplyPermissions.grantedOnResultWithListener(this);
+                NormalApplyPermissions.grantedWithListener(this);
             }
         }
     }

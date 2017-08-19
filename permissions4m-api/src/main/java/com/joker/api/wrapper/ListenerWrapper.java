@@ -10,7 +10,7 @@ import com.joker.api.Permissions4M;
  * Created by joker on 2017/8/16.
  */
 
-interface ListenerWrapper {
+public interface ListenerWrapper {
     /**
      * request code
      *

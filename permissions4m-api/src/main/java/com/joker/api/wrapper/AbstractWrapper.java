@@ -28,6 +28,7 @@ public abstract class AbstractWrapper implements Wrapper {
     private PermissionRequestListener permissionRequestListener;
     private PermissionPageListener permissionPageListener;
     private boolean force;
+    private boolean requestOnRationale;
 
     public AbstractWrapper() {
     }
@@ -129,16 +130,36 @@ public abstract class AbstractWrapper implements Wrapper {
         return force;
     }
 
+    @Override
+    public Wrapper requestOnRationale() {
+        requestOnRationale = true;
+        return this;
+    }
+
+    @Override
+    public boolean isRequestOnRationale() {
+        return requestOnRationale;
+    }
+
     public void request() {
         // use a map to hold wrappers
         Key key = new Key(getContext(), getRequestCode());
         wrapperMap.put(key, this);
-        if (permissionRequestListener == null) {
-            requestPermissionWithAnnotation();
+
+        // on rationale, it should use normal request
+        if (isRequestOnRationale()) {
+            normalRequest();
         } else {
-            requestPermissionWithListener();
+            // not on rationale, judge condition
+            if (permissionRequestListener == null) {
+                requestPermissionWithAnnotation();
+            } else {
+                requestPermissionWithListener();
+            }
         }
     }
+
+    abstract void normalRequest();
 
     protected void requestSync(Activity activity) {
         privateRequestSync(activity);
