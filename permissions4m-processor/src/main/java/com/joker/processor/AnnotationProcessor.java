@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
+import com.joker.annotation.PermissionsNonRationale;
 import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 
@@ -46,6 +47,7 @@ public class AnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         map.clear();
         if (!isAnnotatedWithClass(roundEnv, PermissionsRequestSync.class)) return false;
+        if (!isAnnotatedWithMethod(roundEnv, PermissionsNonRationale.class)) return false;
         if (!isAnnotatedWithMethod(roundEnv, PermissionsGranted.class)) return false;
         if (!isAnnotatedWithMethod(roundEnv, PermissionsDenied.class)) return false;
         if (!isAnnotatedWithMethod(roundEnv, PermissionsRationale.class)) return false;
@@ -165,6 +167,20 @@ public class AnnotationProcessor extends AbstractProcessor {
                 } else {
                     info.singleCustomRationaleMap.put(value[0], methodName);
                 }
+            } else if (annotation instanceof PermissionsNonRationale) {
+                int[] value = ((PermissionsNonRationale) annotation).value();
+                int[] pageType = ((PermissionsNonRationale) annotation).pageType();
+                if (pageType.length != value.length) {
+                    error(element, "pageType's length not equals value's length");
+                    return false;
+                }
+
+                ProxyInfo.NonRationalePermissionBean bean = new ProxyInfo
+                        .NonRationalePermissionBean();
+                bean.setPageType(pageType);
+                bean.setValue(value);
+
+                info.nonRationaleMap.put(methodName, bean);
             } else {
                 error(method, "%s not support.", method);
                 return false;
@@ -199,12 +215,13 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> set = new HashSet<>(5);
+        Set<String> set = new HashSet<>(6);
         set.add(PermissionsGranted.class.getCanonicalName());
         set.add(PermissionsDenied.class.getCanonicalName());
         set.add(PermissionsRationale.class.getCanonicalName());
         set.add(PermissionsCustomRationale.class.getCanonicalName());
         set.add(PermissionsRequestSync.class.getCanonicalName());
+        set.add(PermissionsNonRationale.class.getName());
 
         return set;
     }
