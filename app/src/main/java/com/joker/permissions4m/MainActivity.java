@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     public void smsAndAudioDenied() {
         ToastUtil.show("录音权限申请失败 in activity with annotation");
     }
-    
+
     @PermissionsCustomRationale(AUDIO_CODE)
     public void smsAndAudioCustomRationale() {
         new AlertDialog.Builder(this)

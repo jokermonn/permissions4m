@@ -18,7 +18,7 @@ public abstract class AbstractWrapper implements Wrapper {
     @Permissions4M.PageType
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
     private static final int DEFAULT_REQUEST_CODE = -1;
-    protected static PermissionsProxy proxy;
+    static PermissionsProxy proxy;
     private static Map<String, PermissionsProxy> map = new HashMap<>();
     private static Map<Key, Wrapper> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
@@ -33,7 +33,7 @@ public abstract class AbstractWrapper implements Wrapper {
     public AbstractWrapper() {
     }
 
-    protected static void initProxy(Object object) {
+    static void initProxy(Object object) {
         String name = object.getClass().getName();
         String proxyName = name + PERMISSIONS_PROXY;
         PermissionsProxy proxy = map.get(proxyName);
@@ -161,15 +161,15 @@ public abstract class AbstractWrapper implements Wrapper {
 
     abstract void normalRequest();
 
-    protected void requestSync(Activity activity) {
+    void requestSync(Activity activity) {
         privateRequestSync(activity);
     }
 
-    protected void requestSync(android.app.Fragment fragment) {
+    void requestSync(android.app.Fragment fragment) {
         privateRequestSync(fragment);
     }
 
-    protected void requestSync(android.support.v4.app.Fragment fragment) {
+    void requestSync(android.support.v4.app.Fragment fragment) {
         privateRequestSync(fragment);
     }
 
@@ -184,7 +184,7 @@ public abstract class AbstractWrapper implements Wrapper {
 
     protected Activity getActivity() {
         if (getContext() instanceof android.app.Fragment) {
-            return ((android.app.Fragment)getContext()).getActivity();
+            return ((android.app.Fragment) getContext()).getActivity();
         } else if (getContext() instanceof android.support.v4.app.Fragment) {
             return ((android.support.v4.app.Fragment) getContext()).getActivity();
         } else {
