@@ -4,9 +4,9 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
-[![processor](https://img.shields.io/badge/processor-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-processor)
-[![annotation](https://img.shields.io/badge/annotation-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-annotation)
+[![lib](https://img.shields.io/badge/lib-1.0.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
+[![processor](https://img.shields.io/badge/processor-1.0.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-processor)
+[![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
 
@@ -40,8 +40,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.0-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.0-processor'
+      compile 'com.github.jokermonn:permissions4m:1.0.2-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.2-processor'
 	}
 
 ## 本地依赖 ##
@@ -82,7 +82,7 @@
 
 - TODO:[help me](#help)
 
-- v1.0.1
+- v1.0.2
 
 	- 适配大量国产机型，包括小米、OPPO、华为等
 	- 更改为流式 API
