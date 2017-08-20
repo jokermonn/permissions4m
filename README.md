@@ -10,6 +10,12 @@
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
 
+# 前言 #
+
+- **还在为 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 无法弹出权限申请对话框困惑么？Permissions4M 让它必须弹出来**
+- **还在为明明授权失败，却回调的是权限申请成功方法而苦恼么？ Permissions4M 让它必须回调期望的方法**
+- **还在为用户拒绝且不再提示权限申请对话框而烦躁么？ Permissions4M 让它跳转到手机管家权限设置界面**
+
 # Permissions4M #
 意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。另较原有项目有以下升级：
 
