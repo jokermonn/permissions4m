@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCallButton = (Button) findViewById(R.id.btn_call_log);
+        mCallButton = (Button) findViewById(R.id.btn_calendar);
         mAudioButton = (Button) findViewById(R.id.btn_audio);
         mOneButton = (Button) findViewById(R.id.btn_one);
         mManagerButton = (Button) findViewById(R.id.btn_manager);
