@@ -46,8 +46,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.2-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.2-processor'
+      compile 'com.github.jokermonn:permissions4m:1.0.3-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.3-processor'
 	}
 
 ## 本地依赖 ##
@@ -87,6 +87,9 @@
 
 - TODO:[help me](#help)
 
+- v1.0.3
+	- 修复 `WRITE_CONTACTS` 权限 bug
+
 - v1.0.2
 
 	- 适配大量国产机型，包括小米、OPPO、华为等
@@ -95,7 +98,7 @@
 
 - v1.0.0
 
-	截止于[第37次 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
+	- 截止于[第37次 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
 
 # 注意事项 #
 
