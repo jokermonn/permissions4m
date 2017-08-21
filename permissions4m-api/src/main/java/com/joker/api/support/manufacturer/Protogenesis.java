@@ -8,9 +8,9 @@ import android.provider.Settings;
  */
 
 public class Protogenesis implements PermissionsPage {
-    // system setting page
+    // system details setting page
     @Override
     public Intent settingIntent() {
-        return new Intent(Settings.ACTION_SETTINGS);
+        return new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
     }
 }
