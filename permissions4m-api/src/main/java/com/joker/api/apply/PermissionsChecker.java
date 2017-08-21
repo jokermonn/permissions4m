@@ -244,6 +244,7 @@ public class PermissionsChecker {
             Uri rawContactUri = contentResolver.insert(ContactsContract.RawContacts
                     .CONTENT_URI, values);
             long rawContactId = ContentUris.parseId(rawContactUri);
+            values.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
             values.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, rawContactId);
             values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, TAG);
             values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, TAG_NUMBER);

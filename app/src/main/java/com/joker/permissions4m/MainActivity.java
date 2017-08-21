@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mCallButton = (Button) findViewById(R.id.btn_call_log);
+        mCallButton = (Button) findViewById(R.id.btn_calendar);
         mAudioButton = (Button) findViewById(R.id.btn_audio);
         mOneButton = (Button) findViewById(R.id.btn_one);
         mManagerButton = (Button) findViewById(R.id.btn_manager);
@@ -237,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
     public void smsAndAudioDenied() {
         ToastUtil.show("录音权限申请失败 in activity with annotation");
     }
-
 
     @PermissionsCustomRationale(AUDIO_CODE)
     public void smsAndAudioCustomRationale() {

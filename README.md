@@ -4,11 +4,17 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
-[![processor](https://img.shields.io/badge/processor-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-processor)
-[![annotation](https://img.shields.io/badge/annotation-1.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-annotation)
+[![lib](https://img.shields.io/badge/lib-1.0.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
+[![processor](https://img.shields.io/badge/processor-1.0.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-processor)
+[![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
+
+# 前言 #
+
+- **还在为 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 无法弹出权限申请对话框困惑么？Permissions4M 让它必须弹出来**
+- **还在为明明授权失败，却回调的是权限申请成功方法而苦恼么？ Permissions4M 让它必须回调期望的方法**
+- **还在为用户拒绝且不再提示权限申请对话框而烦躁么？ Permissions4M 让它跳转到手机管家权限设置界面**
 
 # Permissions4M #
 意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。另较原有项目有以下升级：
@@ -40,8 +46,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.0-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.0-processor'
+      compile 'com.github.jokermonn:permissions4m:1.0.2-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.2-processor'
 	}
 
 ## 本地依赖 ##
@@ -69,20 +75,19 @@
 
 * 注意事项
 	* [**必加的二次权限申请回调**](#must_add)
-	* [小米读取通讯录权限回调](#xiaomi_contacts)
 * [接口回调](#annotation)
 * [Listener 回调](#listener)
 * [同步申请](#sync)
 * 关于项目
 	* [help me](#help)
 	* [国产畸形权限适配扩展](#extend)
-	* [项目问题](#problem)
+	* [项目答疑](#problem)
 
 # 版本迭代 #
 
 - TODO:[help me](#help)
 
-- v1.0.1
+- v1.0.2
 
 	- 适配大量国产机型，包括小米、OPPO、华为等
 	- 更改为流式 API
@@ -112,7 +117,7 @@
 在需要权限申请的地方调用
 
 	Permissions4M.get(MainActivity.this)
-				// 是否强制弹出权限申请对话框
+				// 是否强制弹出权限申请对话框，建议为 true
                 .requestForce(true)
 				// 权限
                 .requestPermission(Manifest.permission.RECORD_AUDIO)
@@ -303,7 +308,7 @@
                 break;
         }
 
-注：除上述以外的 dialog，开发者可以自定义其他展示效果，继续权限申请时请使用： 
+注：除上述以外的 dialog，开发者可以自定义其他展示效果，调用权限申请时请使用，否则会陷入无限调用自定义 Rationale 循环中： 
 
 	Permissions4M.get(MainActivity.this)
 			// 务必添加下列一行
@@ -369,7 +374,7 @@
         }
     }
 
-Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是跳至**手机管家页面**，而具体的设置方法在 [注解回调](#annotationm)。
+Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是跳至**手机管家页面**，而具体的设置方法请参考 [注解回调](#annotationm) 中 `.requestPageType(int)` 设置方法。
 
 <h1 id="listener"> Listener 回调</h1>
 
@@ -401,7 +406,7 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
     	})
 		// 权限完全被禁时回调函数中返回 intent 类型（手机管家界面）
     	.requestPageType(Permissions4M.PageType.MANAGER_PAGE)
-		// 系统设置界面
+		// 权限完全被禁时回调函数中返回 intent 类型（系统设置界面）
 		//.requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
 		// 权限完全被禁时回调，接口函数中的参数 Intent 是由上一行决定的
     	.requestPage(new Wrapper.PermissionPageListener() {
@@ -436,17 +441,28 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
  
 - 使用 `Permissions4M.get(MainActivity.this).requestSync();` 进行同步权限申请
 
+例：参考 sample 中 [MainActivity](https://github.com/jokermonn/permissions4m/blob/master/app/src/main/java/com/joker/permissions4m/MainActivity.java) 上的设置 ——
+
+	@PermissionsRequestSync(
+		permission = {Manifest.permission.BODY_SENSORS, 
+						Manifest.permission.ACCESS_FINE_LOCATION, 
+							Manifest.permission.READ_CALENDAR},
+        value = {SENSORS_CODE, 
+					LOCATION_CODE, 
+						CALENDAR_CODE})
+	public class MainActivity extends AppCompatActivity
+
 注：同步申请默认强制申请(`requestForce(true)`)，同步申请不支持 `@PermissionsNonRationale`
 
 <h2 id="help">help me</h2>
 
-**1.**作者司里没有几部测试机，所以写到这一步之后就需要各位开发者共同努力，如果你在开发过程中使用了 vivo、魅族等权限适配也很畸形的手机，请联系作者或提交 issue 或 pull request。需要提交的资料包含：
+**1.** 作者司里没有几部测试机，所以写到这一步之后就需要各位开发者共同努力，如果你在开发过程中使用了 vivo、魅族等权限适配也很畸形的手机，请联系作者或提交 issue 或 pull request。需要提交的资料包含：
 
 - 机型、Android 版本
 - 手机管家设置界面的包名（可使用 [AndroidTracker](https://github.com/fashare2015/ActivityTracker)）
 - 权限申请的流程（`ContextCompat.checkSelfPermission(Context, String)` 返回结果是正常结果吗？                                `ActivityCompat.requestPermissions(Activity, String[], int)` 能否正常弹出权限申请对话框？ `Fragment.requestPermissions(String[], int)` 能否正常弹出权限申请对话框？`ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 是否是正常结果，还是说跟小米一样，永远只会 false？
 
-**2.**目前针对主流权限的强制对话框弹出已经基本完成，但苦于作者功力有限，所以对于涉及到使用以下权限的代码暂时并未完善，如果各位开发者知道能够触发以下权限的代码，可以及时联系作者完善项目：
+**2.** 目前针对主流权限的强制对话框弹出已经基本完成，但苦于作者功力有限，所以对于涉及到使用以下权限的代码暂时并未完善，如果各位开发者知道能够触发以下权限的代码，可以及时联系作者完善项目：
 
 - Manifest.permission.GET_ACCOUNTS
 - Manifest.permission.USE_SIP
@@ -472,11 +488,13 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
 >
 部分权限的 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 返回 false，故权限被拒后将会调用 `@PermissionsNonRationale` 所修饰的函数
 
-<h2 id="problem">项目问题</h2>
+<h2 id="problem">项目答疑</h2>
 
-**1.**Listener 回调暂不支持自定义 Rationale
+**1.** Listener 回调暂不支持自定义 Rationale
 
-**2.**同步申请不支持 `@PermissionsNonRationale` 回调（假设同步申请的权限为 A -> B -> C，那么当 B 被拒时，应该是弹出对话框让用户继续申请还是应该继续 C 权限申请？）
+**2.** 同步申请不支持 `@PermissionsNonRationale` 回调（假设同步申请的权限为 A -> B -> C，那么当 B 被拒时，应该是弹出对话框让用户继续申请还是应该继续 C 权限申请？）
+
+**3.** 为什么不支持权限组申请？国产手机有部分畸形适配，虽然可以以一组权限的格式进行申请授权，但是却可以分别关闭同组权限内单个权限，如果要针对被拒绝的权限做回调，那么代码会显得很冗余。
 
 ## License ##
 
