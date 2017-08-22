@@ -81,14 +81,11 @@ public class Permissions4M {
             // annotation callback
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (wrapper.isRequestForce()) {
-                    Log.e("TAG", "onPrivateRequestPermissionsResult: 1 ");
                     ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
                 } else {
-                    Log.e("TAG", "onPrivateRequestPermissionsResult: 2 ");
                     NormalApplyPermissions.grantedWithAnnotation(wrapper);
                 }
             } else {
-                Log.e("TAG", "onPrivateRequestPermissionsResult: 3 ");
                 NormalApplyPermissions.deniedWithAnnotation(wrapper);
             }
         }
