@@ -109,7 +109,7 @@
 	@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
