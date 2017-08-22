@@ -48,46 +48,47 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     private void supportFragmentRequest() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(getContext());
+            proxy.granted(getContext(), getRequestCode());
+        } else {
+            initProxy(getContext());
 
-        String permission = getPermission();
-        int requestCode = getRequestCode();
-        if (ContextCompat.checkSelfPermission(((android.support.v4.app.Fragment) getContext())
-                .getActivity(), permission) != PackageManager
-                .PERMISSION_GRANTED) {
-            if (((android.support.v4.app.Fragment) getContext()).shouldShowRequestPermissionRationale
-                    (permission)) {
-                if (!proxy.customRationale(getContext(), requestCode)) {
-                    proxy.rationale(getContext(), requestCode);
+            String permission = getPermission();
+            int requestCode = getRequestCode();
+            if (ContextCompat.checkSelfPermission(((android.support.v4.app.Fragment) getContext())
+                    .getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                if (((android.support.v4.app.Fragment) getContext()).shouldShowRequestPermissionRationale
+                        (permission)) {
+                    if (!proxy.customRationale(getContext(), requestCode)) {
+                        proxy.rationale(getContext(), requestCode);
+                        ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
+                                        String[]{permission},
+                                requestCode);
+                    }
+                } else {
                     ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
                                     String[]{permission},
                             requestCode);
                 }
             } else {
-                ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
-                                String[]{permission},
-                        requestCode);
-            }
-        } else {
 //             granted
-            if (isRequestForce()) {
-                if (PermissionsChecker.isPermissionGranted(((android.support.v4.app.Fragment)
-                        getContext()).getActivity(), permission)) {
-                    proxy.granted(getContext(), getRequestCode());
-                } else {
-                    if (SupportUtil.nonShowRationale(this)) {
-                        boolean androidPage = getPageType() == Permissions4M.PageType
-                                .ANDROID_SETTING_PAGE;
-                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
-                                PermissionsPageManager.getIntent(getActivity());
+                if (isRequestForce()) {
+                    if (PermissionsChecker.isPermissionGranted(((android.support.v4.app.Fragment)
+                            getContext()).getActivity(), permission)) {
+                        proxy.granted(getContext(), getRequestCode());
+                    } else {
+                        if (SupportUtil.nonShowRationale(this)) {
+                            boolean androidPage = getPageType() == Permissions4M.PageType
+                                    .ANDROID_SETTING_PAGE;
+                            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                                    PermissionsPageManager.getIntent(getActivity());
 
-                        proxy.intent(getContext(), getRequestCode(), intent);
+                            proxy.intent(getContext(), getRequestCode(), intent);
+                        }
                     }
+                } else {
+                    proxy.granted(getContext(), getRequestCode());
                 }
-            } else {
-                proxy.granted(getContext(), getRequestCode());
             }
         }
     }
@@ -95,93 +96,98 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     private void fragmentRequest() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-        initProxy(getContext());
+            proxy.granted(getContext(), getRequestCode());
+        } else {
+            initProxy(getContext());
 
-        String permission = getPermission();
-        int requestCode = getRequestCode();
-        if (ContextCompat.checkSelfPermission(((android.app.Fragment) getContext()).getActivity(),
-                permission) != PackageManager
-                .PERMISSION_GRANTED) {
-            if (((android.app.Fragment) getContext()).shouldShowRequestPermissionRationale
-                    (permission)) {
-                if (!proxy.customRationale(getContext(), requestCode)) {
-                    proxy.rationale(getContext(), requestCode);
+            String permission = getPermission();
+            int requestCode = getRequestCode();
+            if (ContextCompat.checkSelfPermission(((android.app.Fragment) getContext()).getActivity(),
+                    permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                if (((android.app.Fragment) getContext()).shouldShowRequestPermissionRationale
+                        (permission)) {
+                    if (!proxy.customRationale(getContext(), requestCode)) {
+                        proxy.rationale(getContext(), requestCode);
+                        ((android.app.Fragment) getContext()).requestPermissions(new String[]{permission},
+                                requestCode);
+                    }
+                } else {
                     ((android.app.Fragment) getContext()).requestPermissions(new String[]{permission},
                             requestCode);
                 }
             } else {
-                ((android.app.Fragment) getContext()).requestPermissions(new String[]{permission},
-                        requestCode);
-            }
-        } else {
 //             granted
-            if (isRequestForce()) {
-                if (PermissionsChecker.isPermissionGranted(((android.app.Fragment) getContext())
-                        .getActivity(), permission)) {
-                    proxy.granted(getContext(), getRequestCode());
-                } else {
-                    proxy.denied(getContext(), getRequestCode());
-                    if (SupportUtil.nonShowRationale(this)) {
-                        boolean androidPage = getPageType() == Permissions4M.PageType
-                                .ANDROID_SETTING_PAGE;
-                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
-                                PermissionsPageManager.getIntent(getActivity());
+                if (isRequestForce()) {
+                    if (PermissionsChecker.isPermissionGranted(((android.app.Fragment) getContext())
+                            .getActivity(), permission)) {
+                        proxy.granted(getContext(), getRequestCode());
+                    } else {
+                        proxy.denied(getContext(), getRequestCode());
+                        if (SupportUtil.nonShowRationale(this)) {
+                            boolean androidPage = getPageType() == Permissions4M.PageType
+                                    .ANDROID_SETTING_PAGE;
+                            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                                    PermissionsPageManager.getIntent(getActivity());
 
-                        proxy.intent(getContext(), getRequestCode(), intent);
+                            proxy.intent(getContext(), getRequestCode(), intent);
+                        }
                     }
+                } else {
+                    proxy.granted(getContext(), getRequestCode());
                 }
-            } else {
-                proxy.granted(getContext(), getRequestCode());
             }
         }
     }
 
     private void requestPermissionWithListener(android.app.Fragment fragment) {
         Wrapper.PermissionRequestListener requestListener = getPermissionRequestListener();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || requestListener == null) {
-            return;
-        }
-
-        String permission = getPermission();
-        int requestCode = getRequestCode();
-        if (ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager
-                .PERMISSION_GRANTED) {
-            if (fragment.shouldShowRequestPermissionRationale(permission)) {
-                requestListener.permissionRationale();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            if (requestListener != null) {
+                requestListener.permissionGranted();
             }
-            fragment.requestPermissions(new String[]{permission}, requestCode);
         } else {
-            // granted
-            if (isRequestForce()) {
-                ForceApplyPermissions.grantedOnResultWithListener(this);
+            String permission = getPermission();
+            int requestCode = getRequestCode();
+            if (ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                if (fragment.shouldShowRequestPermissionRationale(permission)) {
+                    requestListener.permissionRationale();
+                }
+                fragment.requestPermissions(new String[]{permission}, requestCode);
             } else {
-                NormalApplyPermissions.grantedWithListener(this);
+                // granted
+                if (isRequestForce()) {
+                    ForceApplyPermissions.grantedOnResultWithListener(this);
+                } else {
+                    NormalApplyPermissions.grantedWithListener(this);
+                }
             }
         }
     }
 
     private void requestPermissionWithListener(android.support.v4.app.Fragment fragment) {
         Wrapper.PermissionRequestListener requestListener = getPermissionRequestListener();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || requestListener == null) {
-            return;
-        }
-
-        String permission = getPermission();
-        int requestCode = getRequestCode();
-        if (ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager
-                .PERMISSION_GRANTED) {
-            if (fragment.shouldShowRequestPermissionRationale(permission)) {
-                requestListener.permissionRationale();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            if (requestListener != null) {
+                requestListener.permissionGranted();
             }
-            fragment.requestPermissions(new String[]{permission}, requestCode);
         } else {
-            // granted
-            if (isRequestForce()) {
-                ForceApplyPermissions.grantedOnResultWithListener(this);
+            String permission = getPermission();
+            int requestCode = getRequestCode();
+            if (ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                if (fragment.shouldShowRequestPermissionRationale(permission)) {
+                    requestListener.permissionRationale();
+                }
+                fragment.requestPermissions(new String[]{permission}, requestCode);
             } else {
-                NormalApplyPermissions.grantedWithListener(this);
+                // granted
+                if (isRequestForce()) {
+                    ForceApplyPermissions.grantedOnResultWithListener(this);
+                } else {
+                    NormalApplyPermissions.grantedWithListener(this);
+                }
             }
         }
     }

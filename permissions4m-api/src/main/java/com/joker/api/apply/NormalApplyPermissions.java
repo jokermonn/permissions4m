@@ -45,10 +45,6 @@ public class NormalApplyPermissions {
     }
 
     public static void deniedOnResultWithListener(Wrapper wrapper) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-
         if (wrapper.getPermissionRequestListener() == null) {
             return;
         }

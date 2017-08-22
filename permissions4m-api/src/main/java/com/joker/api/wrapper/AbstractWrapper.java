@@ -176,10 +176,11 @@ public abstract class AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     private void privateRequestSync(Object object) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
+            proxy.granted(object, getRequestCode());
+        } else {
+            initProxy(object);
+            proxy.startSyncRequestPermissionsMethod(object);
         }
-        initProxy(object);
-        proxy.startSyncRequestPermissionsMethod(object);
     }
 
     protected Activity getActivity() {
