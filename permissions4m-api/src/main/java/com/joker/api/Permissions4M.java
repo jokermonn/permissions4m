@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
@@ -68,26 +67,34 @@ public class Permissions4M {
                 .getPermissionRequestListener();
         // listener callback
         if (requestListener != null) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (wrapper.isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithListener(wrapper);
-                } else {
-                    NormalApplyPermissions.grantedWithListener(wrapper);
-                }
-            } else {
-                NormalApplyPermissions.deniedOnResultWithListener(wrapper);
-            }
+            listenerCallback(grantResults, wrapper);
         } else {
             // annotation callback
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (wrapper.isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
-                } else {
-                    NormalApplyPermissions.grantedWithAnnotation(wrapper);
-                }
+            annotationCallback(grantResults, wrapper);
+        }
+    }
+
+    private static void annotationCallback(@NonNull int[] grantResults, Wrapper wrapper) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (wrapper.isRequestForce()) {
+                ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
             } else {
-                NormalApplyPermissions.deniedWithAnnotation(wrapper);
+                NormalApplyPermissions.grantedWithAnnotation(wrapper);
             }
+        } else {
+            NormalApplyPermissions.deniedWithAnnotation(wrapper);
+        }
+    }
+
+    private static void listenerCallback(@NonNull int[] grantResults, Wrapper wrapper) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (wrapper.isRequestForce()) {
+                ForceApplyPermissions.grantedOnResultWithListener(wrapper);
+            } else {
+                NormalApplyPermissions.grantedWithListener(wrapper);
+            }
+        } else {
+            NormalApplyPermissions.deniedOnResultWithListener(wrapper);
         }
     }
 

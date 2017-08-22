@@ -2,7 +2,6 @@ package com.joker.api.apply;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
@@ -31,7 +30,7 @@ public class NormalApplyPermissions {
         if (SupportUtil.nonShowRationale(wrapper)) {
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                     .ANDROID_SETTING_PAGE;
-            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
                     PermissionsPageManager.getIntent(getActivity(wrapper));
 
             proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
@@ -56,7 +55,7 @@ public class NormalApplyPermissions {
 
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                     .ANDROID_SETTING_PAGE;
-            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
                     PermissionsPageManager.getIntent(activity);
             wrapper.getPermissionPageListener().pageIntent(intent);
         }

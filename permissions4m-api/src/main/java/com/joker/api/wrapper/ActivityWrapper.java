@@ -1,18 +1,13 @@
 package com.joker.api.wrapper;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.joker.api.Permissions4M;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
-import com.joker.api.apply.PermissionsChecker;
-import com.joker.api.apply.util.SupportUtil;
-import com.joker.api.support.PermissionsPageManager;
 
 /**
  * Created by joker on 2017/8/5.
@@ -66,18 +61,7 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
                 // force
                 if (isRequestForce()) {
                     // ensure granted
-                    if (PermissionsChecker.isPermissionGranted(activity, permission)) {
-                        proxy.granted(activity, getRequestCode());
-                    } else {
-                        if (SupportUtil.nonShowRationale(this)) {
-                            boolean androidPage = getPageType() == Permissions4M.PageType
-                                    .ANDROID_SETTING_PAGE;
-                            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
-                                    PermissionsPageManager.getIntent(getActivity());
-
-                            proxy.intent(getContext(), getRequestCode(), intent);
-                        }
-                    }
+                    ForceApplyPermissions.grantedOnResultWithAnnotation(this);
                 } else {
                     proxy.granted(activity, requestCode);
                 }
@@ -102,14 +86,10 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
             // denied
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager
                     .PERMISSION_GRANTED) {
-                if (PermissionsPageManager.isXiaoMi()) {
-                    ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
-                } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                        requestListener.permissionRationale();
-                    }
-                    ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+                    requestListener.permissionRationale();
                 }
+                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
             } else {
                 // granted
                 if (isRequestForce()) {

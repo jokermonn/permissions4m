@@ -1,16 +1,11 @@
 package com.joker.api.wrapper;
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
-import com.joker.api.Permissions4M;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
-import com.joker.api.apply.PermissionsChecker;
-import com.joker.api.apply.util.SupportUtil;
-import com.joker.api.support.PermissionsPageManager;
 
 /**
  * Created by joker on 2017/8/17.
@@ -21,174 +16,104 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     void requestPermissionWithAnnotation() {
-        if (getContext() instanceof android.app.Fragment) {
-            // Fragment
-            fragmentRequest();
-        } else if (getContext() instanceof android.support.v4.app.Fragment) {
-            // SupportFragment
-            supportFragmentRequest();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            proxy.granted(getContext(), getRequestCode());
         } else {
-            throw new IllegalArgumentException(getClass().getName() + "is not Fragment");
+            initProxy(getContext());
+            String permission = getPermission();
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                requestWhetherNeedRationaleWithAnnotation();
+            } else {
+//             granted
+                if (isRequestForce()) {
+                    ForceApplyPermissions.grantedOnResultWithAnnotation(this);
+                } else {
+                    proxy.granted(getContext(), getRequestCode());
+                }
+            }
         }
     }
 
     @Override
     void requestPermissionWithListener() {
-        if (getContext() instanceof android.app.Fragment) {
-            requestPermissionWithListener((android.app.Fragment) getContext());
-        } else if (getContext() instanceof android.support.v4.app.Fragment) {
-            requestPermissionWithListener((android.support.v4.app.Fragment) getContext());
+        Wrapper.PermissionRequestListener requestListener = getPermissionRequestListener();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            if (requestListener != null) {
+                requestListener.permissionGranted();
+            }
         } else {
-            throw new IllegalArgumentException(getClass().getName() + "is not Fragment");
+            String permission = getPermission();
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                requestWhetherNeedRationaleWithListener();
+            } else {
+                // may granted
+                mayGranted();
+            }
         }
     }
 
     @SuppressWarnings("unchecked")
-    private void supportFragmentRequest() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            proxy.granted(getContext(), getRequestCode());
-        } else {
-            initProxy(getContext());
-
-            String permission = getPermission();
-            int requestCode = getRequestCode();
-            if (ContextCompat.checkSelfPermission(((android.support.v4.app.Fragment) getContext())
-                    .getActivity(), permission) != PackageManager
-                    .PERMISSION_GRANTED) {
-                if (((android.support.v4.app.Fragment) getContext()).shouldShowRequestPermissionRationale
-                        (permission)) {
-                    if (!proxy.customRationale(getContext(), requestCode)) {
-                        proxy.rationale(getContext(), requestCode);
-                        ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
-                                        String[]{permission},
-                                requestCode);
-                    }
-                } else {
+    private void requestWhetherNeedRationaleWithAnnotation() {
+        if (getContext() instanceof android.support.v4.app.Fragment) {
+            if (((android.support.v4.app.Fragment) getContext()).shouldShowRequestPermissionRationale
+                    (getPermission())) {
+                if (!proxy.customRationale(getContext(), getRequestCode())) {
+                    proxy.rationale(getContext(), getRequestCode());
                     ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
-                                    String[]{permission},
-                            requestCode);
+                            String[]{getPermission()}, getRequestCode());
                 }
             } else {
-//             granted
-                if (isRequestForce()) {
-                    if (PermissionsChecker.isPermissionGranted(((android.support.v4.app.Fragment)
-                            getContext()).getActivity(), permission)) {
-                        proxy.granted(getContext(), getRequestCode());
-                    } else {
-                        if (SupportUtil.nonShowRationale(this)) {
-                            boolean androidPage = getPageType() == Permissions4M.PageType
-                                    .ANDROID_SETTING_PAGE;
-                            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
-                                    PermissionsPageManager.getIntent(getActivity());
-
-                            proxy.intent(getContext(), getRequestCode(), intent);
-                        }
-                    }
-                } else {
-                    proxy.granted(getContext(), getRequestCode());
+                ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
+                                String[]{getPermission()},
+                        getRequestCode());
+            }
+        } else {
+            if (((android.app.Fragment) getContext()).shouldShowRequestPermissionRationale
+                    (getPermission())) {
+                if (!proxy.customRationale(getContext(), getRequestCode())) {
+                    proxy.rationale(getContext(), getRequestCode());
+                    ((android.app.Fragment) getContext()).requestPermissions(new String[]{getPermission()
+                    }, getRequestCode());
                 }
+            } else {
+                ((android.app.Fragment) getContext()).requestPermissions(new String[]{getPermission()},
+                        getRequestCode());
             }
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void fragmentRequest() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            proxy.granted(getContext(), getRequestCode());
+    private void mayGranted() {
+        if (isRequestForce()) {
+            ForceApplyPermissions.grantedOnResultWithListener(this);
         } else {
-            initProxy(getContext());
-
-            String permission = getPermission();
-            int requestCode = getRequestCode();
-            if (ContextCompat.checkSelfPermission(((android.app.Fragment) getContext()).getActivity(),
-                    permission) != PackageManager
-                    .PERMISSION_GRANTED) {
-                if (((android.app.Fragment) getContext()).shouldShowRequestPermissionRationale
-                        (permission)) {
-                    if (!proxy.customRationale(getContext(), requestCode)) {
-                        proxy.rationale(getContext(), requestCode);
-                        ((android.app.Fragment) getContext()).requestPermissions(new String[]{permission},
-                                requestCode);
-                    }
-                } else {
-                    ((android.app.Fragment) getContext()).requestPermissions(new String[]{permission},
-                            requestCode);
-                }
-            } else {
-//             granted
-                if (isRequestForce()) {
-                    if (PermissionsChecker.isPermissionGranted(((android.app.Fragment) getContext())
-                            .getActivity(), permission)) {
-                        proxy.granted(getContext(), getRequestCode());
-                    } else {
-                        proxy.denied(getContext(), getRequestCode());
-                        if (SupportUtil.nonShowRationale(this)) {
-                            boolean androidPage = getPageType() == Permissions4M.PageType
-                                    .ANDROID_SETTING_PAGE;
-                            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
-                                    PermissionsPageManager.getIntent(getActivity());
-
-                            proxy.intent(getContext(), getRequestCode(), intent);
-                        }
-                    }
-                } else {
-                    proxy.granted(getContext(), getRequestCode());
-                }
-            }
+            NormalApplyPermissions.grantedWithListener(this);
         }
     }
 
-    private void requestPermissionWithListener(android.app.Fragment fragment) {
-        Wrapper.PermissionRequestListener requestListener = getPermissionRequestListener();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            if (requestListener != null) {
-                requestListener.permissionGranted();
+    private void requestWhetherNeedRationaleWithListener() {
+        if (getContext() instanceof android.support.v4.app.Fragment) {
+            if (((android.support.v4.app.Fragment) getContext()).shouldShowRequestPermissionRationale
+                    (getPermission())) {
+                if (getPermissionRequestListener() != null) {
+                    getPermissionRequestListener().permissionRationale();
+                }
             }
+            ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
+                    String[]{getPermission()}, getRequestCode());
         } else {
-            String permission = getPermission();
-            int requestCode = getRequestCode();
-            if (ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager
-                    .PERMISSION_GRANTED) {
-                if (fragment.shouldShowRequestPermissionRationale(permission)) {
-                    requestListener.permissionRationale();
-                }
-                fragment.requestPermissions(new String[]{permission}, requestCode);
-            } else {
-                // granted
-                if (isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithListener(this);
-                } else {
-                    NormalApplyPermissions.grantedWithListener(this);
+            if (((android.app.Fragment) getContext()).shouldShowRequestPermissionRationale
+                    (getPermission())) {
+                if (getPermissionRequestListener() != null) {
+                    getPermissionRequestListener().permissionRationale();
                 }
             }
-        }
-    }
-
-    private void requestPermissionWithListener(android.support.v4.app.Fragment fragment) {
-        Wrapper.PermissionRequestListener requestListener = getPermissionRequestListener();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            if (requestListener != null) {
-                requestListener.permissionGranted();
-            }
-        } else {
-            String permission = getPermission();
-            int requestCode = getRequestCode();
-            if (ContextCompat.checkSelfPermission(fragment.getActivity(), permission) != PackageManager
-                    .PERMISSION_GRANTED) {
-                if (fragment.shouldShowRequestPermissionRationale(permission)) {
-                    requestListener.permissionRationale();
-                }
-                fragment.requestPermissions(new String[]{permission}, requestCode);
-            } else {
-                // granted
-                if (isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithListener(this);
-                } else {
-                    NormalApplyPermissions.grantedWithListener(this);
-                }
-            }
+            ((android.app.Fragment) getContext()).requestPermissions(new String[]{getPermission()},
+                    getRequestCode());
         }
     }
 
