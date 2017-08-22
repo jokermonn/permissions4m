@@ -1,6 +1,8 @@
 package com.joker.api.support.manufacturer;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.Settings;
 
 /**
@@ -8,9 +10,18 @@ import android.provider.Settings;
  */
 
 public class Protogenesis implements PermissionsPage {
+    private final Activity activity;
+
+    public Protogenesis(Activity activity) {
+        this.activity = activity;
+    }
+
     // system details setting page
     @Override
     public Intent settingIntent() {
-        return new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts(PACK_TAG, activity.getPackageName(), null);
+        intent.setData(uri);
+        return new Intent(intent);
     }
 }

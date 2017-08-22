@@ -31,7 +31,7 @@ public class PermissionsPageManager {
     }
 
     public static Intent getIntent(Activity activity) {
-        PermissionsPage permissionsPage = new Protogenesis();
+        PermissionsPage permissionsPage = new Protogenesis(activity);
         try {
             if (MANUFACTURER_HUAWEI.equalsIgnoreCase(manufacturer)) {
                 permissionsPage = new HUAWEI(activity);
@@ -46,13 +46,13 @@ public class PermissionsPageManager {
             return permissionsPage.settingIntent();
         } catch (Exception e) {
             Log.e("Permissions4M", "手机品牌为：" + manufacturer + "异常抛出，：" + e.getMessage());
-            permissionsPage = new Protogenesis();
+            permissionsPage = new Protogenesis(activity);
             return ((Protogenesis) permissionsPage).settingIntent();
         }
     }
 
-    public static Intent getIntent() {
-        return new Protogenesis().settingIntent();
+    public static Intent getSettingIntent(Activity activity) {
+        return new Protogenesis(activity).settingIntent();
     }
 
     /**
