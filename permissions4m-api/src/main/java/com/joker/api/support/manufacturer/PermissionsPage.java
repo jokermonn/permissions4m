@@ -7,7 +7,7 @@ import android.content.Intent;
  */
 
 public interface PermissionsPage {
-    String PACK_TAG = "packageName";
+    String PACK_TAG = "package";
 
     // normally, ActivityNotFoundException
     Intent settingIntent() throws Exception;

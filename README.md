@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.0.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-lib)
-[![processor](https://img.shields.io/badge/processor-1.0.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.0-processor)
+[![lib](https://img.shields.io/badge/lib-1.0.3-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.3-lib)
+[![processor](https://img.shields.io/badge/processor-1.0.3-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.3-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -46,8 +46,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.2-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.2-processor'
+      compile 'com.github.jokermonn:permissions4m:1.0.3-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.3-processor'
 	}
 
 ## 本地依赖 ##
@@ -87,6 +87,9 @@
 
 - TODO:[help me](#help)
 
+- v1.0.3
+	- 修复 `WRITE_CONTACTS` 权限 bug
+
 - v1.0.2
 
 	- 适配大量国产机型，包括小米、OPPO、华为等
@@ -95,7 +98,7 @@
 
 - v1.0.0
 
-	截止于[第37次 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
+	- 截止于[第37次 commits](https://github.com/jokermonn/permissions4m/tree/bda771f9470df7b061c915e3daaea1e787381f71)
 
 # 注意事项 #
 
@@ -106,7 +109,7 @@
 	@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
-        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, permissions, grantResults);
+        Permissions4M.onRequestPermissionsResult(MainFragment.this, requestCode, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
