@@ -72,8 +72,8 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
                     if (SupportUtil.nonShowRationale(this)) {
                         boolean androidPage = getPageType() == Permissions4M.PageType
                                 .ANDROID_SETTING_PAGE;
-                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
-                                PermissionsPageManager.getIntent(getActivity());
+                        Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
+                                PermissionsPageManager.getIntent(activity);
 
                         proxy.intent(getContext(), getRequestCode(), intent);
                     }

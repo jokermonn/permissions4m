@@ -31,7 +31,7 @@ public class NormalApplyPermissions {
         if (SupportUtil.nonShowRationale(wrapper)) {
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                     .ANDROID_SETTING_PAGE;
-            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
                     PermissionsPageManager.getIntent(getActivity(wrapper));
 
             proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
@@ -60,7 +60,7 @@ public class NormalApplyPermissions {
 
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                     .ANDROID_SETTING_PAGE;
-            Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
                     PermissionsPageManager.getIntent(activity);
             wrapper.getPermissionPageListener().pageIntent(intent);
         }

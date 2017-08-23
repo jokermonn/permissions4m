@@ -80,7 +80,8 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
                     if (SupportUtil.nonShowRationale(this)) {
                         boolean androidPage = getPageType() == Permissions4M.PageType
                                 .ANDROID_SETTING_PAGE;
-                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                        Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity
+                                ()) :
                                 PermissionsPageManager.getIntent(getActivity());
 
                         proxy.intent(getContext(), getRequestCode(), intent);
@@ -126,7 +127,8 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
                     if (SupportUtil.nonShowRationale(this)) {
                         boolean androidPage = getPageType() == Permissions4M.PageType
                                 .ANDROID_SETTING_PAGE;
-                        Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                        Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity
+                                ()) :
                                 PermissionsPageManager.getIntent(getActivity());
 
                         proxy.intent(getContext(), getRequestCode(), intent);

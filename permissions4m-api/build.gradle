@@ -1,14 +1,11 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-
-group = 'com.github.jokermonn'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 11
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -25,6 +22,5 @@ android {
 
 dependencies {
     compile 'com.jokermonn:permissions4m-annotation:1.0.3'
-//    compile project(':permissions4m-annotation')
     compile 'com.android.support:appcompat-v7:25.3.1'
 }

@@ -2,12 +2,15 @@ package com.joker.api.apply;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
 import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
 import com.joker.api.wrapper.Wrapper;
+
+import static com.joker.api.support.PermissionsPageManager.getSettingIntent;
 
 
 /**
@@ -37,7 +40,7 @@ public class ForceApplyPermissions {
             if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
                 boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                         .ANDROID_SETTING_PAGE;
-                Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                Intent intent = androidPage ? getSettingIntent(activity) :
                         PermissionsPageManager.getIntent(activity);
                 pageListener.pageIntent(intent);
             }
@@ -50,6 +53,7 @@ public class ForceApplyPermissions {
         Activity activity = getActivity(wrapper);
 
         PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
+        Log.e("TAG", "grantedOnResultWithAnnotation: " + (wrapper.getContext().getClass().getName()));
         if (PermissionsChecker.isPermissionGranted(activity, wrapper.getPermission())) {
             proxy.granted(wrapper.getContext(), wrapper.getRequestCode());
         } else {
@@ -58,7 +62,7 @@ public class ForceApplyPermissions {
             if (SupportUtil.nonShowRationale(wrapper)) {
                 boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                         .ANDROID_SETTING_PAGE;
-                Intent intent = androidPage ? PermissionsPageManager.getIntent() :
+                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
                         PermissionsPageManager.getIntent(getActivity(wrapper));
 
                 proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
