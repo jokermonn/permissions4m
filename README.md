@@ -50,27 +50,6 @@
       annotationProcessor 'com.github.jokermonn:permissions4m:1.0.6-processor'
 	}
 
-## 本地依赖 ##
-
-使用 jar/aar 包，请先下载此[链接](https://github.com/jokermonn/Permissions4M/tree/master/jars)下三个包，放入 libs 目录中，在 app 的 `app.gradle` 中添加如下代码
-
-	android {
-		// ...
-	}
-
-	repositories {
-	    flatDir {
-	        dirs 'libs'
-	    }
-	}
-
-	dependencies {
-		// 添加如下三行
-		compile(name: 'permissions4m-api', ext: 'aar')
-		compile files('libs/permissions4m-annotation.jar')
-		annotationProcessor files('libs/permissions4m-processor.jar')
-	}
-
 # 使用文档 #
 
 * 注意事项
