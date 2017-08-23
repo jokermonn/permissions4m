@@ -20,11 +20,11 @@ public class PermissionsPageManager {
     /**
      * Build.MANUFACTURER
      */
-    public static final String MANUFACTURER_HUAWEI = "HUAWEI"; // 华为
-    public static final String MANUFACTURER_XIAOMI = "XIAOMI"; // 小米
-    public static final String MANUFACTURER_OPPO = "OPPO";     // oppo
-    public static final String MANUFACTURER_VIVO = "vivo";     // vivo
-    public static final String manufacturer = Build.MANUFACTURER;
+    private static final String MANUFACTURER_HUAWEI = "HUAWEI"; // 华为
+    private static final String MANUFACTURER_XIAOMI = "XIAOMI"; // 小米
+    private static final String MANUFACTURER_OPPO = "OPPO";     // oppo
+    private static final String MANUFACTURER_VIVO = "vivo";     // vivo
+    private static final String manufacturer = Build.MANUFACTURER;
 
     public static String getManufacturer() {
         return manufacturer;

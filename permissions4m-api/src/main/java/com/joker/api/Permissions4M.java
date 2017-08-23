@@ -58,7 +58,8 @@ public class Permissions4M {
             requestCode, @NonNull int[] grantResults) {
         AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
         Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key);
-        // because SupportFragment request permissions will call Activity callback first and then call SupportFragment callback
+        // because SupportFragment request permissions will call Activity callback first and then call
+        // SupportFragment callback
         // and the first time will throw NullPointerException
         if (wrapper == null) {
             return;
@@ -82,17 +83,6 @@ public class Permissions4M {
                 NormalApplyPermissions.grantedWithAnnotation(wrapper);
             }
         } else {
-<<<<<<< HEAD
-            // annotation callback
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (wrapper.isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
-                } else {
-                    NormalApplyPermissions.grantedWithAnnotation(wrapper);
-                }
-            } else {
-                NormalApplyPermissions.deniedWithAnnotation(wrapper);
-=======
             NormalApplyPermissions.deniedWithAnnotation(wrapper);
         }
     }
@@ -103,7 +93,6 @@ public class Permissions4M {
                 ForceApplyPermissions.grantedOnResultWithListener(wrapper);
             } else {
                 NormalApplyPermissions.grantedWithListener(wrapper);
->>>>>>> master
             }
         } else {
             NormalApplyPermissions.deniedOnResultWithListener(wrapper);

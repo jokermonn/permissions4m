@@ -3,9 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permissions4m.iml" filepath="$PROJECT_DIR$/permissions4m.iml" />
       <module fileurl="file://$PROJECT_DIR$/permissions4m.iml" filepath="$PROJECT_DIR$/permissions4m.iml" />
       <module fileurl="file://$PROJECT_DIR$/permissions4m-annotation/permissions4m-annotation.iml" filepath="$PROJECT_DIR$/permissions4m-annotation/permissions4m-annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permissions4m-annotation/permissions4m-annotation.iml" filepath="$PROJECT_DIR$/permissions4m-annotation/permissions4m-annotation.iml" />
       <module fileurl="file://$PROJECT_DIR$/permissions4m-api/permissions4m-api.iml" filepath="$PROJECT_DIR$/permissions4m-api/permissions4m-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permissions4m-api/permissions4m-api.iml" filepath="$PROJECT_DIR$/permissions4m-api/permissions4m-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/permissions4m-processor/permissions4m-processor.iml" filepath="$PROJECT_DIR$/permissions4m-processor/permissions4m-processor.iml" />
       <module fileurl="file://$PROJECT_DIR$/permissions4m-processor/permissions4m-processor.iml" filepath="$PROJECT_DIR$/permissions4m-processor/permissions4m-processor.iml" />
     </modules>
   </component>
