@@ -30,7 +30,7 @@ public interface ListenerWrapper {
     /**
      * android setting page or phone manager page
      *
-     * @param pageType {@link com.joker.api.Permissions4M.PageType}
+     * @param pageType {@link Permissions4M.PageType}
      * @return
      */
     Wrapper requestPageType(@Permissions4M.PageType int pageType);

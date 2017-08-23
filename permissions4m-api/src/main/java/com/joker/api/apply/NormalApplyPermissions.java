@@ -2,6 +2,7 @@ package com.joker.api.apply;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
@@ -17,8 +18,8 @@ import com.joker.api.wrapper.Wrapper;
 public class NormalApplyPermissions {
     @SuppressWarnings("unchecked")
     public static void grantedWithAnnotation(Wrapper wrapper) {
-        wrapper.getProxy(wrapper.getContext().getClass().getName()).granted(wrapper.getContext(), wrapper
-                .getRequestCode());
+        wrapper.getProxy(wrapper.getContext().getClass().getName())
+                .granted(wrapper.getContext(), wrapper.getRequestCode());
     }
 
     @SuppressWarnings("unchecked")
@@ -44,6 +45,10 @@ public class NormalApplyPermissions {
     }
 
     public static void deniedOnResultWithListener(Wrapper wrapper) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
         if (wrapper.getPermissionRequestListener() == null) {
             return;
         }

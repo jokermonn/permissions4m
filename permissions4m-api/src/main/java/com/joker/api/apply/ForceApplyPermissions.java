@@ -37,7 +37,7 @@ public class ForceApplyPermissions {
             if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
                 boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                         .ANDROID_SETTING_PAGE;
-                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
+                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
                         PermissionsPageManager.getIntent(activity);
                 pageListener.pageIntent(intent);
             }
@@ -58,7 +58,7 @@ public class ForceApplyPermissions {
             if (SupportUtil.nonShowRationale(wrapper)) {
                 boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                         .ANDROID_SETTING_PAGE;
-                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
+                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
                         PermissionsPageManager.getIntent(getActivity(wrapper));
 
                 proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);

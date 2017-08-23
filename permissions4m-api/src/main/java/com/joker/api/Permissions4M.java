@@ -58,8 +58,7 @@ public class Permissions4M {
             requestCode, @NonNull int[] grantResults) {
         AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
         Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key);
-        // because SupportFragment request permissions will call Activity callback first and then call
-        // SupportFragment callback
+        // because SupportFragment request permissions will call Activity callback first and then call SupportFragment callback
         // and the first time will throw NullPointerException
         if (wrapper == null) {
             return;

@@ -1,16 +1,13 @@
 package com.joker.api.wrapper;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.joker.api.Permissions4M;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
-import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
 
 /**
@@ -42,66 +39,75 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     @Override
     void requestPermissionWithAnnotation() {
+        initProxy(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            proxy.granted(getContext(), getRequestCode());
+            proxy.granted(activity, getRequestCode());
         } else {
-            initProxy(activity);
-
             String permission = getPermission();
-            int requestCode = getRequestCode();
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager
                     .PERMISSION_GRANTED) {
-                if ((activity).shouldShowRequestPermissionRationale(permission)) {
-                    if (!proxy.customRationale(activity, requestCode)) {
-                        proxy.rationale(activity, requestCode);
-                        ActivityCompat.requestPermissions(activity, new String[]{permission},
-                                requestCode);
-                    }
-                } else {
-                    ActivityCompat.requestPermissions(activity, new String[]{permission},
-                            requestCode);
-                }
+                tryRequestWithAnnotation();
             } else {
                 // force
-                if (isRequestForce()) {
-                    // ensure granted
-                    ForceApplyPermissions.grantedOnResultWithAnnotation(this);
-                } else {
-                    proxy.granted(activity, requestCode);
-                }
+                mayGrantedWithAnnotation();
             }
         }
     }
 
     @Override
     void requestPermissionWithListener() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            if (getPermissionRequestListener() != null) {
-                getPermissionRequestListener().permissionGranted();
+        String permission = getPermission();
+        int requestCode = getRequestCode();
+
+        // denied
+        if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager
+                .PERMISSION_GRANTED) {
+            tryRequestWithListener(permission, requestCode);
+        } else {
+            // may granted
+            mayGrantedWithListener();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void tryRequestWithAnnotation() {
+        if ((getActivity()).shouldShowRequestPermissionRationale(getPermission())) {
+            if (!proxy.customRationale(getActivity(), getRequestCode())) {
+                proxy.rationale(getActivity(), getRequestCode());
+                ActivityCompat.requestPermissions(getActivity(), new String[]{getPermission()},
+                        getRequestCode());
             }
         } else {
-            String permission = getPermission();
-            int requestCode = getRequestCode();
-            Wrapper.PermissionRequestListener requestListener = getPermissionRequestListener();
-            if (requestListener == null) {
-                return;
-            }
+            ActivityCompat.requestPermissions(getActivity(), new String[]{getPermission()},
+                    getRequestCode());
+        }
+    }
 
-            // denied
-            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager
-                    .PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-                    requestListener.permissionRationale();
-                }
-                ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
-            } else {
-                // granted
-                if (isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithListener(this);
-                } else {
-                    NormalApplyPermissions.grantedWithListener(this);
-                }
+    @SuppressWarnings("unchecked")
+    private void mayGrantedWithAnnotation() {
+        if (isRequestForce()) {
+            // ensure granted
+            ForceApplyPermissions.grantedOnResultWithAnnotation(this);
+        } else {
+            NormalApplyPermissions.grantedWithAnnotation(this);
+        }
+    }
+
+    private void tryRequestWithListener(String permission, int requestCode) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+            PermissionRequestListener requestListener = getPermissionRequestListener();
+            if (requestListener != null) {
+                requestListener.permissionRationale();
             }
+        }
+        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+    }
+
+    private void mayGrantedWithListener() {
+        if (isRequestForce()) {
+            ForceApplyPermissions.grantedOnResultWithListener(this);
+        } else {
+            NormalApplyPermissions.grantedWithListener(this);
         }
     }
 }

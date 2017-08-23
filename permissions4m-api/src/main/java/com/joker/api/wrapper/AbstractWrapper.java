@@ -141,6 +141,7 @@ public abstract class AbstractWrapper implements Wrapper {
         return requestOnRationale;
     }
 
+    @Override
     public void request() {
         // use a map to hold wrappers
         Key key = new Key(getContext(), getRequestCode());
@@ -175,10 +176,10 @@ public abstract class AbstractWrapper implements Wrapper {
 
     @SuppressWarnings("unchecked")
     private void privateRequestSync(Object object) {
+        initProxy(object);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             proxy.granted(object, getRequestCode());
         } else {
-            initProxy(object);
             proxy.startSyncRequestPermissionsMethod(object);
         }
     }

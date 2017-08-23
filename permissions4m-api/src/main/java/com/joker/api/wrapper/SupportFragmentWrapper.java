@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 public class SupportFragmentWrapper extends FragmentBaseWrapper implements Wrapper {
     private final Fragment fragment;
 
-    public SupportFragmentWrapper(android.support.v4.app.Fragment fragment) {
+    public SupportFragmentWrapper(Fragment fragment) {
         this.fragment = fragment;
     }
 
