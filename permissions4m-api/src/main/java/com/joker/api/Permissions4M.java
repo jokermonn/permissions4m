@@ -58,7 +58,8 @@ public class Permissions4M {
             requestCode, @NonNull int[] grantResults) {
         AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
         Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key);
-        // because SupportFragment request permissions will call Activity callback first and then call SupportFragment callback
+        // because SupportFragment request permissions will call Activity callback first and then call
+        // SupportFragment callback
         // and the first time will throw NullPointerException
         if (wrapper == null) {
             return;
@@ -67,26 +68,34 @@ public class Permissions4M {
                 .getPermissionRequestListener();
         // listener callback
         if (requestListener != null) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (wrapper.isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithListener(wrapper);
-                } else {
-                    NormalApplyPermissions.grantedWithListener(wrapper);
-                }
-            } else {
-                NormalApplyPermissions.deniedOnResultWithListener(wrapper);
-            }
+            listenerCallback(grantResults, wrapper);
         } else {
             // annotation callback
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (wrapper.isRequestForce()) {
-                    ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
-                } else {
-                    NormalApplyPermissions.grantedWithAnnotation(wrapper);
-                }
+            annotationCallback(grantResults, wrapper);
+        }
+    }
+
+    private static void annotationCallback(@NonNull int[] grantResults, Wrapper wrapper) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (wrapper.isRequestForce()) {
+                ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
             } else {
-                NormalApplyPermissions.deniedWithAnnotation(wrapper);
+                NormalApplyPermissions.grantedWithAnnotation(wrapper);
             }
+        } else {
+            NormalApplyPermissions.deniedWithAnnotation(wrapper);
+        }
+    }
+
+    private static void listenerCallback(@NonNull int[] grantResults, Wrapper wrapper) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (wrapper.isRequestForce()) {
+                ForceApplyPermissions.grantedOnResultWithListener(wrapper);
+            } else {
+                NormalApplyPermissions.grantedWithListener(wrapper);
+            }
+        } else {
+            NormalApplyPermissions.deniedOnResultWithListener(wrapper);
         }
     }
 
