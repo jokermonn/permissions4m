@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         mPermissionPageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(PermissionsPageManager.getIntent(MainActivity.this));
+                startActivity(PermissionsPageManager.getSettingIntent(MainActivity.this));
             }
         });
 
