@@ -46,7 +46,7 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.3-lib'
+      compile 'com.github.jokermonn:permissions4m:1.0.4-lib'
       annotationProcessor 'com.github.jokermonn:permissions4m:1.0.3-processor'
 	}
 
@@ -87,14 +87,20 @@
 
 - TODO:[help me](#help)
 
+- v1.0.4
+	- 低版本默认授权成功
+	- 更改最低版兼容 sdk 到`11`
+
 - v1.0.3
 	- 修复 `WRITE_CONTACTS` 权限 bug
+	- 截止于[第99次 commits](https://github.com/jokermonn/permissions4m/tree/476f9e547799b1e1e42455ce4a7810f1b1c9bee6)
 
 - v1.0.2
 
 	- 适配大量国产机型，包括小米、OPPO、华为等
 	- 更改为流式 API
 	- 支持 Listener 接口回调
+	- 截止于[第81次 commits](https://github.com/jokermonn/permissions4m/tree/937c380f73ac67b028c2e98f296e9a79a982c8e4)
 
 - v1.0.0
 
