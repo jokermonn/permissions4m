@@ -4,7 +4,7 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.0.3-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.3-lib)
+[![lib](https://img.shields.io/badge/lib-1.0.5-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.5-lib)
 [![processor](https://img.shields.io/badge/processor-1.0.3-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.3-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
@@ -87,7 +87,7 @@
 
 - TODO:[help me](#help)
 
-- v1.0.4
+- v1.0.5
 	- 低版本默认授权成功
 	- 更改最低版兼容 sdk 到`11`
 
