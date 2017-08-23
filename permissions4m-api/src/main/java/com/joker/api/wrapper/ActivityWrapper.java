@@ -67,14 +67,6 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
                     // ensure granted
                     ForceApplyPermissions.grantedOnResultWithAnnotation(this);
                 } else {
-                    if (SupportUtil.nonShowRationale(this)) {
-                        boolean androidPage = getPageType() == Permissions4M.PageType
-                                .ANDROID_SETTING_PAGE;
-                        Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
-                                PermissionsPageManager.getIntent(activity);
-
-                        proxy.intent(getContext(), getRequestCode(), intent);
-                    }
                     proxy.granted(activity, requestCode);
                 }
             }
