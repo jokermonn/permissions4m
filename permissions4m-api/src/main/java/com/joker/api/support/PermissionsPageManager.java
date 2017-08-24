@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.joker.api.support.manufacturer.HUAWEI;
+import com.joker.api.support.manufacturer.MEIZU;
 import com.joker.api.support.manufacturer.OPPO;
 import com.joker.api.support.manufacturer.PermissionsPage;
 import com.joker.api.support.manufacturer.Protogenesis;
@@ -24,6 +25,7 @@ public class PermissionsPageManager {
     private static final String MANUFACTURER_XIAOMI = "XIAOMI"; // 小米
     private static final String MANUFACTURER_OPPO = "OPPO";     // oppo
     private static final String MANUFACTURER_VIVO = "vivo";     // vivo
+    private static final String MANUFACTURER_MEIZU = "meizu";     // meizu
     private static final String manufacturer = Build.MANUFACTURER;
 
     public static String getManufacturer() {
@@ -41,6 +43,8 @@ public class PermissionsPageManager {
                 permissionsPage = new VIVO(activity);
             } else if (MANUFACTURER_XIAOMI.equalsIgnoreCase(manufacturer)) {
                 permissionsPage = new XIAOMI(activity);
+            } else if (MANUFACTURER_MEIZU.equalsIgnoreCase(manufacturer)) {
+                permissionsPage = new MEIZU(activity);
             }
 
             return permissionsPage.settingIntent();

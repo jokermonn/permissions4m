@@ -1,8 +1,8 @@
 package com.joker.api.support.manufacturer;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 
 import java.io.BufferedReader;
@@ -26,9 +26,9 @@ public class XIAOMI implements PermissionsPage {
             ".AppPermissionsEditorActivity";
     // xiaomi permissions setting page
     private final String MIUI8_OUT_CLS = "com.android.settings.applications.InstalledAppDetailsTop";
-    private final Context context;
+    private final Activity context;
 
-    public XIAOMI(Context context) {
+    public XIAOMI(Activity context) {
         this.context = context;
     }
 

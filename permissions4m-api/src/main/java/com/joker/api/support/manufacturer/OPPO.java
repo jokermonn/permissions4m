@@ -1,7 +1,7 @@
 package com.joker.api.support.manufacturer;
 
+import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 
 /**
@@ -15,12 +15,12 @@ import android.content.Intent;
  */
 
 public class OPPO implements PermissionsPage {
-    private final Context context;
+    private final Activity context;
     private final String PKG = "com.coloros.safecenter";
     private final String MANAGER_OUT_CLS = "com.coloros.safecenter.permission.singlepage" +
             ".PermissionSinglePageActivity";
 
-    public OPPO(Context context) {
+    public OPPO(Activity context) {
         this.context = context;
     }
 

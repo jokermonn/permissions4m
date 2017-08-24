@@ -1,7 +1,7 @@
 package com.joker.api.support.manufacturer;
 
+import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 
 /**
@@ -17,9 +17,9 @@ import android.content.Intent;
 public class VIVO implements PermissionsPage {
     private final String MAIN_CLS = "com.iqoo.secure.MainActivity";
     private final String PKG = "com.iqoo.secure";
-    private final Context context;
+    private final Activity context;
 
-    public VIVO(Context context) {
+    public VIVO(Activity context) {
         this.context = context;
     }
 
