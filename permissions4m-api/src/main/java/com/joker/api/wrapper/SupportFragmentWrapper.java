@@ -1,16 +1,15 @@
 package com.joker.api.wrapper;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 
 /**
  * Created by joker on 2017/8/5.
  */
 
 public class SupportFragmentWrapper extends FragmentBaseWrapper implements Wrapper {
-    private final Fragment fragment;
+    private final android.support.v4.app.Fragment fragment;
 
-    public SupportFragmentWrapper(Fragment fragment) {
+    public SupportFragmentWrapper(android.support.v4.app.Fragment fragment) {
         this.fragment = fragment;
     }
 

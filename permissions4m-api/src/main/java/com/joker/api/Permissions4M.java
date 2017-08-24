@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
@@ -57,8 +58,9 @@ public class Permissions4M {
     private static void onPrivateRequestPermissionsResult(Object object, int
             requestCode, @NonNull int[] grantResults) {
         AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
-        Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key);
-        // because SupportFragment request permissions will call Activity callback first and then call SupportFragment callback
+        Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key).get();
+        // because SupportFragment request permissions will call Activity callback first and then call
+        // SupportFragment callback
         // and the first time will throw NullPointerException
         if (wrapper == null) {
             return;

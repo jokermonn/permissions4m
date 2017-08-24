@@ -6,6 +6,7 @@ import android.os.Build;
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +20,7 @@ public abstract class AbstractWrapper implements Wrapper {
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
     private static final int DEFAULT_REQUEST_CODE = -1;
     static PermissionsProxy proxy;
-    private static Map<String, PermissionsProxy> map = new HashMap<>();
-    private static Map<Key, Wrapper> wrapperMap = new HashMap<>();
+    private static Map<Key, WeakReference<Wrapper>> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
     private int pageType = DEFAULT_PAGE_TYPE;
     private int requestCode = DEFAULT_REQUEST_CODE;
@@ -36,13 +36,9 @@ public abstract class AbstractWrapper implements Wrapper {
     static void initProxy(Object object) {
         String name = object.getClass().getName();
         String proxyName = name + PERMISSIONS_PROXY;
-        PermissionsProxy proxy = map.get(proxyName);
         try {
             if (proxy == null) {
-                AbstractWrapper.proxy = (PermissionsProxy) Class.forName(proxyName).newInstance();
-                map.put(proxyName, AbstractWrapper.proxy);
-            } else {
-                AbstractWrapper.proxy = proxy;
+                proxy = (PermissionsProxy) Class.forName(proxyName).newInstance();
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -53,13 +49,26 @@ public abstract class AbstractWrapper implements Wrapper {
         }
     }
 
-    public static Map<Key, Wrapper> getWrapperMap() {
+    public static Map<Key, WeakReference<Wrapper>> getWrapperMap() {
         return wrapperMap;
     }
 
     @Override
     public PermissionsProxy getProxy(String className) {
-        return map.get(className + PERMISSIONS_PROXY);
+        try {
+            if (proxy == null) {
+                String proxyName = className + PERMISSIONS_PROXY;
+                proxy = (PermissionsProxy) Class.forName(proxyName).newInstance();
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return proxy;
     }
 
     @Override
@@ -145,7 +154,7 @@ public abstract class AbstractWrapper implements Wrapper {
     public void request() {
         // use a map to hold wrappers
         Key key = new Key(getContext(), getRequestCode());
-        wrapperMap.put(key, this);
+        wrapperMap.put(key, new WeakReference<Wrapper>(this));
 
         // on rationale, it should use normal request
         if (isRequestOnRationale()) {
@@ -190,10 +199,10 @@ public abstract class AbstractWrapper implements Wrapper {
 
     public static class Key {
         private int requestCode;
-        private Object object;
+        private WeakReference<Object> object;
 
         public Key(Object object, int requestCode) {
-            this.object = object;
+            this.object = new WeakReference<>(object);
             this.requestCode = requestCode;
         }
 
@@ -208,12 +217,12 @@ public abstract class AbstractWrapper implements Wrapper {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Key && ((Key) obj).getRequestCode() == requestCode &&
-                    object.getClass().getName().equals(((Key) obj).getObject().getClass().getName());
+                    object.get().getClass().getName().equals(((Key) obj).getObject().get().getClass().getName());
         }
 
         @Override
         public int hashCode() {
-            return object.hashCode() >> 1 + requestCode;
+            return object.get().hashCode() >> 1 + requestCode;
         }
 
         public int getRequestCode() {
@@ -224,11 +233,11 @@ public abstract class AbstractWrapper implements Wrapper {
             this.requestCode = requestCode;
         }
 
-        public Object getObject() {
+        public WeakReference<Object> getObject() {
             return object;
         }
 
-        public void setObject(Object object) {
+        public void setObject(WeakReference<Object> object) {
             this.object = object;
         }
     }

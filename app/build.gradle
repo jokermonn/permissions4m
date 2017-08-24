@@ -28,9 +28,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     // umeng
+    compile project(':permissions4m-api')
+    annotationProcessor project(':permissions4m-processor')
     compile 'com.umeng.analytics:analytics:6.1.2'
-    compile project (':permissions4m-api')
-    annotationProcessor project (':permissions4m-processor')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-v4:25.3.1'

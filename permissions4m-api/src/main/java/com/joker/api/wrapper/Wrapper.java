@@ -7,5 +7,9 @@ import android.app.Activity;
  */
 
 public interface Wrapper extends ListenerWrapper, AnnotationWrapper {
+    /**
+     * get activity
+     * @return
+     */
     Activity getActivity();
 }
