@@ -1,5 +1,6 @@
 package com.joker.api.wrapper;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 
 /**
@@ -21,5 +22,10 @@ public class SupportFragmentWrapper extends FragmentBaseWrapper implements Wrapp
     @Override
     public void requestSync() {
         requestSync(fragment);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return ((android.support.v4.app.Fragment) getContext()).getActivity();
     }
 }

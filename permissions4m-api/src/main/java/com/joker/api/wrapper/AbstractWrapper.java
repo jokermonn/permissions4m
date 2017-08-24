@@ -184,16 +184,6 @@ public abstract class AbstractWrapper implements Wrapper {
         }
     }
 
-    protected Activity getActivity() {
-        if (getContext() instanceof android.app.Fragment) {
-            return ((android.app.Fragment) getContext()).getActivity();
-        } else if (getContext() instanceof android.support.v4.app.Fragment) {
-            return ((android.support.v4.app.Fragment) getContext()).getActivity();
-        } else {
-            return (Activity) getContext();
-        }
-    }
-
     abstract void requestPermissionWithAnnotation();
 
     abstract void requestPermissionWithListener();

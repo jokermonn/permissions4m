@@ -110,4 +110,9 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
             NormalApplyPermissions.grantedWithListener(this);
         }
     }
+
+    @Override
+    public Activity getActivity() {
+        return (Activity) getContext();
+    }
 }

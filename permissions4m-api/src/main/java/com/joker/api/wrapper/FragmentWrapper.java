@@ -1,5 +1,7 @@
 package com.joker.api.wrapper;
 
+import android.app.Activity;
+
 /**
  * Created by joker on 2017/8/5.
  */
@@ -19,5 +21,10 @@ public class FragmentWrapper extends FragmentBaseWrapper implements Wrapper {
     @Override
     public void requestSync() {
         requestSync(fragment);
+    }
+
+    @Override
+    public Activity getActivity() {
+        return ((android.app.Fragment) getContext()).getActivity();
     }
 }
