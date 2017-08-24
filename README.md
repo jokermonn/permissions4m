@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.0.7-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.7-lib)
-[![processor](https://img.shields.io/badge/processor-1.0.7-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.7-processor)
+[![lib](https://img.shields.io/badge/lib-1.0.8-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.8-lib)
+[![processor](https://img.shields.io/badge/processor-1.0.8-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.8-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -46,8 +46,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.7-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.7-processor'
+      compile 'com.github.jokermonn:permissions4m:1.0.8-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.8-processor'
 	}
 
 # 使用文档 #
