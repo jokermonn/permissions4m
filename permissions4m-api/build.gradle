@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.github.dcendents.android-maven'
-//
-//group = 'com.github.jokermonn'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.jokermonn'
 
 android {
     compileSdkVersion 25
