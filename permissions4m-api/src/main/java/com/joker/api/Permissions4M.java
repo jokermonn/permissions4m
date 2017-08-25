@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
@@ -16,6 +15,7 @@ import com.joker.api.wrapper.Wrapper;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.WeakReference;
 
 import static com.joker.api.Permissions4M.PageType.ANDROID_SETTING_PAGE;
 import static com.joker.api.Permissions4M.PageType.MANAGER_PAGE;
@@ -38,18 +38,28 @@ public class Permissions4M {
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * in {@link android.app.Activity}, once permission request only call this method once
+     */
     public static void onRequestPermissionsResult(Activity activity, int
             requestCode, @NonNull int[] grantResults) {
         onPrivateRequestPermissionsResult(activity, requestCode, grantResults);
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * in {@link android.app.Fragment}, once permission request only call this method once
+     */
     public static void onRequestPermissionsResult(android.app.Fragment fragment, int
             requestCode, @NonNull int[] grantResults) {
         onPrivateRequestPermissionsResult(fragment, requestCode, grantResults);
     }
 
     @SuppressWarnings("unchecked")
+    /**
+     * in {@link android.support.v4.app.android.support.v4.app.Fragment}, once permission request
+     * will call this method **twice**
+     */
     public static void onRequestPermissionsResult(android.support.v4.app.Fragment fragment, int
             requestCode, @NonNull int[] grantResults) {
         onPrivateRequestPermissionsResult(fragment, requestCode, grantResults);
@@ -58,9 +68,16 @@ public class Permissions4M {
     private static void onPrivateRequestPermissionsResult(Object object, int
             requestCode, @NonNull int[] grantResults) {
         AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
-        Wrapper wrapper = AbstractWrapper.getWrapperMap().get(key).get();
-        // because SupportFragment request permissions will call Activity callback first and then call
-        // SupportFragment callback
+        WeakReference<Wrapper> reference = AbstractWrapper.getWrapperMap().get(key);
+        // because SupportFragment request permissions will call Activity callback first
+        // and then call SupportFragment callback
+        // and the first time will throw NullPointerException
+        if (reference == null) {
+            return;
+        }
+        Wrapper wrapper = reference.get();
+        // because SupportFragment request permissions will call Activity callback first
+        // and then call SupportFragment callback
         // and the first time will throw NullPointerException
         if (wrapper == null) {
             return;

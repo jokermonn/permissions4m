@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.joker.api.PermissionsProxy;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
 
@@ -38,9 +39,8 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     @Override
     void requestPermissionWithAnnotation() {
-        initProxy(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            proxy.granted(activity, getRequestCode());
+            getProxy(getContext().getClass().getName()).granted(activity, getRequestCode());
         } else {
             String permission = getPermission();
             if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager
@@ -71,8 +71,9 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     private void tryRequestWithAnnotation() {
         if ((getActivity()).shouldShowRequestPermissionRationale(getPermission())) {
-            if (!proxy.customRationale(getActivity(), getRequestCode())) {
-                proxy.rationale(getActivity(), getRequestCode());
+            if (!getProxy(getContext().getClass().getName()).customRationale(getActivity(),
+                    getRequestCode())) {
+                getProxy(getContext().getClass().getName()).rationale(getActivity(), getRequestCode());
                 ActivityCompat.requestPermissions(getActivity(), new String[]{getPermission()},
                         getRequestCode());
             }

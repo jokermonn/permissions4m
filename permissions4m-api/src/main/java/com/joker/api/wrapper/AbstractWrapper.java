@@ -19,7 +19,7 @@ public abstract class AbstractWrapper implements Wrapper {
     @Permissions4M.PageType
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
     private static final int DEFAULT_REQUEST_CODE = -1;
-    static PermissionsProxy proxy;
+    private static Map<String, PermissionsProxy> proxyMap = new HashMap<>();
     private static Map<Key, WeakReference<Wrapper>> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
     private int pageType = DEFAULT_PAGE_TYPE;
@@ -33,32 +33,16 @@ public abstract class AbstractWrapper implements Wrapper {
     public AbstractWrapper() {
     }
 
-    static void initProxy(Object object) {
-        String name = object.getClass().getName();
-        String proxyName = name + PERMISSIONS_PROXY;
-        try {
-            if (proxy == null) {
-                proxy = (PermissionsProxy) Class.forName(proxyName).newInstance();
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static Map<Key, WeakReference<Wrapper>> getWrapperMap() {
         return wrapperMap;
     }
 
     @Override
     public PermissionsProxy getProxy(String className) {
+        String proxyName = className + PERMISSIONS_PROXY;
         try {
-            if (proxy == null) {
-                String proxyName = className + PERMISSIONS_PROXY;
-                proxy = (PermissionsProxy) Class.forName(proxyName).newInstance();
+            if (proxyMap.get(proxyName) == null) {
+                proxyMap.put(proxyName, (PermissionsProxy) Class.forName(proxyName).newInstance());
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -68,7 +52,7 @@ public abstract class AbstractWrapper implements Wrapper {
             e.printStackTrace();
         }
 
-        return proxy;
+        return proxyMap.get(proxyName);
     }
 
     @Override
@@ -185,11 +169,10 @@ public abstract class AbstractWrapper implements Wrapper {
 
     @SuppressWarnings("unchecked")
     private void privateRequestSync(Object object) {
-        initProxy(object);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            proxy.granted(object, getRequestCode());
+            getProxy(object.getClass().getName()).granted(object, getRequestCode());
         } else {
-            proxy.startSyncRequestPermissionsMethod(object);
+            getProxy(object.getClass().getName()).startSyncRequestPermissionsMethod(object);
         }
     }
 
@@ -217,7 +200,8 @@ public abstract class AbstractWrapper implements Wrapper {
         @Override
         public boolean equals(Object obj) {
             return obj instanceof Key && ((Key) obj).getRequestCode() == requestCode &&
-                    object.get().getClass().getName().equals(((Key) obj).getObject().get().getClass().getName());
+                    object.get().getClass().getName().equals(((Key) obj).getObject().get().getClass()
+                            .getName());
         }
 
         @Override
