@@ -42,8 +42,6 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
 
     @SuppressWarnings("unchecked")
     private void fragmentRequestWithAnnotation() {
-        initProxy(getContext());
-
         String permission = getPermission();
         if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
                 .PERMISSION_GRANTED) {
@@ -70,8 +68,8 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
         if (getContext() instanceof android.support.v4.app.Fragment) {
             if (((android.support.v4.app.Fragment) getContext()).shouldShowRequestPermissionRationale
                     (getPermission())) {
-                if (!proxy.customRationale(getContext(), getRequestCode())) {
-                    proxy.rationale(getContext(), getRequestCode());
+                if (!getProxy(getContext().getClass().getName()).customRationale(getContext(), getRequestCode())) {
+                    getProxy(getContext().getClass().getName()).rationale(getContext(), getRequestCode());
                     ((android.support.v4.app.Fragment) getContext()).requestPermissions(new
                             String[]{getPermission()}, getRequestCode());
                 }
@@ -82,8 +80,8 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
         } else {
             if (((android.app.Fragment) getContext()).shouldShowRequestPermissionRationale
                     (getPermission())) {
-                if (!proxy.customRationale(getContext(), getRequestCode())) {
-                    proxy.rationale(getContext(), getRequestCode());
+                if (!getProxy(getContext().getClass().getName()).customRationale(getContext(), getRequestCode())) {
+                    getProxy(getContext().getClass().getName()).rationale(getContext(), getRequestCode());
                     ((android.app.Fragment) getContext()).requestPermissions(new String[]{getPermission()
                     }, getRequestCode());
                 }
