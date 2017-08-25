@@ -58,13 +58,13 @@ public class XIAOMI implements PermissionsPage {
     public Intent settingIntent() throws ActivityNotFoundException {
         Intent intent = new Intent();
         String miuiInfo = getSystemProperty();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (miuiInfo.contains("7") || miuiInfo.contains("6")) {
             intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
             intent.setClassName(PKG, MIUI7_MANAGER_OUT_CLS);
             intent.putExtra("extra_pkgname", context.getPackageName());
         } else {
             // miui 8
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(PACK_TAG, context.getPackageName());
             ComponentName comp = new ComponentName(PKG, MIUI8_MANAGER_OUT_CLS);
             intent.setComponent(comp);
