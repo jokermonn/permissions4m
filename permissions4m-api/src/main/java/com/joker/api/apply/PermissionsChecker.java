@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.provider.Telephony;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,7 +37,7 @@ import static android.content.Context.TELEPHONY_SERVICE;
 
 public class PermissionsChecker {
     private static final String TAG = "permissions4m";
-    private static final String TAG_NUMBER = "110";
+    private static final String TAG_NUMBER = "1";
 
     /**
      * ensure whether permission granted
@@ -138,23 +139,24 @@ public class PermissionsChecker {
         ContentResolver contentResolver = activity.getContentResolver();
         ContentValues content = new ContentValues();
         content.put(CallLog.Calls.TYPE, CallLog.Calls.INCOMING_TYPE);
-        content.put(CallLog.Calls.NUMBER, "13333333");
+        content.put(CallLog.Calls.NUMBER, TAG_NUMBER);
         content.put(CallLog.Calls.DATE, 20140808);
         content.put(CallLog.Calls.NEW, "0");
         contentResolver.insert(Uri.parse("content://call_log/calls"), content);
 
         contentResolver.delete(Uri.parse("content://call_log/calls"), "number = ?", new
-                String[]{"13333333"});
+                String[]{TAG_NUMBER});
 
         return true;
     }
 
     private static boolean checkReadSms(Activity activity) throws Exception {
-        Uri uri = Uri.parse("content://sms/");
-        Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
+        Cursor cursor = activity.getContentResolver().query(Uri.parse("content://sms/"), null, null,
+                null, null);
         if (cursor != null) {
             if (PermissionsPageManager.isXiaoMi()) {
-                if (canNotGetContactsInfo(cursor)) {
+                if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(Telephony.Sms.PERSON))) {
+                    cursor.close();
                     return false;
                 }
             }
@@ -230,7 +232,8 @@ public class PermissionsChecker {
                 null, null);
         if (cursor != null) {
             if (PermissionsPageManager.isXiaoMi()) {
-                if (canNotGetContactsInfo(cursor)) {
+                if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(CallLog.Calls.NUMBER))) {
+                    cursor.close();
                     return false;
                 }
             }
@@ -281,7 +284,8 @@ public class PermissionsChecker {
                 .CONTENT_URI, null, null, null, null);
         if (cursor != null) {
             if (PermissionsPageManager.isXiaoMi()) {
-                if (canNotGetContactsInfo(cursor)) {
+                if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds
+                        .Phone.NUMBER))) {
                     cursor.close();
                     return false;
                 }
@@ -299,15 +303,16 @@ public class PermissionsChecker {
      * ---->cursor.getCount == 0
      * 2.granted {@link android.Manifest.permission#READ_CONTACTS} permission
      * ---->cursor.getCount return real count in contacts
-     *
+     * <p>
      * so when there are no user or permission denied, it will return 0
+     *
      * @param cursor
+     * @param numberIndex
      * @return true if can not get info
      */
-    private static boolean canNotGetContactsInfo(Cursor cursor) {
+    private static boolean isNumberIndexInfoIsNull(Cursor cursor, int numberIndex) {
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 return TextUtils.isEmpty(cursor.getString(numberIndex));
             }
             return false;
