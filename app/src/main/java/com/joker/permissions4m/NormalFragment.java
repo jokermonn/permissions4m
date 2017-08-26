@@ -41,11 +41,11 @@ public class NormalFragment extends Fragment {
     private static final int READ_CALENDAR_CODE = 200;
     private static final int SMS_CODE = 500;
     private static final int AUDIO_CODE = 600;
-    private static final int STORAGE_CODE = 1000;
+    private static final int PHONE_STATE_CODE = 1000;
     private Button mCalendar;
     private Button mSmsButton;
     private Button mOneButton;
-    private Button mStorageButton;
+    private Button mStateButton;
 
     public NormalFragment() {
         // Required empty public constructor
@@ -57,7 +57,7 @@ public class NormalFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_normal, container, false);
         mSmsButton = (Button) view.findViewById(R.id.btn_sms);
         mOneButton = (Button) view.findViewById(R.id.btn_one);
-        mStorageButton = (Button) view.findViewById(R.id.btn_storage);
+        mStateButton = (Button) view.findViewById(R.id.btn_state);
         mCalendar = (Button) view.findViewById(R.id.btn_calendar);
 
         // 读取日历申请
@@ -95,27 +95,27 @@ public class NormalFragment extends Fragment {
             }
         });
 
-        mStorageButton.setOnClickListener(new View.OnClickListener() {
+        mStateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(NormalFragment.this)
                         .requestForce(true)
-                        .requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        .requestCode(STORAGE_CODE)
+                        .requestPermission(Manifest.permission.READ_PHONE_STATE)
+                        .requestCode(PHONE_STATE_CODE)
                         .requestCallback(new ListenerWrapper.PermissionRequestListener() {
                             @Override
                             public void permissionGranted() {
-                                ToastUtil.show("读取存储卡权限成功 in activity with listener");
+                                ToastUtil.show("读取手机状态权限成功 in activity with listener");
                             }
 
                             @Override
                             public void permissionDenied() {
-                                ToastUtil.show("读取存储卡权失败 in activity with listener");
+                                ToastUtil.show("读取手机状态权失败 in activity with listener");
                             }
 
                             @Override
                             public void permissionRationale() {
-                                ToastUtil.show("请打开读取存储卡权限 in activity with listener");
+                                ToastUtil.show("请打开读取手机状态权限 in activity with listener");
                             }
                         })
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
@@ -123,7 +123,7 @@ public class NormalFragment extends Fragment {
                             @Override
                             public void pageIntent(final Intent intent) {
                                 new AlertDialog.Builder(getActivity())
-                                        .setMessage("读取存储卡权限申请：\n我们需要您开启读取存储卡权限(in activity with listener)")
+                                        .setMessage("读取手机状态权限申请：\n我们需要您开启读取手机状态权限(in activity with listener)")
                                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
