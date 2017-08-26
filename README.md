@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.0.9-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.9-lib)
-[![processor](https://img.shields.io/badge/processor-1.0.9-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.0.9-processor)
+[![lib](https://img.shields.io/badge/lib-1.1.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.1.2-lib)
+[![processor](https://img.shields.io/badge/processor-1.1.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.1.2-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -46,8 +46,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.0.9-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.0.9-processor'
+      compile 'com.github.jokermonn:permissions4m:1.1.2-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:1.1.2-processor'
 	}
 
 # 使用文档 #
@@ -66,9 +66,10 @@
 
 - TODO:[help me](#help)
 
-- v1.1.0
+- v1.1.2
 	- 增强小米中的 `READ_CONTACTS` 申请([国产畸形权限适配](#extends))
 	- 增强小米中的 `PHONE_STATE` 申请
+	- 增强小米中的 `READ_SMS` 申请
 - v1.0.9
 	- 修复内存泄露
 
@@ -475,6 +476,8 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
 
 - 小米
  - 目前小米通讯录授权在授权失败时的原因有两种，可能是**用户手机中不存在联系人**，可能是用户拒绝授权，所以建议针对小米机型应给予相应的提示
+>>
+>原因在于，小米手机在授权拒绝后 `Cursor` 对象不会为 null（其他手机拒绝权限后为 null），仅会返回一个 `getCount()` 为0的 `Cursor` 对象，
 
 - OPPO
 >
