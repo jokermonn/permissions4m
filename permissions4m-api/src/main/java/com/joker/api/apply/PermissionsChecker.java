@@ -18,6 +18,7 @@ import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.joker.api.apply.util.AudioRecordManager;
 import com.joker.api.support.PermissionsPageManager;
@@ -104,6 +105,7 @@ public class PermissionsChecker {
                     return true;
             }
         } catch (Exception e) {
+            Log.e(TAG, "throwing exception in PermissionChecker:  ", e);
             return false;
         }
     }
@@ -151,8 +153,10 @@ public class PermissionsChecker {
         Uri uri = Uri.parse("content://sms/");
         Cursor cursor = activity.getContentResolver().query(uri, null, null, null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isXiaoMi() && checkReadContactsContent(activity, cursor)) {
-                return false;
+            if (PermissionsPageManager.isXiaoMi()) {
+                if (canNotGetContactsInfo(cursor)) {
+                    return false;
+                }
             }
             cursor.close();
             return true;
@@ -191,7 +195,7 @@ public class PermissionsChecker {
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         // fuck XIAOMI!
         if (PermissionsPageManager.isXiaoMi()) {
-            location.getLatitude();
+            double latitude = location.getLatitude();
         }
         return true;
     }
@@ -217,8 +221,7 @@ public class PermissionsChecker {
     private static boolean checkReadPhoneState(Activity activity) throws Exception {
         TelephonyManager service = (TelephonyManager) activity.getSystemService
                 (TELEPHONY_SERVICE);
-        service.getDeviceId();
-        return true;
+        return !TextUtils.isEmpty(service.getDeviceId());
     }
 
     private static boolean checkReadCallLog(Activity activity) throws Exception {
@@ -226,8 +229,10 @@ public class PermissionsChecker {
                         ("content://call_log/calls"), null, null,
                 null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isXiaoMi() && checkReadContactsContent(activity, cursor)) {
-                return false;
+            if (PermissionsPageManager.isXiaoMi()) {
+                if (canNotGetContactsInfo(cursor)) {
+                    return false;
+                }
             }
             cursor.close();
             return true;
@@ -244,7 +249,8 @@ public class PermissionsChecker {
             Uri rawContactUri = contentResolver.insert(ContactsContract.RawContacts
                     .CONTENT_URI, values);
             long rawContactId = ContentUris.parseId(rawContactUri);
-            values.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+            values.put(ContactsContract.Contacts.Data.MIMETYPE, ContactsContract.CommonDataKinds
+                    .StructuredName.CONTENT_ITEM_TYPE);
             values.put(ContactsContract.Contacts.Data.RAW_CONTACT_ID, rawContactId);
             values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, TAG);
             values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, TAG_NUMBER);
@@ -274,8 +280,11 @@ public class PermissionsChecker {
         Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
                 .CONTENT_URI, null, null, null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isXiaoMi() && checkReadContactsContent(activity, cursor)) {
-                return false;
+            if (PermissionsPageManager.isXiaoMi()) {
+                if (canNotGetContactsInfo(cursor)) {
+                    cursor.close();
+                    return false;
+                }
             }
             cursor.close();
             return true;
@@ -284,17 +293,26 @@ public class PermissionsChecker {
         }
     }
 
-    private static boolean checkReadContactsContent(Activity activity, Cursor cursor) {
-        String s = "";
-        int i = 0;
-        while (cursor.moveToNext()) {
-            i++;
-            if (i == 2) {
-                break;
+    /**
+     * in XIAOMI
+     * 1.denied {@link android.Manifest.permission#READ_CONTACTS} permission
+     * ---->cursor.getCount == 0
+     * 2.granted {@link android.Manifest.permission#READ_CONTACTS} permission
+     * ---->cursor.getCount return real count in contacts
+     *
+     * so when there are no user or permission denied, it will return 0
+     * @param cursor
+     * @return true if can not get info
+     */
+    private static boolean canNotGetContactsInfo(Cursor cursor) {
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                return TextUtils.isEmpty(cursor.getString(numberIndex));
             }
-            s += cursor.getString(0) + cursor.getString(1);
+            return false;
+        } else {
+            return true;
         }
-
-        return TextUtils.isEmpty(s);
     }
 }
