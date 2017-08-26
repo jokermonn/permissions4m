@@ -30,8 +30,8 @@ dependencies {
     // umeng
 //    compile project(':permissions4m-api')
 //    annotationProcessor project(':permissions4m-processor')
-    annotationProcessor 'com.github.jokermonn:permissions4m:1.1.1-processor'
-    compile 'com.github.jokermonn:permissions4m:1.1.1-lib'
+    annotationProcessor 'com.github.jokermonn:permissions4m:1.1.2-processor'
+    compile 'com.github.jokermonn:permissions4m:1.1.2-lib'
     compile 'com.umeng.analytics:analytics:6.1.2'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
