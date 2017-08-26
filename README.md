@@ -66,6 +66,9 @@
 
 - TODO:[help me](#help)
 
+- v1.1.0
+	- 增强小米中的 `READ_CONTACTS` 申请([国产畸形权限适配](#extends))
+	- 增强小米中的 `PHONE_STATE` 申请
 - v1.0.9
 	- 修复内存泄露
 
@@ -471,12 +474,11 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
 <h2 id="extend">国产畸形权限适配扩展</h2>
 
 - 小米
->
-大概是我最想 f**k 的机型了吧，适配之路异常凶险，此机型 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 永远返回 false，意味着不能够在用户拒绝之后给予提示。且不一定弹出权限申请对话框。
+ - 目前小米通讯录授权在授权失败时的原因有两种，可能是**用户手机中不存在联系人**，可能是用户拒绝授权，所以建议针对小米机型应给予相应的提示
 
 - OPPO
 >
-此机型，针对 `ContextCompat.checkSelfPermission(Context, String)` 判断是根据是否 `AndroidManifest.xml` 中声明了该权限来决定返回值，如果 `AndroidManifest.xml` 中声明了该权限，那么就将直接返回已授予权限（但实际上权限可能授予也可能未授予），且不一定弹出权限申请对话框。
+部分机型针对 `ContextCompat.checkSelfPermission(Context, String)` 判断是根据是否 `AndroidManifest.xml` 中声明了该权限来决定返回值，如果 `AndroidManifest.xml` 中声明了该权限，那么就将直接返回已授予权限（但实际上权限可能授予也可能未授予，国产小米和魅族等手机在低于6.0版本以下也是这样设计的），且不一定弹出权限申请对话框。
 
 - 华为
 >
