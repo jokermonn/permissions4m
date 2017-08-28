@@ -137,39 +137,40 @@ public class AnnotationProcessor extends AbstractProcessor {
                 map.put(typeName, info);
             }
 
+            int size = method.getParameters().size();
             Annotation annotation = method.getAnnotation(clazz);
             String methodName = method.getSimpleName().toString();
             if (annotation instanceof PermissionsGranted) {
                 int[] value = ((PermissionsGranted) annotation).value();
-                if (value.length > 1) {
+                if (value.length > 1 || size == 1) {
                     info.grantedMap.put(methodName, value);
                 } else {
                     info.singleGrantMap.put(value[0], methodName);
                 }
             } else if (annotation instanceof PermissionsDenied) {
                 int[] value = ((PermissionsDenied) annotation).value();
-                if (value.length > 1) {
+                if (value.length > 1 || size == 1) {
                     info.deniedMap.put(methodName, value);
                 } else {
                     info.singleDeniedMap.put(value[0], methodName);
                 }
             } else if (annotation instanceof PermissionsRationale) {
                 int[] value = ((PermissionsRationale) annotation).value();
-                if (value.length > 1) {
+                if (value.length > 1 || size == 1) {
                     info.rationaleMap.put(methodName, value);
                 } else {
                     info.singleRationaleMap.put(value[0], methodName);
                 }
             } else if (annotation instanceof PermissionsCustomRationale) {
                 int[] value = ((PermissionsCustomRationale) annotation).value();
-                if (value.length > 1) {
+                if (value.length > 1 || size == 1) {
                     info.customRationaleMap.put(methodName, value);
                 } else {
                     info.singleCustomRationaleMap.put(value[0], methodName);
                 }
             } else if (annotation instanceof PermissionsNonRationale) {
                 int[] value = ((PermissionsNonRationale) annotation).value();
-                if (value.length > 1) {
+                if (value.length > 1 || size == 2) {
                     info.nonRationaleMap.put(methodName, value);
                 } else {
                     info.singleNonRationaleMap.put(value[0], methodName);
