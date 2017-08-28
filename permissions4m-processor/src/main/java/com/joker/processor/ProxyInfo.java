@@ -75,7 +75,9 @@ class ProxyInfo {
     }
 
     private void generateSyncRequestPermissionsMethod(StringBuilder builder) {
-        if (checkBuilderNonNull(builder)) return;
+        if (builder == null) {
+            return;
+        }
 
         builder.append("@Override\n").append("public void startSyncRequestPermissionsMethod(").append
                 (element.getSimpleName()).append(" object) {\n")
@@ -85,7 +87,9 @@ class ProxyInfo {
     }
 
     private void generateCustomRationaleMethod(StringBuilder builder) {
-        if (checkBuilderNonNull(builder)) return;
+        if (builder == null) {
+            return;
+        }
 
         builder.append("@Override\n").append("public boolean customRationale(").append(element
                 .getSimpleName())
@@ -114,7 +118,9 @@ class ProxyInfo {
     }
 
     private void generatePageIntent(StringBuilder builder) {
-        if (checkBuilderNonNull(builder)) return;
+        if (builder == null) {
+            return;
+        }
 
         builder.append("@Override\n").append("public void intent(").append(element.getSimpleName())
                 .append(" object, int code, Intent intent) {\n")
@@ -134,14 +140,17 @@ class ProxyInfo {
 
         for (Map.Entry<Integer, String> entry : singleNonRationaleMap.entrySet()) {
             Integer integer = entry.getKey();
-            builder.append("case ").append(integer).append(":{ object.").append(entry.getValue()).append("(intent);break;}");
+            builder.append("case ").append(integer).append(":{ object.").append(entry.getValue()).append
+                    ("(intent);break;}");
         }
 
         builder.append("default:\nbreak;\n").append("}\n}\n\n");
     }
 
     private void generateRationaleMethod(StringBuilder builder) {
-        if (checkBuilderNonNull(builder)) return;
+        if (builder == null) {
+            return;
+        }
 
         builder.append("@Override\n").append("public void rationale(").append(element.getSimpleName())
                 .append(" object, int code) {\n")
@@ -169,7 +178,9 @@ class ProxyInfo {
     }
 
     private void generateDeniedMethod(StringBuilder builder) {
-        if (checkBuilderNonNull(builder)) return;
+        if (builder == null) {
+            return;
+        }
 
         builder.append("@Override\n").append("public void denied(").append(element.getSimpleName())
                 .append(" object, int code) {\n")
@@ -199,7 +210,9 @@ class ProxyInfo {
     }
 
     private void generateGrantedMethod(StringBuilder builder) {
-        if (checkBuilderNonNull(builder)) return;
+        if (builder == null) {
+            return;
+        }
 
         builder.append("@Override\n").append("public void granted(").append(element.getSimpleName())
                 .append(" object, int code) {\n")
@@ -252,10 +265,6 @@ class ProxyInfo {
                 }
             }
         }
-    }
-
-    private boolean checkBuilderNonNull(StringBuilder builder) {
-        return builder == null;
     }
 
     private String getClassName(TypeElement element, String packageName) {
