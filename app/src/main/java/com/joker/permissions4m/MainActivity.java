@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -165,12 +166,15 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权成功 in activity with annotation");
+                Log.d("TAG", "syncGranted:  地理位置权限授权成功 in activity with annotation");
                 break;
             case SENSORS_CODE:
                 ToastUtil.show("传感器权限授权成功 in activity with annotation");
+                Log.d("TAG", "syncGranted:  传感器权限授权成功 in activity with annotation");
                 break;
             case CALENDAR_CODE:
                 ToastUtil.show("读取日历权限授权成功 in activity with annotation");
+                Log.d("TAG", "syncGranted:  读取日历权限授权成功 in activity with annotation");
                 break;
             default:
                 break;
@@ -182,12 +186,15 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权失败 in activity with annotation");
+                Log.d("TAG", "syncDenied:  地理位置权限授权失败 in activity with annotation");
                 break;
             case SENSORS_CODE:
                 ToastUtil.show("传感器权限授权失败 in activity with annotation");
+                Log.d("TAG", "syncDenied:  传感器权限授权失败 in activity with annotation");
                 break;
             case CALENDAR_CODE:
                 ToastUtil.show("读取日历权限授权失败 in activity with annotation");
+                Log.d("TAG", "syncDenied:  读取日历权限授权失败 in activity with annotation");
                 break;
             default:
                 break;
@@ -199,12 +206,15 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case LOCATION_CODE:
                 ToastUtil.show("请开启地理位置权限 in activity with annotation");
+                Log.d("TAG", "syncRationale:  请开启地理位置权限 in activity with annotation");
                 break;
             case SENSORS_CODE:
                 ToastUtil.show("请开启传感器权限 in activity with annotation");
+                Log.d("TAG", "syncRationale:  请开启传感器权限 in activity with annotation");
                 break;
             case CALENDAR_CODE:
                 ToastUtil.show("请开启读取日历权限 in activity with annotation");
+                Log.d("TAG", "syncRationale:  请开启读取日历权限 in activity with annotation");
                 break;
             default:
                 break;

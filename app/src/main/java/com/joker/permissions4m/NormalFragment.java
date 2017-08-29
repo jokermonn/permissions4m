@@ -38,11 +38,9 @@ public class NormalFragment extends Fragment {
     public static final int CALENDAR_CODE = 700;
     public static final int SENSORS_CODE = 800;
     public static final int LOCATION_CODE = 900;
-    private static final int READ_CALENDAR_CODE = 200;
     private static final int SMS_CODE = 500;
     private static final int AUDIO_CODE = 600;
     private static final int PHONE_STATE_CODE = 1000;
-    private Button mCalendar;
     private Button mSmsButton;
     private Button mOneButton;
     private Button mStateButton;
@@ -58,20 +56,6 @@ public class NormalFragment extends Fragment {
         mSmsButton = (Button) view.findViewById(R.id.btn_sms);
         mOneButton = (Button) view.findViewById(R.id.btn_one);
         mStateButton = (Button) view.findViewById(R.id.btn_state);
-        mCalendar = (Button) view.findViewById(R.id.btn_calendar);
-
-        // 读取日历申请
-        mCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Permissions4M.get(NormalFragment.this)
-                        .requestPermission(Manifest.permission.READ_CALENDAR)
-                        .requestForce(true)
-                        .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
-                        .requestCode(READ_CALENDAR_CODE)
-                        .request();
-            }
-        });
 
         // 短信申请
         mSmsButton.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +107,8 @@ public class NormalFragment extends Fragment {
                             @Override
                             public void pageIntent(final Intent intent) {
                                 new AlertDialog.Builder(getActivity())
-                                        .setMessage("读取手机状态权限申请：\n我们需要您开启读取手机状态权限(in activity with listener)")
+                                        .setMessage("读取手机状态权限申请：\n我们需要您开启读取手机状态权限(in activity with " +
+                                                "listener)")
                                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -154,12 +139,9 @@ public class NormalFragment extends Fragment {
     }
 
     //====================================================================
-    @PermissionsGranted({READ_CALENDAR_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    @PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallGranted(int code) {
         switch (code) {
-            case READ_CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权成功 in fragment with annotation");
-                break;
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权成功 in fragment with annotation");
                 break;
@@ -174,12 +156,9 @@ public class NormalFragment extends Fragment {
         }
     }
 
-    @PermissionsDenied({READ_CALENDAR_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallDenied(int code) {
         switch (code) {
-            case READ_CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权失败 in fragment with annotation");
-                break;
             case LOCATION_CODE:
                 ToastUtil.show("地理位置权限授权失败 in fragment with annotation");
                 break;
@@ -194,12 +173,9 @@ public class NormalFragment extends Fragment {
         }
     }
 
-    @PermissionsRationale({READ_CALENDAR_CODE, LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
+    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
     public void storageAndCallRationale(int code) {
         switch (code) {
-            case READ_CALENDAR_CODE:
-                ToastUtil.show("请开启读取日历权限授权 in fragment with annotation");
-                break;
             case LOCATION_CODE:
                 ToastUtil.show("请开启地理位置权限 in fragment with annotation");
                 break;
@@ -283,29 +259,12 @@ public class NormalFragment extends Fragment {
         }
     }
 
-    @PermissionsNonRationale({SMS_CODE, READ_CALENDAR_CODE})
+    @PermissionsNonRationale({SMS_CODE})
     public void nonRationale(int code, final Intent intent) {
         switch (code) {
             case SMS_CODE:
                 new AlertDialog.Builder(getActivity())
                         .setMessage("短信权限申请：\n我们需要您开启短信权限(in fragment with annotation)")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
-                break;
-            case READ_CALENDAR_CODE:
-                new AlertDialog.Builder(getActivity())
-                        .setMessage("读取日历权限申请：\n我们需要您开启读取日历权限(in fragment with annotation)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
