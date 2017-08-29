@@ -1,10 +1,16 @@
 package com.joker.api.wrapper;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
+import com.joker.api.apply.ForceApplyPermissions;
+import com.joker.api.apply.NormalApplyPermissions;
+import com.joker.api.apply.PermissionsChecker;
+import com.joker.api.support.PermissionsPageManager;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -19,6 +25,7 @@ public abstract class AbstractWrapper implements Wrapper {
     @Permissions4M.PageType
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
     private static final int DEFAULT_REQUEST_CODE = -1;
+    private static final boolean DEFAULT_IS_FORCE = true;
     private static Map<String, PermissionsProxy> proxyMap = new HashMap<>();
     private static Map<Key, WeakReference<Wrapper>> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
@@ -27,7 +34,7 @@ public abstract class AbstractWrapper implements Wrapper {
     private String permission;
     private PermissionRequestListener permissionRequestListener;
     private PermissionPageListener permissionPageListener;
-    private boolean force;
+    private boolean force = DEFAULT_IS_FORCE;
     private boolean requestOnRationale;
 
     public AbstractWrapper() {
@@ -142,7 +149,7 @@ public abstract class AbstractWrapper implements Wrapper {
 
         // on rationale, it should use normal request
         if (isRequestOnRationale()) {
-            normalRequest();
+            originalRequest();
         } else {
             // not on rationale, judge condition
             if (permissionRequestListener == null) {
@@ -152,8 +159,6 @@ public abstract class AbstractWrapper implements Wrapper {
             }
         }
     }
-
-    abstract void normalRequest();
 
     void requestSync(Activity activity) {
         privateRequestSync(activity);
@@ -169,16 +174,111 @@ public abstract class AbstractWrapper implements Wrapper {
 
     @SuppressWarnings("unchecked")
     private void privateRequestSync(Object object) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            getProxy(object.getClass().getName()).granted(object, getRequestCode());
+        getProxy(object.getClass().getName()).startSyncRequestPermissionsMethod(object);
+    }
+
+    /**
+     * 1.under {@link android.os.Build.VERSION_CODES#M}, and it's not the
+     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
+     * some manufacturers that has permission manage under M)
+     * <p>
+     * 2.it's not the {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, and
+     * Version Code is bigger than {@link android.os.Build.VERSION_CODES#M}
+     * <p>
+     * 3.under {@link android.os.Build.VERSION_CODES#M}, and it's
+     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
+     */
+    @SuppressWarnings("unchecked")
+    private void requestPermissionWithAnnotation() {
+        PermissionsProxy proxy = getProxy(getContext().getClass().getName());
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !PermissionsPageManager
+                .isUnderMHasPermissionRequestManufacturer()) {
+            proxy.granted(getContext(), getRequestCode());
+        } else if (!PermissionsPageManager.isUnderMHasPermissionRequestManufacturer()) {
+            String permission = getPermission();
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                tryRequestWithAnnotation();
+            } else {
+                mayGrantedWithAnnotation();
+            }
         } else {
-            getProxy(object.getClass().getName()).startSyncRequestPermissionsMethod(object);
+            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
+                proxy.granted(getContext(), getRequestCode());
+            } else {
+                ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
+            }
         }
     }
 
-    abstract void requestPermissionWithAnnotation();
+    private void mayGrantedWithAnnotation() {
+        if (isRequestForce()) {
+            ForceApplyPermissions.grantedOnResultWithAnnotation(this);
+        } else {
+            NormalApplyPermissions.grantedWithAnnotation(this);
+        }
+    }
 
-    abstract void requestPermissionWithListener();
+    /**
+     * 1.under {@link android.os.Build.VERSION_CODES#M}, and it's not the
+     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
+     * some manufacturers that has permission manage under M)
+     * <p>
+     * 2.it's not the {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, and
+     * Version Code is bigger than {@link android.os.Build.VERSION_CODES#M}
+     * <p>
+     * 3.under {@link android.os.Build.VERSION_CODES#M}, and it's
+     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
+     */
+    private void requestPermissionWithListener() {
+        PermissionRequestListener listener = getPermissionRequestListener();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !PermissionsPageManager
+                .isUnderMHasPermissionRequestManufacturer()) {
+            if (listener != null) {
+                listener.permissionGranted();
+            }
+        } else if (!PermissionsPageManager.isUnderMHasPermissionRequestManufacturer()) {
+            String permission = getPermission();
+            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
+                    .PERMISSION_GRANTED) {
+                tryRequestWithListener();
+            } else {
+                mayGrantedWithListener();
+            }
+        } else {
+            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
+                if (listener != null) {
+                    listener.permissionGranted();
+                }
+            } else {
+                ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
+            }
+        }
+    }
+
+    private void mayGrantedWithListener() {
+        if (isRequestForce()) {
+            ForceApplyPermissions.grantedOnResultWithListener(this);
+        } else {
+            NormalApplyPermissions.grantedWithListener(this);
+        }
+    }
+
+    /**
+     * request in second request, should use original request with no callback.
+     */
+    abstract void originalRequest();
+
+    /**
+     * use annotation request
+     */
+    abstract void tryRequestWithAnnotation();
+
+    /**
+     * use listener request
+     */
+    abstract void tryRequestWithListener();
 
     public static class Key {
         private int requestCode;

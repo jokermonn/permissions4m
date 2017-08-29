@@ -21,11 +21,11 @@ public class PermissionsPageManager {
     /**
      * Build.MANUFACTURER
      */
-    private static final String MANUFACTURER_HUAWEI = "HUAWEI"; // 华为
-    private static final String MANUFACTURER_XIAOMI = "XIAOMI"; // 小米
-    private static final String MANUFACTURER_OPPO = "OPPO";     // oppo
-    private static final String MANUFACTURER_VIVO = "vivo";     // vivo
-    private static final String MANUFACTURER_MEIZU = "meizu";     // meizu
+    private static final String MANUFACTURER_HUAWEI = "HUAWEI";
+    private static final String MANUFACTURER_XIAOMI = "XIAOMI";
+    private static final String MANUFACTURER_OPPO = "OPPO";
+    private static final String MANUFACTURER_VIVO = "vivo";
+    private static final String MANUFACTURER_MEIZU = "meizu";
     private static final String manufacturer = Build.MANUFACTURER;
 
     public static String getManufacturer() {
@@ -59,12 +59,21 @@ public class PermissionsPageManager {
         return new Protogenesis(activity).settingIntent();
     }
 
-    /**
-     * whether is xiaomi
-     *
-     * @return true if it is
-     */
-    public static boolean isXiaoMi() {
+    public static boolean isXIAOMI() {
         return getManufacturer().equalsIgnoreCase(MANUFACTURER_XIAOMI);
+    }
+
+    public static boolean isOPPO() {
+        return getManufacturer().equalsIgnoreCase(MANUFACTURER_OPPO);
+    }
+
+    public static boolean isMEIZU() {
+        return getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU);
+    }
+
+    public static boolean isUnderMHasPermissionRequestManufacturer() {
+        return (getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
+                .equalsIgnoreCase(MANUFACTURER_XIAOMI)) && Build.VERSION.SDK_INT >= Build.VERSION_CODES
+                .LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
     }
 }

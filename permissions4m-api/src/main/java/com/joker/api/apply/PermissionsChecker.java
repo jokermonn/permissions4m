@@ -1,6 +1,7 @@
 package com.joker.api.apply;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -38,6 +39,7 @@ import static android.content.Context.TELEPHONY_SERVICE;
 public class PermissionsChecker {
     private static final String TAG = "permissions4m";
     private static final String TAG_NUMBER = "1";
+    private static int count = 0;
 
     /**
      * ensure whether permission granted
@@ -66,7 +68,6 @@ public class PermissionsChecker {
                     return checkWriteCallLog(activity);
                 case Manifest.permission.USE_SIP:
                     return true;
-                // can not apply
                 case Manifest.permission.PROCESS_OUTGOING_CALLS:
                     return true;
                 case Manifest.permission.ADD_VOICEMAIL:
@@ -106,25 +107,36 @@ public class PermissionsChecker {
                     return true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Log.e(TAG, "throwing exception in PermissionChecker:  ", e);
             return false;
         }
     }
 
-    private static boolean checkRecordAudio(Activity activity) {
-        try {
-            AudioRecordManager.getInstance().startRecord(activity.getCacheDir().getPath() + TAG +
-                    ".3gp");
-            AudioRecordManager.getInstance().stopRecord();
-            AudioRecordManager.getInstance().deleteFile();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+    /**
+     * record audio, {@link android.Manifest.permission#RECORD_AUDIO},
+     * it will consume some resource!!
+     *
+     * @param activity
+     * @return true if success
+     */
+    private static boolean checkRecordAudio(Activity activity) throws Exception {
+        AudioRecordManager recordManager = new AudioRecordManager();
+
+        recordManager.startRecord(activity.getExternalFilesDir(Environment.DIRECTORY_RINGTONES) + "/" +
+                TAG + ".3gp");
+        recordManager.stopRecord();
+
+        return recordManager.getSuccess();
     }
 
-    private static boolean checkReadCalendar(Activity activity) {
+    /**
+     * read calendar, {@link android.Manifest.permission#READ_CALENDAR}
+     *
+     * @param activity
+     * @return true if success
+     */
+    private static boolean checkReadCalendar(Activity activity) throws Exception {
         Cursor cursor = activity.getContentResolver().query(Uri.parse("content://com" +
                 ".android.calendar/calendars"), null, null, null, null);
         if (cursor != null) {
@@ -135,7 +147,13 @@ public class PermissionsChecker {
         }
     }
 
-    private static boolean checkWriteCallLog(Activity activity) {
+    /**
+     * write or delete call log, {@link android.Manifest.permission#WRITE_CALL_LOG}
+     *
+     * @param activity
+     * @return true if success
+     */
+    private static boolean checkWriteCallLog(Activity activity) throws Exception {
         ContentResolver contentResolver = activity.getContentResolver();
         ContentValues content = new ContentValues();
         content.put(CallLog.Calls.TYPE, CallLog.Calls.INCOMING_TYPE);
@@ -150,12 +168,23 @@ public class PermissionsChecker {
         return true;
     }
 
+    /**
+     * read sms, {@link android.Manifest.permission#READ_SMS}
+     * in MEIZU 5.0~6.0, just according normal phone request
+     * in XIAOMI 6.0~, need force judge
+     * in XIAOMI 5.0~6.0, not test!!!
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkReadSms(Activity activity) throws Exception {
         Cursor cursor = activity.getContentResolver().query(Uri.parse("content://sms/"), null, null,
                 null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isXiaoMi()) {
-                if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(Telephony.Sms.PERSON))) {
+            if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() ||
+                    PermissionsPageManager.isXIAOMI()) {
+                if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(Telephony.Sms.DATE))) {
                     cursor.close();
                     return false;
                 }
@@ -167,6 +196,13 @@ public class PermissionsChecker {
         }
     }
 
+    /**
+     * write storage, {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE}
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkWriteStorage(Activity activity) throws Exception {
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).getPath(), TAG);
@@ -184,6 +220,13 @@ public class PermissionsChecker {
         }
     }
 
+    /**
+     * read storage, {@link android.Manifest.permission#READ_EXTERNAL_STORAGE}
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkReadStorage(Activity activity) throws Exception {
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).getPath());
@@ -191,17 +234,33 @@ public class PermissionsChecker {
         return files != null;
     }
 
+    /**
+     * use location, {@link android.Manifest.permission#ACCESS_FINE_LOCATION},
+     * {@link android.Manifest.permission#ACCESS_COARSE_LOCATION}
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkLocation(Activity activity) throws Exception {
         LocationManager locationManager = (LocationManager) activity.getSystemService
                 (LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         // fuck XIAOMI!
-        if (PermissionsPageManager.isXiaoMi()) {
+        if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() || PermissionsPageManager
+                .isXIAOMI()) {
             double latitude = location.getLatitude();
         }
         return true;
     }
 
+    /**
+     * use sensors, {@link android.Manifest.permission#BODY_SENSORS}
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkBodySensors(Activity activity) throws Exception {
         SensorManager sensorManager = (SensorManager) activity.getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor((Sensor.TYPE_ACCELEROMETER));
@@ -220,18 +279,48 @@ public class PermissionsChecker {
         return true;
     }
 
+    /**
+     * read phone state, {@link android.Manifest.permission#READ_PHONE_STATE}
+     * <p>
+     * in {@link com.joker.api.support.manufacturer.XIAOMI} or
+     * {@link com.joker.api.support.manufacturer.OPPO}          :
+     * -> {@link TelephonyManager#getDeviceId()} will be null if deny permission
+     * <p>
+     * in {@link com.joker.api.support.manufacturer.MEIZU}      :
+     * -> {@link TelephonyManager#getSubscriberId()} will be null if deny permission
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
+    @SuppressLint("HardwareIds")
     private static boolean checkReadPhoneState(Activity activity) throws Exception {
         TelephonyManager service = (TelephonyManager) activity.getSystemService
                 (TELEPHONY_SERVICE);
-        return !TextUtils.isEmpty(service.getDeviceId());
+        if (PermissionsPageManager.isMEIZU()) {
+            return !TextUtils.isEmpty(service.getSubscriberId());
+        } else if (PermissionsPageManager.isXIAOMI() || PermissionsPageManager.isOPPO()) {
+            return !TextUtils.isEmpty(service.getDeviceId());
+        } else {
+            return !TextUtils.isEmpty(service.getDeviceId()) || !TextUtils.isEmpty(service
+                    .getSubscriberId());
+        }
     }
 
+    /**
+     * read call log, {@link android.Manifest.permission#READ_CALL_LOG}
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkReadCallLog(Activity activity) throws Exception {
         Cursor cursor = activity.getContentResolver().query(Uri.parse
                         ("content://call_log/calls"), null, null,
                 null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isXiaoMi()) {
+            if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() ||
+                    PermissionsPageManager.isXIAOMI()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(CallLog.Calls.NUMBER))) {
                     cursor.close();
                     return false;
@@ -244,6 +333,14 @@ public class PermissionsChecker {
         }
     }
 
+    /**
+     * write and delete contacts info, {@link android.Manifest.permission#WRITE_CONTACTS}
+     * and we should get read contacts permission first.
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkWriteContacts(Activity activity) throws Exception {
         if (checkReadContacts(activity)) {
             // write some info
@@ -279,11 +376,19 @@ public class PermissionsChecker {
         }
     }
 
+    /**
+     * read contacts, {@link android.Manifest.permission#READ_CONTACTS}
+     *
+     * @param activity
+     * @return true if success
+     * @throws Exception
+     */
     private static boolean checkReadContacts(Activity activity) throws Exception {
         Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
                 .CONTENT_URI, null, null, null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isXiaoMi()) {
+            if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() ||
+                    PermissionsPageManager.isXIAOMI()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds
                         .Phone.NUMBER))) {
                     cursor.close();
@@ -298,7 +403,7 @@ public class PermissionsChecker {
     }
 
     /**
-     * in XIAOMI
+     * in {@link com.joker.api.support.manufacturer.XIAOMI}
      * 1.denied {@link android.Manifest.permission#READ_CONTACTS} permission
      * ---->cursor.getCount == 0
      * 2.granted {@link android.Manifest.permission#READ_CONTACTS} permission

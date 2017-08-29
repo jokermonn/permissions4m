@@ -15,13 +15,14 @@ import java.io.IOException;
 
 public class AudioRecordManager {
     private static AudioRecordManager mInstance;
+    public File file;
     private AudioRecord mRecorder;
     private DataOutputStream dos;
     private Thread recordThread;
     private boolean isStart = false;
     private int bufferSize;
     /**
-     * 录音线程
+     * record thread
      */
     Runnable recordRunnable = new Runnable() {
         @Override
@@ -29,16 +30,14 @@ public class AudioRecordManager {
             try {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
                 int bytesRecord;
-                //int bufferSize = 320;
                 byte[] tempBuffer = new byte[bufferSize];
-                if (mRecorder.getState() != AudioRecord.STATE_INITIALIZED) {
-                    stopRecord();
-                    return;
-                }
+//                if (mRecorder.getState() != AudioRecord.STATE_INITIALIZED) {
+//                    stopRecord();
+//                    return;
+//                }
                 mRecorder.startRecording();
-                //writeToFileHead();
                 while (isStart) {
-                    if (null != mRecorder) {
+                    if (mRecorder != null) {
                         bytesRecord = mRecorder.read(tempBuffer, 0, bufferSize);
                         if (bytesRecord == AudioRecord.ERROR_INVALID_OPERATION || bytesRecord ==
                                 AudioRecord.ERROR_BAD_VALUE) {
@@ -57,7 +56,7 @@ public class AudioRecordManager {
         }
 
     };
-    private String path;
+    private long length;
 
     public AudioRecordManager() {
         bufferSize = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat
@@ -66,33 +65,22 @@ public class AudioRecordManager {
                 AudioFormat.ENCODING_PCM_16BIT, bufferSize * 2);
     }
 
-    /**
-     * 获取单例引用
-     *
-     * @return
-     */
-    public static AudioRecordManager getInstance() {
-        if (mInstance == null) {
-            synchronized (AudioRecordManager.class) {
-                if (mInstance == null) {
-                    mInstance = new AudioRecordManager();
-                }
-            }
-        }
-        return mInstance;
+
+    public boolean getSuccess() {
+        return length > 0;
     }
 
     /**
-     * 销毁线程方法
+     * destroy record thread
      */
     private void destroyThread() {
         try {
             isStart = false;
-            if (null != recordThread && Thread.State.RUNNABLE == recordThread.getState()) {
+            if (recordThread != null && recordThread.getState() != Thread.State.TERMINATED) {
                 try {
-                    Thread.sleep(500);
                     recordThread.interrupt();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     recordThread = null;
                 }
             }
@@ -105,10 +93,9 @@ public class AudioRecordManager {
     }
 
     /**
-     * 启动录音线程
+     * start record thread
      */
     private void startThread() {
-        destroyThread();
         isStart = true;
         if (recordThread == null) {
             recordThread = new Thread(recordRunnable);
@@ -117,35 +104,37 @@ public class AudioRecordManager {
     }
 
     /**
-     * 保存文件
+     * save file
      *
-     * @param path
      * @throws IOException
      */
     private void setPath(String path) throws IOException {
-        this.path = path;
-        File file = new File(path);
-        if (file.exists()) {
-            file.delete();
-        }
+        file = new File(path);
+        deleteFile();
         file.createNewFile();
         dos = new DataOutputStream(new FileOutputStream(file, true));
     }
 
     /**
-     * 启动录音
+     * start record
      *
      * @param path
+     * @throws IOException
      */
-    public void startRecord(String path) throws IOException {
+    public void startRecord(String path) throws IOException, InterruptedException {
         setPath(path);
         startThread();
     }
 
     /**
-     * 停止录音
+     * stop record
+     *
+     * @throws IOException
+     * @throws InterruptedException
      */
-    public void stopRecord() throws IOException {
+    public void stopRecord() throws IOException, InterruptedException {
+        // specially for OPPO、XIAOMI、MEIZU、HUAWEI and so on
+        Thread.sleep(250);
         destroyThread();
         if (mRecorder != null) {
             if (mRecorder.getState() == AudioRecord.STATE_INITIALIZED) {
@@ -159,10 +148,11 @@ public class AudioRecordManager {
             dos.flush();
             dos.close();
         }
+        length = file.length();
+        deleteFile();
     }
 
-    public void deleteFile() {
-        File file = new File(path);
+    private void deleteFile() {
         if (file.exists()) {
             file.delete();
         }

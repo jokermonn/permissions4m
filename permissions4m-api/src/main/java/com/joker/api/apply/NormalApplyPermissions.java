@@ -2,12 +2,12 @@ package com.joker.api.apply;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 
 import com.joker.api.Permissions4M;
 import com.joker.api.PermissionsProxy;
 import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
+import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.Wrapper;
 
 
@@ -16,6 +16,7 @@ import com.joker.api.wrapper.Wrapper;
  */
 
 public class NormalApplyPermissions {
+    // annotation module ===================================================================================
     @SuppressWarnings("unchecked")
     public static void grantedWithAnnotation(Wrapper wrapper) {
         wrapper.getProxy(wrapper.getContext().getClass().getName())
@@ -38,6 +39,7 @@ public class NormalApplyPermissions {
         }
     }
 
+    // listener module ===================================================================================
     public static void grantedWithListener(Wrapper wrapper) {
         if (wrapper.getPermissionRequestListener() != null) {
             wrapper.getPermissionRequestListener().permissionGranted();
@@ -45,15 +47,10 @@ public class NormalApplyPermissions {
     }
 
     public static void deniedOnResultWithListener(Wrapper wrapper) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
+        ListenerWrapper.PermissionRequestListener requestListener = wrapper.getPermissionRequestListener();
+        if (requestListener != null) {
+            requestListener.permissionDenied();
         }
-
-        if (wrapper.getPermissionRequestListener() == null) {
-            return;
-        }
-
-        wrapper.getPermissionRequestListener().permissionDenied();
 
         if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
             Activity activity = getActivity(wrapper);
