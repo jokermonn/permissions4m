@@ -14,7 +14,6 @@ import java.io.IOException;
  */
 
 public class AudioRecordManager {
-    private static AudioRecordManager mInstance;
     public File file;
     private AudioRecord mRecorder;
     private DataOutputStream dos;
@@ -31,10 +30,6 @@ public class AudioRecordManager {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
                 int bytesRecord;
                 byte[] tempBuffer = new byte[bufferSize];
-//                if (mRecorder.getState() != AudioRecord.STATE_INITIALIZED) {
-//                    stopRecord();
-//                    return;
-//                }
                 mRecorder.startRecording();
                 while (isStart) {
                     if (mRecorder != null) {
@@ -64,7 +59,6 @@ public class AudioRecordManager {
         mRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, bufferSize * 2);
     }
-
 
     public boolean getSuccess() {
         return length > 0;
