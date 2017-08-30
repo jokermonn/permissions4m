@@ -182,7 +182,7 @@ public class PermissionsChecker {
         Cursor cursor = activity.getContentResolver().query(Uri.parse("content://sms/"), null, null,
                 null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() ||
+            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager.BuildVersionUnderMAboveL()) ||
                     PermissionsPageManager.isXIAOMI()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(Telephony.Sms.DATE))) {
                     cursor.close();
@@ -247,7 +247,7 @@ public class PermissionsChecker {
                 (LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         // fuck XIAOMI!
-        if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() || PermissionsPageManager
+        if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager.BuildVersionUnderMAboveL()) || PermissionsPageManager
                 .isXIAOMI()) {
             double latitude = location.getLatitude();
         }
@@ -319,7 +319,7 @@ public class PermissionsChecker {
                         ("content://call_log/calls"), null, null,
                 null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() ||
+            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager.BuildVersionUnderMAboveL()) ||
                     PermissionsPageManager.isXIAOMI()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(CallLog.Calls.NUMBER))) {
                     cursor.close();
@@ -387,7 +387,7 @@ public class PermissionsChecker {
         Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
                 .CONTENT_URI, null, null, null, null);
         if (cursor != null) {
-            if (PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() ||
+            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager.BuildVersionUnderMAboveL()) ||
                     PermissionsPageManager.isXIAOMI()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds
                         .Phone.NUMBER))) {
