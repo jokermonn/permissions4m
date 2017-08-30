@@ -73,7 +73,16 @@ public class PermissionsPageManager {
 
     public static boolean isUnderMHasPermissionRequestManufacturer() {
         return (getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
-                .equalsIgnoreCase(MANUFACTURER_XIAOMI)) && Build.VERSION.SDK_INT >= Build.VERSION_CODES
+                .equalsIgnoreCase(MANUFACTURER_XIAOMI));
+    }
+
+    /**
+     * Build version code is under 6.0 but above 5.0
+     *
+     * @return
+     */
+    public static boolean BuildVersionUnderMAboveL() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES
                 .LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
     }
 }

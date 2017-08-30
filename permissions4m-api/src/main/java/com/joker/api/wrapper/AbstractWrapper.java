@@ -26,6 +26,7 @@ public abstract class AbstractWrapper implements Wrapper {
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
     private static final int DEFAULT_REQUEST_CODE = -1;
     private static final boolean DEFAULT_IS_FORCE = true;
+    private static final boolean DEFAULT_IS_ALLOWED = false;
     private static Map<String, PermissionsProxy> proxyMap = new HashMap<>();
     private static Map<Key, WeakReference<Wrapper>> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
@@ -35,6 +36,7 @@ public abstract class AbstractWrapper implements Wrapper {
     private PermissionRequestListener permissionRequestListener;
     private PermissionPageListener permissionPageListener;
     private boolean force = DEFAULT_IS_FORCE;
+    private boolean allow = DEFAULT_IS_ALLOWED;
     private boolean requestOnRationale;
 
     public AbstractWrapper() {
@@ -142,6 +144,17 @@ public abstract class AbstractWrapper implements Wrapper {
     }
 
     @Override
+    public Wrapper requestUnderM(boolean allow) {
+        this.allow = allow;
+        return this;
+    }
+
+    @Override
+    public boolean isRequestUnderM() {
+        return allow;
+    }
+
+    @Override
     public void request() {
         // use a map to hold wrappers
         Key key = new Key(getContext(), getRequestCode());
@@ -180,10 +193,12 @@ public abstract class AbstractWrapper implements Wrapper {
     /**
      * 1.under {@link android.os.Build.VERSION_CODES#M}, and it's not the
      * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
-     * some manufacturers that has permission manage under M)
+     * some manufacturers that has permission manage under M) or it's the
+     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, but under
+     * {@link android.os.Build.VERSION_CODES#LOLLIPOP}
      * <p>
      * 2.it's not the {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, and
-     * Version Code is bigger than {@link android.os.Build.VERSION_CODES#M}
+     * Version Code is above than {@link android.os.Build.VERSION_CODES#M}
      * <p>
      * 3.under {@link android.os.Build.VERSION_CODES#M}, and it's
      * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
@@ -192,10 +207,13 @@ public abstract class AbstractWrapper implements Wrapper {
     private void requestPermissionWithAnnotation() {
         PermissionsProxy proxy = getProxy(getContext().getClass().getName());
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !PermissionsPageManager
-                .isUnderMHasPermissionRequestManufacturer()) {
-            proxy.granted(getContext(), getRequestCode());
-        } else if (!PermissionsPageManager.isUnderMHasPermissionRequestManufacturer()) {
+        if (underMAboveLShouldRequest()) {
+            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
+                proxy.granted(getContext(), getRequestCode());
+            } else {
+                ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
+            }
+        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             String permission = getPermission();
             if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
                     .PERMISSION_GRANTED) {
@@ -204,11 +222,7 @@ public abstract class AbstractWrapper implements Wrapper {
                 mayGrantedWithAnnotation();
             }
         } else {
-            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
-                proxy.granted(getContext(), getRequestCode());
-            } else {
-                ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
-            }
+            proxy.granted(getContext(), getRequestCode());
         }
     }
 
@@ -233,12 +247,16 @@ public abstract class AbstractWrapper implements Wrapper {
      */
     private void requestPermissionWithListener() {
         PermissionRequestListener listener = getPermissionRequestListener();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && !PermissionsPageManager
-                .isUnderMHasPermissionRequestManufacturer()) {
-            if (listener != null) {
-                listener.permissionGranted();
+
+        if (underMAboveLShouldRequest()) {
+            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
+                if (listener != null) {
+                    listener.permissionGranted();
+                }
+            } else {
+                ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
             }
-        } else if (!PermissionsPageManager.isUnderMHasPermissionRequestManufacturer()) {
+        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
             String permission = getPermission();
             if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
                     .PERMISSION_GRANTED) {
@@ -247,12 +265,8 @@ public abstract class AbstractWrapper implements Wrapper {
                 mayGrantedWithListener();
             }
         } else {
-            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
-                if (listener != null) {
-                    listener.permissionGranted();
-                }
-            } else {
-                ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
+            if (listener != null) {
+                listener.permissionGranted();
             }
         }
     }
@@ -263,6 +277,22 @@ public abstract class AbstractWrapper implements Wrapper {
         } else {
             NormalApplyPermissions.grantedWithListener(this);
         }
+    }
+
+    /**
+     * the condition of {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}:
+     * -> like {@link com.joker.api.support.manufacturer.XIAOMI} and
+     * {@link com.joker.api.support.manufacturer.MEIZU}
+     * could request permission:
+     * 1. is {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} device
+     * 2. version code is 5.0~6.0
+     * 3. {@link Wrapper#isRequestUnderM()} return true
+     *
+     * @return
+     */
+    private boolean underMAboveLShouldRequest() {
+        return PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() &&
+                PermissionsPageManager.BuildVersionUnderMAboveL() && isRequestUnderM();
     }
 
     /**
@@ -299,7 +329,8 @@ public abstract class AbstractWrapper implements Wrapper {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Key && ((Key) obj).getRequestCode() == requestCode &&
+            return obj instanceof Key && ((Key) obj).getRequestCode() == requestCode && ((Key) obj)
+                    .getObject().get() != null && object.get().getClass() != null &&
                     object.get().getClass().getName().equals(((Key) obj).getObject().get().getClass()
                             .getName());
         }

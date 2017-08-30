@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-1.1.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.1.2-lib)
-[![processor](https://img.shields.io/badge/processor-1.1.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/1.1.2-processor)
+[![lib](https://img.shields.io/badge/lib-2.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.0-lib)
+[![processor](https://img.shields.io/badge/processor-2.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.0-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -22,7 +22,8 @@
 - 支持 java8
 - **支持一行代码同步请求多个权限**
 - 支持多种回调函数，代码可以更简洁
-- **支持大量国产机型适配**
+- **支持国产机型适配**
+- **支持国产机型5.0权限申请**
 
 权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
 
@@ -46,8 +47,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:1.1.2-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:1.1.2-processor'
+      compile 'com.github.jokermonn:permissions4m:2.0.0-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:2.0.0-processor'
 	}
 
 # 使用文档 #
@@ -66,6 +67,13 @@
 
 - TODO:[help me](#help)
 
+- v2.0.0
+	- 修复 fragment/support fragment 中低于6.0版本注解回调无效
+	- 修复 activity 强制申请回调失效
+	- 修复 activity 自定义二次回调失效
+	- 增强函数回调方式
+	- 增强录音权限申请
+	- **适配魅族5.0权限申请**
 - v1.1.2
 	- 增强小米中的 `READ_CONTACTS` 申请([国产畸形权限适配](#extends))
 	- 增强小米中的 `PHONE_STATE` 申请
@@ -115,8 +123,8 @@
 在需要权限申请的地方调用
 
 	Permissions4M.get(MainActivity.this)
-				// 是否强制弹出权限申请对话框，建议为 true
-                .requestForce(true)
+				// 是否强制弹出权限申请对话框，建议设置为 true，默认为 true
+                // .requestForce(true)
 				// 权限
                 .requestPermission(Manifest.permission.RECORD_AUDIO)
 				// 权限码
@@ -134,7 +142,6 @@
         @Override
         public void onClick(View v) {
             Permissions4M.get(MainActivity.this)
-                    .requestForce(true)
 					.requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                     .requestPermission(Manifest.permission.RECORD_AUDIO)
                     .requestCode(AUDIO_CODE)
@@ -148,11 +155,19 @@
 
 授权**成功**时回调，注解中需要传入参数，分为两种情况：
 
-- 单参数：`@PermissionsGranted(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+- 单参数：`@PermissionsGranted(LOCATION_CODE)`，被修饰函数可不传入参数，例：
 >
 
 	@PermissionsGranted(LOCATION_CODE)
     public void granted() {
+		ToastUtil.show("地理位置授权成功");
+	}
+
+>传参的话必须是 int 型
+>
+
+	@PermissionsGranted(LOCATION_CODE)
+    public void granted(int code) {
 		ToastUtil.show("地理位置授权成功");
 	}
 
@@ -180,11 +195,20 @@
 
 授权**失败**时回调，注解中需要传入参数，分为两种情况：
 
-- 单参数：`@PermissionsDenied(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+- 单参数：`@PermissionsDenied(LOCATION_CODE)`，被修饰函数可不传入参数，例：
 >
 
 	@PermissionsDenied(LOCATION_CODE)
     public void denied() {
+		ToastUtil.show("地理位置授权失败");
+	}
+
+>传参的话必须是 int 型
+>
+
+	@PermissionsDenied(LOCATION_CODE)
+    public void denied(int code) {
+		ToastUtil.show("地理位置授权失败");
 	}
 
 - 多参数：`@PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})`，被修饰函数需要传入一个 int 参数，例：
@@ -210,11 +234,19 @@
 <h2 id="rationale">@PermissionsRationale</h2>
 二次授权时回调，用于解释为何需要此权限，注解中需要传入参数，分为两种情况：
 
-- 单参数：`@PermissionsRationale(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+- 单参数：`@PermissionsRationale(LOCATION_CODE)`，被修饰函数可不传入参数，例：
 >
 
 	@PermissionsRationale(LOCATION_CODE)
     public void rationale() {
+		ToastUtil.show("请开启读取地理位置权限");
+	}
+
+>传参的话必须是 int 型
+>
+
+	@PermissionsRationale(LOCATION_CODE)
+    public void denied(int code) {
 		ToastUtil.show("请开启读取地理位置权限");
 	}
 
@@ -243,11 +275,32 @@
 
 二次授权时回调，用于解释为何需要此权限，注解中需要传入参数，分为两种情况：
 
-- 单参数：`@PermissionsCustomRationale(LOCATION_CODE)`，被修饰函数无需传入参数，例：
+- 单参数：`@PermissionsCustomRationale(LOCATION_CODE)`，被修饰函数可不传入参数，例：
 >
 
 	@PermissionsCustomRationale(LOCATION_CODE)
     public void cusRationale() {
+		new AlertDialog.Builder(this)
+                        .setMessage("读取地理位置权限申请：\n我们需要您开启读取地理位置权限(in activity with annotation)")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Permissions4M.get(MainActivity.this)
+										// 注意添加 .requestOnRationale()
+                                        .requestOnRationale()
+                                        .requestPermission(Manifest.permission.READ_SMS)
+                                        .requestCode(SMS_CODE)
+                                        .request();
+                            }
+                        })
+                        .show();
+	}
+
+>传参的话必须是 int 型
+>
+
+	@PermissionsCustomRationale(LOCATION_CODE)
+    public void cusRationale(int code) {
 		new AlertDialog.Builder(this)
                         .setMessage("读取地理位置权限申请：\n我们需要您开启读取地理位置权限(in activity with annotation)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -319,11 +372,19 @@
 
 用户太傻逼，**拒绝权限**且**不再提示**（[国产畸形权限适配扩展](#extend)）情况下调用，此时意味着无论是 [@PermissionsCustomRationale](#custom_rationale) 或者 [@PermissionsRationale](#rationale) 都不会被调用，无法给予用户提示，此时该注解修饰的函数被调用，注解中需要传入参数，分为两种情况：
 
-- 单参数：`@PermissionsNonRationale(LOCATION_CODE)`，被修饰函数只需传入 Intent 参数，例：
+- 单参数：`@PermissionsNonRationale(LOCATION_CODE)`，被修饰函数可只传入 Intent 参数，例：
 >
 
 	@PermissionsNonRationale({LOCATION_CODE})
 	public void nonRationale(Intent intent) {
+		startActivity(intent);
+	}
+
+> 也可传入 int 参数和 Intent 参数，例：
+>
+
+	@PermissionsNonRationale({LOCATION_CODE})
+	public void nonRationale(int code, Intent intent) {
 		startActivity(intent);
 	}
 
@@ -374,13 +435,13 @@
 
 Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是跳至**手机管家页面**，而具体的设置方法请参考 [注解回调](#annotationm) 中 `.requestPageType(int)` 设置方法。
 
-<h1 id="listener"> Listener 回调</h1>
+<h1 id="listener"> Listener 回调 </h1>
 
 例：
 
 	Permissions4M.get(MainActivity.this)
-		// 是否强制弹出权限申请对话框
-    	.requestForce(true)
+		// 是否强制弹出权限申请对话框，建议为 true，默认为 true
+    	// .requestForce(true)
 		// 权限
     	.requestPermission(Manifest.permission.READ_CONTACTS)
 		// 权限码

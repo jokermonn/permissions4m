@@ -13,14 +13,4 @@ interface AnnotationWrapper {
      * @return
      */
     PermissionsProxy getProxy(String className);
-
-    /**
-     * called when use custom rationale, in case fall in to drop-dead
-     *
-     * custom rationale -> ensure button -> Permissions4M.request ->
-     * if(custom rationale) -> custom rationale
-     */
-    Wrapper requestOnRationale();
-
-    boolean isRequestOnRationale();
 }
