@@ -134,15 +134,15 @@
 		// 是否支持 5.0 权限申请，默认为 false
 		// .requestUnderM(false)
 		// 权限
-                .requestPermission(Manifest.permission.RECORD_AUDIO)
+        .requestPermission(Manifest.permission.RECORD_AUDIO)
 		// 权限码
-                .requestCode(AUDIO_CODE)
+        .requestCode(AUDIO_CODE)
 		// 如果需要使用 @PermissionNonRationale 注解的话，建议添加如下一行
 		// 返回的 intent 是跳转至**系统设置页面**
-                // .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
+        // .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
 		// 返回的 intent 是跳转至**手机管家页面**
 		// .requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
-                .request();
+        .request();
 
 如：
 
