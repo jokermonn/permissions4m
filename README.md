@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-2.0.3-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.3-lib)
-[![processor](https://img.shields.io/badge/processor-2.0.3-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.3-processor)
+[![lib](https://img.shields.io/badge/lib-2.0.4-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.4-lib)
+[![processor](https://img.shields.io/badge/processor-2.0.4-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.4-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
