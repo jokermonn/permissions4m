@@ -213,7 +213,7 @@ public abstract class AbstractWrapper implements Wrapper {
             } else {
                 ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
             }
-        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String permission = getPermission();
             if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
                     .PERMISSION_GRANTED) {
@@ -256,7 +256,7 @@ public abstract class AbstractWrapper implements Wrapper {
             } else {
                 ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
             }
-        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String permission = getPermission();
             if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
                     .PERMISSION_GRANTED) {
