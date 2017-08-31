@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-2.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.0-lib)
-[![processor](https://img.shields.io/badge/processor-2.0.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.0-processor)
+[![lib](https://img.shields.io/badge/lib-2.0.4-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.4-lib)
+[![processor](https://img.shields.io/badge/processor-2.0.4-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.4-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -17,7 +17,7 @@
 - **还在为用户拒绝且不再提示权限申请对话框而烦躁么？ Permissions4M 让它跳转到手机管家权限设置界面**
 
 # Permissions4M #
-意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。另较原有项目有以下升级：
+意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。permissions4m 另较原有项目有以下升级：
 
 - 支持 java8
 - **支持一行代码同步请求多个权限**
