@@ -16,12 +16,15 @@
 - **还在为明明授权失败，却回调的是权限申请成功方法而苦恼么？ Permissions4M 让它必须回调期望的方法**
 - **还在为用户拒绝且不再提示权限申请对话框而烦躁么？ Permissions4M 让它跳转到手机管家权限设置界面**
 
-# Permissions4M #
-意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。permissions4m 另较原有项目有以下升级：
+# permissions4m #
+意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。起初目的是仅作为纯粹的 [Andriod 编译时注解项目](http://blog.csdn.net/ziwang_/article/details/76576495)，较原有项目有以下升级：
 
 - 支持 java8
 - **支持一行代码同步请求多个权限**
 - 支持多种回调函数，代码可以更简洁
+
+后 permissions4m 为适配国产机型而迭代，目前：
+
 - **支持国产机型适配**
 - **支持国产机型5.0权限申请**
 
@@ -47,8 +50,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:2.0.0-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:2.0.0-processor'
+      compile 'com.github.jokermonn:permissions4m:2.0.4-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:2.0.4-processor'
 	}
 
 # 使用文档 #
@@ -67,6 +70,9 @@
 
 - TODO:[help me](#help)
 
+- v2.0.4
+	- 支持手动关闭5.0权限申请
+	- 修复代理类空指针异常
 - v2.0.0
 	- 修复 fragment/support fragment 中低于6.0版本注解回调无效
 	- 修复 activity 强制申请回调失效
@@ -125,6 +131,8 @@
 	Permissions4M.get(MainActivity.this)
 				// 是否强制弹出权限申请对话框，建议设置为 true，默认为 true
                 // .requestForce(true)
+				// 是否支持 5.0 权限申请，默认为 false
+				// .requestUnderM(false)
 				// 权限
                 .requestPermission(Manifest.permission.RECORD_AUDIO)
 				// 权限码
@@ -442,6 +450,8 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
 	Permissions4M.get(MainActivity.this)
 		// 是否强制弹出权限申请对话框，建议为 true，默认为 true
     	// .requestForce(true)
+		// 是否支持 5.0 权限申请，默认为 false
+		// .requestUnderM(false)
 		// 权限
     	.requestPermission(Manifest.permission.READ_CONTACTS)
 		// 权限码

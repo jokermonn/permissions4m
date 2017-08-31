@@ -329,10 +329,11 @@ public abstract class AbstractWrapper implements Wrapper {
 
         @Override
         public boolean equals(Object obj) {
-            return obj instanceof Key && ((Key) obj).getRequestCode() == requestCode && ((Key) obj)
-                    .getObject().get() != null && object.get().getClass() != null &&
-                    object.get().getClass().getName().equals(((Key) obj).getObject().get().getClass()
-                            .getName());
+            return obj instanceof Key && ((Key) obj)
+                    .getObject().get() != null && object.get().getClass() != null && ((Key) obj)
+                    .getRequestCode() == requestCode && object.get().getClass().getName().equals(((Key)
+                    obj).getObject().get().getClass()
+                    .getName());
         }
 
         @Override
