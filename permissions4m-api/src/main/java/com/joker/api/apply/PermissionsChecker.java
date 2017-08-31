@@ -395,8 +395,6 @@ public class PermissionsChecker {
                     PermissionsPageManager.isXIAOMI()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds
                         .Phone.NUMBER))) {
-                    Log.e("TAG", "checkReadContacts:  " + cursor.getColumnIndex(ContactsContract
-                            .CommonDataKinds.Phone.NUMBER));
                     cursor.close();
                     return false;
                 }
