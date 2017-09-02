@@ -156,21 +156,29 @@ public abstract class AbstractWrapper implements Wrapper {
 
     @Override
     public void request() {
-        // use a map to hold wrappers
-        Key key = new Key(getContext(), getRequestCode());
-        wrapperMap.put(key, new WeakReference<Wrapper>(this));
-
         // on rationale, it should use normal request
         if (isRequestOnRationale()) {
             originalRequest();
         } else {
+            // use a map to hold wrappers
             // not on rationale, judge condition
+            addEntity();
             if (permissionRequestListener == null) {
                 requestPermissionWithAnnotation();
             } else {
                 requestPermissionWithListener();
             }
         }
+    }
+
+    /**
+     * add an entity to map
+     * entity struct:
+     * permission -> context
+     */
+    private void addEntity() {
+        Key key = new Key(getContext(), getRequestCode());
+        wrapperMap.put(key, new WeakReference<Wrapper>(this));
     }
 
     void requestSync(Activity activity) {
