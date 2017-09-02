@@ -59,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
-                        .requestForce(true)
+                        .requestCodes(CALL_LOG_CODE)
+                        .requestPermissions(Manifest.permission.READ_CALL_LOG)
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
-                        .requestCode(CALL_LOG_CODE)
-                        .requestPermission(Manifest.permission.READ_CALL_LOG)
                         .request();
             }
         });
@@ -72,10 +71,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
-                        .requestForce(true)
+                        .requestPermissions(Manifest.permission.RECORD_AUDIO)
+                        .requestCodes(AUDIO_CODE)
                         .requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
-                        .requestPermission(Manifest.permission.RECORD_AUDIO)
-                        .requestCode(AUDIO_CODE)
                         .request();
             }
         });
@@ -108,22 +106,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
-                        .requestForce(true)
-                        .requestPermission(Manifest.permission.READ_CONTACTS)
-                        .requestCode(READ_CONTACTS_CODE)
+                        .requestPermissions(Manifest.permission.READ_CONTACTS)
+                        .requestCodes(READ_CONTACTS_CODE)
                         .requestCallback(new Wrapper.PermissionRequestListener() {
                             @Override
-                            public void permissionGranted() {
+                            public void permissionGranted(int code) {
                                 ToastUtil.show("读取通讯录权限成功 in activity with listener");
                             }
 
                             @Override
-                            public void permissionDenied() {
+                            public void permissionDenied(int code) {
                                 ToastUtil.show("读取通讯录权失败 in activity with listener");
                             }
 
                             @Override
-                            public void permissionRationale() {
+                            public void permissionRationale(int code) {
                                 ToastUtil.show("请打开读取通讯录权限 in activity with listener");
                             }
                         })
@@ -257,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Permissions4M.get(MainActivity.this)
                                 .requestOnRationale()
-                                .requestPermission(Manifest.permission.RECORD_AUDIO)
-                                .requestCode(AUDIO_CODE)
+                                .requestPermissions(Manifest.permission.RECORD_AUDIO)
+                                .requestCodes(AUDIO_CODE)
                                 .request();
                     }
                 })

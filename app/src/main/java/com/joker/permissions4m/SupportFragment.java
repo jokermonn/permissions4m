@@ -45,10 +45,9 @@ public class SupportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(SupportFragment.this)
-                        .requestForce(true)
+                        .requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                        .requestCodes(LOCATION_CODE)
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
-                        .requestPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                        .requestCode(LOCATION_CODE)
                         .request();
             }
         });
@@ -58,10 +57,9 @@ public class SupportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(SupportFragment.this)
-                        .requestForce(true)
+                        .requestPermissions(Manifest.permission.CAMERA)
+                        .requestCodes(CAMERA_CODE)
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
-                        .requestPermission(Manifest.permission.CAMERA)
-                        .requestCode(CAMERA_CODE)
                         .request();
             }
         });
@@ -112,8 +110,8 @@ public class SupportFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         Permissions4M.get(SupportFragment.this)
                                 .requestOnRationale()
-                                .requestPermission(Manifest.permission.CAMERA)
-                                .requestCode(CAMERA_CODE)
+                                .requestPermissions(Manifest.permission.CAMERA)
+                                .requestCodes(CAMERA_CODE)
                                 .request();
                     }
                 })

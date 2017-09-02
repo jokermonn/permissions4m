@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +18,18 @@ import com.joker.annotation.PermissionsCustomRationale;
 import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsNonRationale;
-import com.joker.annotation.PermissionsRationale;
-import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
 import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.Wrapper;
 import com.joker.permissions4m.other.ToastUtil;
 
-import static com.joker.permissions4m.NormalFragment.CALENDAR_CODE;
-import static com.joker.permissions4m.NormalFragment.LOCATION_CODE;
-import static com.joker.permissions4m.NormalFragment.SENSORS_CODE;
-
 /**
  * A simple {@link Fragment} subclass.
  */
-@PermissionsRequestSync(permission = {Manifest.permission.BODY_SENSORS, Manifest.permission
-        .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR},
-        value = {SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE})
 public class NormalFragment extends Fragment {
-    public static final int CALENDAR_CODE = 700;
-    public static final int SENSORS_CODE = 800;
-    public static final int LOCATION_CODE = 900;
+    private static final int CALENDAR_CODE = 700;
+    private static final int SENSORS_CODE = 800;
+    private static final int LOCATION_CODE = 900;
     private static final int SMS_CODE = 500;
     private static final int AUDIO_CODE = 600;
     private static final int PHONE_STATE_CODE = 1000;
@@ -62,10 +54,9 @@ public class NormalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(NormalFragment.this)
-                        .requestPermission(Manifest.permission.READ_SMS)
-                        .requestForce(true)
+                        .requestPermissions(Manifest.permission.READ_SMS)
+                        .requestCodes(SMS_CODE)
                         .requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
-                        .requestCode(SMS_CODE)
                         .request();
             }
         });
@@ -75,7 +66,71 @@ public class NormalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(NormalFragment.this)
-                        .requestSync();
+                        .requestPermissions(Manifest.permission.BODY_SENSORS, Manifest.permission
+                                .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR)
+                        .requestCodes(SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE)
+                        .requestCallback(new ListenerWrapper.PermissionRequestListener() {
+                            @Override
+                            public void permissionGranted(int code) {
+                                switch (code) {
+                                    case LOCATION_CODE:
+                                        ToastUtil.show("地理位置权限授权成功 in fragment with annotation");
+                                        Log.e("TAG", "permissionGranted: 地理位置权限授权成功 ");
+                                        break;
+                                    case SENSORS_CODE:
+                                        ToastUtil.show("传感器权限授权成功 in fragment with annotation");
+                                        Log.e("TAG", "permissionGranted: 传感器权限授权成功 ");
+                                        break;
+                                    case CALENDAR_CODE:
+                                        ToastUtil.show("读取日历权限授权成功 in fragment with annotation");
+                                        Log.e("TAG", "permissionGranted: 读取日历权限授权成功 ");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void permissionDenied(int code) {
+                                switch (code) {
+                                    case LOCATION_CODE:
+                                        ToastUtil.show("地理位置权限授权失败 in fragment with annotation");
+                                        Log.e("TAG", "permissionDenied: 地理位置权限授权失败 ");
+                                        break;
+                                    case SENSORS_CODE:
+                                        ToastUtil.show("传感器权限授权失败 in fragment with annotation");
+                                        Log.e("TAG", "permissionDenied: 传感器权限授权失败 ");
+                                        break;
+                                    case CALENDAR_CODE:
+                                        ToastUtil.show("读取日历权限授权失败 in fragment with annotation");
+                                        Log.e("TAG", "permissionDenied: 读取日历权限授权失败 ");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void permissionRationale(int code) {
+                                switch (code) {
+                                    case LOCATION_CODE:
+                                        ToastUtil.show("请开启地理位置权限 in fragment with annotation");
+                                        Log.e("TAG", "permissionRationale: 请开启地理位置权限 ");
+                                        break;
+                                    case SENSORS_CODE:
+                                        ToastUtil.show("请开启传感器权限 in fragment with annotation");
+                                        Log.e("TAG", "permissionRationale: 请开启传感器权限 ");
+                                        break;
+                                    case CALENDAR_CODE:
+                                        ToastUtil.show("请开启读取日历权限 in fragment with annotation");
+                                        Log.e("TAG", "permissionRationale: 请开启读取日历权限 ");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        })
+                        .request();
             }
         });
 
@@ -83,22 +138,21 @@ public class NormalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(NormalFragment.this)
-                        .requestForce(true)
-                        .requestPermission(Manifest.permission.READ_PHONE_STATE)
-                        .requestCode(PHONE_STATE_CODE)
+                        .requestPermissions(Manifest.permission.READ_PHONE_STATE)
+                        .requestCodes(PHONE_STATE_CODE)
                         .requestCallback(new ListenerWrapper.PermissionRequestListener() {
                             @Override
-                            public void permissionGranted() {
+                            public void permissionGranted(int code) {
                                 ToastUtil.show("读取手机状态权限成功 in activity with listener");
                             }
 
                             @Override
-                            public void permissionDenied() {
+                            public void permissionDenied(int code) {
                                 ToastUtil.show("读取手机状态权失败 in activity with listener");
                             }
 
                             @Override
-                            public void permissionRationale() {
+                            public void permissionRationale(int code) {
                                 ToastUtil.show("请打开读取手机状态权限 in activity with listener");
                             }
                         })
@@ -137,59 +191,6 @@ public class NormalFragment extends Fragment {
         Permissions4M.onRequestPermissionsResult(NormalFragment.this, requestCode, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
-    //====================================================================
-    @PermissionsGranted({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void storageAndCallGranted(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                ToastUtil.show("地理位置权限授权成功 in fragment with annotation");
-                break;
-            case SENSORS_CODE:
-                ToastUtil.show("传感器权限授权成功 in fragment with annotation");
-                break;
-            case CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权成功 in fragment with annotation");
-                break;
-            default:
-                break;
-        }
-    }
-
-    @PermissionsDenied({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void storageAndCallDenied(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                ToastUtil.show("地理位置权限授权失败 in fragment with annotation");
-                break;
-            case SENSORS_CODE:
-                ToastUtil.show("传感器权限授权失败 in fragment with annotation");
-                break;
-            case CALENDAR_CODE:
-                ToastUtil.show("读取日历权限授权失败 in fragment with annotation");
-                break;
-            default:
-                break;
-        }
-    }
-
-    @PermissionsRationale({LOCATION_CODE, SENSORS_CODE, CALENDAR_CODE})
-    public void storageAndCallRationale(int code) {
-        switch (code) {
-            case LOCATION_CODE:
-                ToastUtil.show("请开启地理位置权限 in fragment with annotation");
-                break;
-            case SENSORS_CODE:
-                ToastUtil.show("请开启传感器权限 in fragment with annotation");
-                break;
-            case CALENDAR_CODE:
-                ToastUtil.show("请开启读取日历权限 in fragment with annotation");
-                break;
-            default:
-                break;
-        }
-    }
-
 
     //====================================================================
     @PermissionsGranted({SMS_CODE, AUDIO_CODE})
@@ -231,8 +232,8 @@ public class NormalFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 Permissions4M.get(NormalFragment.this)
                                         .requestOnRationale()
-                                        .requestPermission(Manifest.permission.READ_SMS)
-                                        .requestCode(SMS_CODE)
+                                        .requestPermissions(Manifest.permission.READ_SMS)
+                                        .requestCodes(SMS_CODE)
                                         .request();
                             }
                         })
@@ -246,8 +247,8 @@ public class NormalFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 Permissions4M.get(NormalFragment.this)
                                         .requestOnRationale()
-                                        .requestPermission(Manifest.permission.RECORD_AUDIO)
-                                        .requestCode(AUDIO_CODE)
+                                        .requestPermissions(Manifest.permission.RECORD_AUDIO)
+                                        .requestCodes(AUDIO_CODE)
                                         .request();
                             }
                         })
