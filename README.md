@@ -134,9 +134,9 @@
 		// 是否支持 5.0 权限申请，默认为 false
 		// .requestUnderM(false)
 		// 权限
-        .requestPermission(Manifest.permission.RECORD_AUDIO)
+        .requestPermissions(Manifest.permission.RECORD_AUDIO)
 		// 权限码
-        .requestCode(AUDIO_CODE)
+        .requestCodes(AUDIO_CODE)
 		// 如果需要使用 @PermissionNonRationale 注解的话，建议添加如下一行
 		// 返回的 intent 是跳转至**系统设置页面**
         // .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
@@ -151,8 +151,8 @@
         public void onClick(View v) {
             Permissions4M.get(MainActivity.this)
 					.requestPageType(Permissions4M.PageType.MANAGER_PAGE)
-                    .requestPermission(Manifest.permission.RECORD_AUDIO)
-                    .requestCode(AUDIO_CODE)
+                    .requestPermissions(Manifest.permission.RECORD_AUDIO)
+                    .requestCodes(AUDIO_CODE)
                     .request();
         }
     });
@@ -296,8 +296,8 @@
                                 Permissions4M.get(MainActivity.this)
 										// 注意添加 .requestOnRationale()
                                         .requestOnRationale()
-                                        .requestPermission(Manifest.permission.READ_SMS)
-                                        .requestCode(SMS_CODE)
+                                        .requestPermissions(Manifest.permission.READ_SMS)
+                                        .requestCodes(SMS_CODE)
                                         .request();
                             }
                         })
@@ -317,8 +317,8 @@
                                 Permissions4M.get(MainActivity.this)
 										// 注意添加 .requestOnRationale()
                                         .requestOnRationale()
-                                        .requestPermission(Manifest.permission.READ_SMS)
-                                        .requestCode(SMS_CODE)
+                                        .requestPermissions(Manifest.permission.READ_SMS)
+                                        .requestCodes(SMS_CODE)
                                         .request();
                             }
                         })
@@ -340,8 +340,8 @@
                                 Permissions4M.get(MainActivity.this)
 										// 注意添加 .requestOnRationale()
                                         .requestOnRationale()
-                                        .requestPermission(Manifest.permission.READ_SMS)
-                                        .requestCode(SMS_CODE)
+                                        .requestPermissions(Manifest.permission.READ_SMS)
+                                        .requestCodes(SMS_CODE)
                                         .request();
                             }
                         })
@@ -356,8 +356,8 @@
                                 Permissions4M.get(MainActivity.this)
 										// 注意添加 .requestOnRationale()
                                         .requestOnRationale()
-                                        .requestPermission(Manifest.permission.RECORD_AUDIO)
-                                        .requestCode(AUDIO_CODE)
+                                        .requestPermissions(Manifest.permission.RECORD_AUDIO)
+                                        .requestCodes(AUDIO_CODE)
                                         .request();
                             }
                         })
@@ -372,8 +372,8 @@
 	Permissions4M.get(MainActivity.this)
 			// 务必添加下列一行
           .requestOnRationale()
-          .requestPermission(Manifest.permission.RECORD_AUDIO)
-          .requestCode(AUDIO_CODE)
+          .requestPermissions(Manifest.permission.RECORD_AUDIO)
+          .requestCodes(AUDIO_CODE)
           .request();
 
 <h2 id="non_rationale">@PermissionsNonRationale</h2>
@@ -453,23 +453,23 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
 		// 是否支持 5.0 权限申请，默认为 false
 		// .requestUnderM(false)
 		// 权限
-    	.requestPermission(Manifest.permission.READ_CONTACTS)
+    	.requestPermissions(Manifest.permission.READ_CONTACTS)
 		// 权限码
-    	.requestCode(READ_CONTACTS_CODE)
+    	.requestCodes(READ_CONTACTS_CODE)
 		// 权限请求结果
     	.requestCallback(new Wrapper.PermissionRequestListener() {
        		@Override
-        	public void permissionGranted() {
+        	public void permissionGranted(int code) {
             	ToastUtil.show("读取通讯录权限成功 in activity with listener");
         	}
 
         	@Override
-        	public void permissionDenied() {
+        	public void permissionDenied(int code) {
             	ToastUtil.show("读取通讯录权失败 in activity with listener");
         	}
 
         	@Override
-        	public void permissionRationale() {
+        	public void permissionRationale(int code) {
             	ToastUtil.show("请打开读取通讯录权限 in activity with listener");
         	}
     	})
