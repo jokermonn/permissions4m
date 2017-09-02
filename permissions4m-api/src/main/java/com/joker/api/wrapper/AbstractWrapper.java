@@ -6,7 +6,6 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
 import com.joker.api.Permissions4M;
-import com.joker.api.PermissionsProxy;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
 import com.joker.api.apply.PermissionsChecker;

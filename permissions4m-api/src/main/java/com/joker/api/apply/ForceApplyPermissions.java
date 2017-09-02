@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.joker.api.Permissions4M;
-import com.joker.api.PermissionsProxy;
 import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
+import com.joker.api.wrapper.AnnotationWrapper;
 import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.PermissionWrapper;
 import com.joker.api.wrapper.Wrapper;
@@ -48,7 +48,7 @@ public class ForceApplyPermissions {
     public static void grantedOnResultWithAnnotation(PermissionWrapper wrapper) {
         Activity activity = getActivity(wrapper);
 
-        PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
+        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
         String requestPermission = wrapper.getRequestPermission();
         int requestCode = wrapper.getRequestCode();
         if (PermissionsChecker.isPermissionGranted(activity, requestPermission)) {
@@ -85,7 +85,7 @@ public class ForceApplyPermissions {
 
     @SuppressWarnings("unchecked")
     public static void deniedOnResultWithAnnotationForUnderMManufacturer(PermissionWrapper wrapper) {
-        PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
+        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
         proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
 
         boolean androidPage = wrapper.getPageType() == Permissions4M.PageType

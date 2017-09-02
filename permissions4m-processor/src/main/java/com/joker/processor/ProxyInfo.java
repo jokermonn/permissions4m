@@ -51,8 +51,8 @@ class ProxyInfo {
     String generateJavaCode() {
         StringBuilder builder = new StringBuilder();
         builder.append("package ").append(packageName).append(";\n\n")
-                .append("import com.joker.api.*;\n")
-                .append("import com.joker.api.support.*;\n")
+                .append("import com.joker.api.Permissions4M;\n")
+                .append("import com.joker.api.wrapper.AnnotationWrapper.PermissionsProxy;\n")
                 .append("import android.content.Intent;\n\n")
                 .append("public class ").append(proxyName).append(" implements ").append
                 (PERMISSIONS_PROXY).append
