@@ -30,11 +30,11 @@ public interface ListenerWrapper {
     PermissionPageListener getPermissionPageListener();
 
     interface PermissionRequestListener {
-        void permissionGranted();
+        void permissionGranted(int code);
 
-        void permissionDenied();
+        void permissionDenied(int code);
 
-        void permissionRationale();
+        void permissionRationale(int code);
     }
 
     interface PermissionPageListener {

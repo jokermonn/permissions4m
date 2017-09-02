@@ -27,34 +27,35 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
 
     @Override
     void originalRequest() {
-        ActivityCompat.requestPermissions(getActivity(), new String[]{getPermission()}, getRequestCode());
+        ActivityCompat.requestPermissions(getActivity(), new String[]{getRequestPermission()},
+                getRequestCode());
     }
 
     @SuppressWarnings("unchecked")
     @SuppressLint("NewApi")
     void tryRequestWithAnnotation() {
-        if ((getActivity()).shouldShowRequestPermissionRationale(getPermission())) {
+        if ((getActivity()).shouldShowRequestPermissionRationale(getRequestPermission())) {
             if (!getProxy(getContext().getClass().getName()).customRationale(getActivity(),
                     getRequestCode())) {
                 getProxy(getContext().getClass().getName()).rationale(getActivity(), getRequestCode());
-                ActivityCompat.requestPermissions(getActivity(), new String[]{getPermission()},
+                ActivityCompat.requestPermissions(getActivity(), new String[]{getRequestPermission()},
                         getRequestCode());
             }
         } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{getPermission()},
+            ActivityCompat.requestPermissions(getActivity(), new String[]{getRequestPermission()},
                     getRequestCode());
         }
     }
 
     @SuppressWarnings("unchecked")
     void tryRequestWithListener() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, getPermission())) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, getRequestPermission())) {
             PermissionRequestListener requestListener = getPermissionRequestListener();
             if (requestListener != null) {
-                requestListener.permissionRationale();
+                requestListener.permissionRationale(getRequestCode());
             }
         }
-        ActivityCompat.requestPermissions(activity, new String[]{getPermission()}, getRequestCode());
+        ActivityCompat.requestPermissions(activity, new String[]{getRequestPermission()}, getRequestCode());
     }
 
     @Override

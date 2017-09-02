@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by joker on 2017/8/5.
  */
 
-public abstract class AbstractWrapper implements Wrapper {
+public abstract class AbstractWrapper implements PermissionWrapper {
     private static final String PERMISSIONS_PROXY = "$$PermissionsProxy";
     @Permissions4M.PageType
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
@@ -28,10 +28,12 @@ public abstract class AbstractWrapper implements Wrapper {
     private static final boolean DEFAULT_IS_FORCE = true;
     private static final boolean DEFAULT_IS_ALLOWED = false;
     private static Map<String, PermissionsProxy> proxyMap = new HashMap<>();
-    private static Map<Key, WeakReference<Wrapper>> wrapperMap = new HashMap<>();
+    private static Map<Key, WeakReference<PermissionWrapper>> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
     private int pageType = DEFAULT_PAGE_TYPE;
     private int requestCode = DEFAULT_REQUEST_CODE;
+    private int[] requestCodes;
+    private String[] permissions;
     private String permission;
     private PermissionRequestListener permissionRequestListener;
     private PermissionPageListener permissionPageListener;
@@ -42,7 +44,7 @@ public abstract class AbstractWrapper implements Wrapper {
     public AbstractWrapper() {
     }
 
-    public static Map<Key, WeakReference<Wrapper>> getWrapperMap() {
+    public static Map<Key, WeakReference<PermissionWrapper>> getWrapperMap() {
         return wrapperMap;
     }
 
@@ -74,8 +76,20 @@ public abstract class AbstractWrapper implements Wrapper {
     }
 
     @Override
+    public Wrapper requestCodes(int... codes) {
+        this.requestCodes = codes;
+        return this;
+    }
+
+    @Override
     public Wrapper requestPermission(String permission) {
         this.permission = permission;
+        return this;
+    }
+
+    @Override
+    public Wrapper requestPermissions(String... permissions) {
+        this.permissions = permissions;
         return this;
     }
 
@@ -103,13 +117,24 @@ public abstract class AbstractWrapper implements Wrapper {
         return this;
     }
 
+    @Override
     public int getRequestCode() {
         return requestCode;
     }
 
     @Override
-    public String getPermission() {
+    public int[] getRequestCodes() {
+        return requestCodes;
+    }
+
+    @Override
+    public String getRequestPermission() {
         return permission;
+    }
+
+    @Override
+    public String[] getRequestPermissions() {
+        return permissions;
     }
 
     @Override
@@ -156,29 +181,45 @@ public abstract class AbstractWrapper implements Wrapper {
 
     @Override
     public void request() {
-        // on rationale, it should use normal request
         if (isRequestOnRationale()) {
+            addEntity(getRequestPermissions()[0], getRequestCodes()[0]);
             originalRequest();
         } else {
-            // use a map to hold wrappers
-            // not on rationale, judge condition
-            addEntity();
-            if (permissionRequestListener == null) {
-                requestPermissionWithAnnotation();
+            PermissionRequestListener requestListener = getPermissionRequestListener();
+            if (requestListener != null) {
+                String[] permissions = getRequestPermissions();
+                int[] requestCodes = getRequestCodes();
+                for (int i = 0; i < permissions.length; i++) {
+                    addEntity(permissions[i], requestCodes[i % requestCodes.length]);
+                    requestPermissionWithListener();
+                }
             } else {
-                requestPermissionWithListener();
+                addEntity(getRequestPermissions()[0], getRequestCodes()[0]);
+                requestPermissionWithAnnotation();
             }
         }
     }
 
     /**
+     * we normal use {@link PermissionWrapper#getRequestCode()} and
+     * {@link PermissionWrapper#getRequestPermission()} not
+     * {@link Wrapper#getRequestCodes()} or
+     * {@link Wrapper#getRequestPermissions()}
+     * <p>
+     * <p>
      * add an entity to map
      * entity struct:
      * permission -> context
+     *
+     * @param permission
+     * @param requestCode
      */
-    private void addEntity() {
+    private void addEntity(String permission, int requestCode) {
+        requestCode(requestCode);
+        requestPermission(permission);
+        // use a map to hold wrappers
         Key key = new Key(getContext(), getRequestCode());
-        wrapperMap.put(key, new WeakReference<Wrapper>(this));
+        wrapperMap.put(key, new WeakReference<PermissionWrapper>(this));
     }
 
     void requestSync(Activity activity) {
@@ -216,13 +257,13 @@ public abstract class AbstractWrapper implements Wrapper {
         PermissionsProxy proxy = getProxy(getContext().getClass().getName());
 
         if (underMAboveLShouldRequest()) {
-            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
+            if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 proxy.granted(getContext(), getRequestCode());
             } else {
                 ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String permission = getPermission();
+            String permission = getRequestPermission();
             if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
                     .PERMISSION_GRANTED) {
                 tryRequestWithAnnotation();
@@ -257,25 +298,20 @@ public abstract class AbstractWrapper implements Wrapper {
         PermissionRequestListener listener = getPermissionRequestListener();
 
         if (underMAboveLShouldRequest()) {
-            if (PermissionsChecker.isPermissionGranted(getActivity(), getPermission())) {
-                if (listener != null) {
-                    listener.permissionGranted();
-                }
+            if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
+                listener.permissionGranted(getRequestCode());
             } else {
                 ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String permission = getPermission();
-            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager
+            if (ContextCompat.checkSelfPermission(getActivity(), getRequestPermission()) != PackageManager
                     .PERMISSION_GRANTED) {
                 tryRequestWithListener();
             } else {
                 mayGrantedWithListener();
             }
         } else {
-            if (listener != null) {
-                listener.permissionGranted();
-            }
+            listener.permissionGranted(getRequestCode());
         }
     }
 
