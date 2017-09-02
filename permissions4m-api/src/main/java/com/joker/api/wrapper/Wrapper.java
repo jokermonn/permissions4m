@@ -22,7 +22,7 @@ public interface Wrapper extends ListenerWrapper, AnnotationWrapper {
      * @param code
      * @return
      */
-    Wrapper requestCode(int code);
+    Wrapper requestCodes(int... code);
 
     /**
      * request permission
@@ -30,7 +30,7 @@ public interface Wrapper extends ListenerWrapper, AnnotationWrapper {
      * @param permission {@link android.Manifest.permission}
      * @return
      */
-    Wrapper requestPermission(String permission);
+    Wrapper requestPermissions(String... permission);
 
     /**
      * android setting page or phone manager page
@@ -86,9 +86,9 @@ public interface Wrapper extends ListenerWrapper, AnnotationWrapper {
      */
     void requestSync();
 
-    int getRequestCode();
+    int[] getRequestCodes();
 
-    String getPermission();
+    String[] getRequestPermissions();
 
     boolean isRequestOnRationale();
 
