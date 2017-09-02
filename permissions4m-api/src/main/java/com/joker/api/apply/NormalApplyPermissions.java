@@ -8,6 +8,7 @@ import com.joker.api.PermissionsProxy;
 import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
 import com.joker.api.wrapper.ListenerWrapper;
+import com.joker.api.wrapper.PermissionWrapper;
 import com.joker.api.wrapper.Wrapper;
 
 
@@ -18,13 +19,13 @@ import com.joker.api.wrapper.Wrapper;
 public class NormalApplyPermissions {
     // annotation module ===================================================================================
     @SuppressWarnings("unchecked")
-    public static void grantedWithAnnotation(Wrapper wrapper) {
+    public static void grantedWithAnnotation(PermissionWrapper wrapper) {
         wrapper.getProxy(wrapper.getContext().getClass().getName())
                 .granted(wrapper.getContext(), wrapper.getRequestCode());
     }
 
     @SuppressWarnings("unchecked")
-    public static void deniedWithAnnotation(Wrapper wrapper) {
+    public static void deniedWithAnnotation(PermissionWrapper wrapper) {
         PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
 
         proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
@@ -40,16 +41,16 @@ public class NormalApplyPermissions {
     }
 
     // listener module ===================================================================================
-    public static void grantedWithListener(Wrapper wrapper) {
+    public static void grantedWithListener(PermissionWrapper wrapper) {
         if (wrapper.getPermissionRequestListener() != null) {
-            wrapper.getPermissionRequestListener().permissionGranted();
+            wrapper.getPermissionRequestListener().permissionGranted(wrapper.getRequestCode());
         }
     }
 
-    public static void deniedOnResultWithListener(Wrapper wrapper) {
+    public static void deniedOnResultWithListener(PermissionWrapper wrapper) {
         ListenerWrapper.PermissionRequestListener requestListener = wrapper.getPermissionRequestListener();
         if (requestListener != null) {
-            requestListener.permissionDenied();
+            requestListener.permissionDenied(wrapper.getRequestCode());
         }
 
         if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {

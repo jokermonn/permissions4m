@@ -10,6 +10,7 @@ import com.joker.api.apply.NormalApplyPermissions;
 import com.joker.api.wrapper.AbstractWrapper;
 import com.joker.api.wrapper.ActivityWrapper;
 import com.joker.api.wrapper.FragmentWrapper;
+import com.joker.api.wrapper.PermissionWrapper;
 import com.joker.api.wrapper.SupportFragmentWrapper;
 import com.joker.api.wrapper.Wrapper;
 
@@ -68,14 +69,14 @@ public class Permissions4M {
     private static void onPrivateRequestPermissionsResult(Object object, int
             requestCode, @NonNull int[] grantResults) {
         AbstractWrapper.Key key = new AbstractWrapper.Key(object, requestCode);
-        WeakReference<Wrapper> reference = AbstractWrapper.getWrapperMap().get(key);
+        WeakReference<PermissionWrapper> reference = AbstractWrapper.getWrapperMap().get(key);
         // because SupportFragment request permissions will call Activity callback first
         // and then call SupportFragment callback
         // and the first time will throw NullPointerException
         if (reference == null) {
             return;
         }
-        Wrapper wrapper = reference.get();
+        PermissionWrapper wrapper = reference.get();
         // because SupportFragment request permissions will call Activity callback first
         // and then call SupportFragment callback
         // and the first time will throw NullPointerException
@@ -93,7 +94,7 @@ public class Permissions4M {
         }
     }
 
-    private static void annotationCallback(@NonNull int[] grantResults, Wrapper wrapper) {
+    private static void annotationCallback(@NonNull int[] grantResults, PermissionWrapper wrapper) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (wrapper.isRequestForce()) {
                 ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
@@ -105,7 +106,7 @@ public class Permissions4M {
         }
     }
 
-    private static void listenerCallback(@NonNull int[] grantResults, Wrapper wrapper) {
+    private static void listenerCallback(@NonNull int[] grantResults, PermissionWrapper wrapper) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (wrapper.isRequestForce()) {
                 ForceApplyPermissions.grantedOnResultWithListener(wrapper);
@@ -120,8 +121,8 @@ public class Permissions4M {
     public static void requestPermission(Activity activity, String permission, int requestCode) {
         new ActivityWrapper(activity)
                 .requestForce(true)
-                .requestPermission(permission)
-                .requestCode(requestCode)
+                .requestPermissions(permission)
+                .requestCodes(requestCode)
                 .request();
     }
 
@@ -129,8 +130,8 @@ public class Permissions4M {
             permission, int requestCode) {
         new FragmentWrapper(fragment)
                 .requestForce(true)
-                .requestPermission(permission)
-                .requestCode(requestCode)
+                .requestPermissions(permission)
+                .requestCodes(requestCode)
                 .request();
     }
 
@@ -138,8 +139,8 @@ public class Permissions4M {
             requestCode) {
         new SupportFragmentWrapper(fragment)
                 .requestForce(true)
-                .requestPermission(permission)
-                .requestCode(requestCode)
+                .requestPermissions(permission)
+                .requestCodes(requestCode)
                 .request();
     }
 

@@ -247,13 +247,17 @@ public class PermissionsChecker {
         LocationManager locationManager = (LocationManager) activity.getSystemService
                 (LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        // fuck XIAOMI!
-        if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager
-                .BuildVersionUnderMAboveL()) || PermissionsPageManager
-                .isXIAOMI()) {
-            double latitude = location.getLatitude();
+        if (location == null) {
+            return false;
+        } else {
+            // fuck XIAOMI! and MEIZU!
+            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager
+                    .BuildVersionUnderMAboveL()) || PermissionsPageManager
+                    .isXIAOMI()) {
+                double latitude = location.getLatitude();
+            }
+            return true;
         }
-        return true;
     }
 
     /**
