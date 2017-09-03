@@ -194,7 +194,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     @Override
     public void request() {
         if (isRequestOnRationale()) {
-            addEntity(getRequestPermissions()[0], getRequestCodes()[0]);
+            addEntity(getRequestPermissions()[0], getRequestCodes()[0], false);
             originalRequest();
         } else {
             PermissionRequestListener requestListener = getPermissionRequestListener();
@@ -202,11 +202,11 @@ public abstract class AbstractWrapper implements PermissionWrapper {
                 String[] permissions = getRequestPermissions();
                 Integer[] requestCodes = getRequestCodes();
                 for (int i = permissions.length - 1; i >= 0; i--) {
-                    addEntity(permissions[i], requestCodes[i % requestCodes.length]);
-                    requestPermissionWithListener();
+                    addEntity(permissions[i], requestCodes[i % requestCodes.length], true);
                 }
+                requestPermissionWithListener();
             } else {
-                addEntity(getRequestPermissions()[0], getRequestCodes()[0]);
+                addEntity(getRequestPermissions()[0], getRequestCodes()[0], true);
                 requestPermissionWithAnnotation();
             }
         }
@@ -225,13 +225,16 @@ public abstract class AbstractWrapper implements PermissionWrapper {
      *
      * @param permission
      * @param requestCode
+     * @param add
      */
-    private void addEntity(String permission, int requestCode) {
+    private void addEntity(String permission, int requestCode, boolean add) {
         requestCode(requestCode);
         requestPermission(permission);
         // use a map to hold wrappers
-        Key key = new Key(getContext(), getRequestCode());
-        wrapperMap.put(key, new WeakReference<PermissionWrapper>(this));
+        if (add) {
+            Key key = new Key(getContext(), getRequestCode());
+            wrapperMap.put(key, new WeakReference<PermissionWrapper>(this));
+        }
     }
 
     void requestSync(Activity activity) {
