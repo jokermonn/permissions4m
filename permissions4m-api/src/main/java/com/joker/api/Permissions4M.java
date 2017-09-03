@@ -10,6 +10,7 @@ import com.joker.api.apply.NormalApplyPermissions;
 import com.joker.api.wrapper.AbstractWrapper;
 import com.joker.api.wrapper.ActivityWrapper;
 import com.joker.api.wrapper.FragmentWrapper;
+import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.PermissionWrapper;
 import com.joker.api.wrapper.SupportFragmentWrapper;
 import com.joker.api.wrapper.Wrapper;
@@ -83,7 +84,7 @@ public class Permissions4M {
         if (wrapper == null) {
             return;
         }
-        Wrapper.PermissionRequestListener requestListener = wrapper
+        ListenerWrapper.PermissionRequestListener requestListener = wrapper
                 .getPermissionRequestListener();
         // listener callback
         if (requestListener != null) {
@@ -114,13 +115,12 @@ public class Permissions4M {
                 NormalApplyPermissions.grantedWithListener(wrapper);
             }
         } else {
-            NormalApplyPermissions.deniedOnResultWithListener(wrapper);
+            NormalApplyPermissions.deniedWithListener(wrapper);
         }
     }
 
     public static void requestPermission(Activity activity, String permission, int requestCode) {
         new ActivityWrapper(activity)
-                .requestForce(true)
                 .requestPermissions(permission)
                 .requestCodes(requestCode)
                 .request();
@@ -129,7 +129,6 @@ public class Permissions4M {
     public static void requestPermission(android.app.Fragment fragment, String
             permission, int requestCode) {
         new FragmentWrapper(fragment)
-                .requestForce(true)
                 .requestPermissions(permission)
                 .requestCodes(requestCode)
                 .request();
@@ -138,7 +137,6 @@ public class Permissions4M {
     public static void requestPermission(android.support.v4.app.Fragment fragment, String permission, int
             requestCode) {
         new SupportFragmentWrapper(fragment)
-                .requestForce(true)
                 .requestPermissions(permission)
                 .requestCodes(requestCode)
                 .request();
