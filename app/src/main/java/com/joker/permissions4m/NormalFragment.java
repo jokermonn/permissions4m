@@ -130,6 +130,70 @@ public class NormalFragment extends Fragment {
                                 }
                             }
                         })
+                        .requestCustomRationaleListener(new ListenerWrapper.PermissionCustomRationaleListener() {
+                            @Override
+                            public void permissionCustomRationale(int code) {
+                                switch (code) {
+                                    case LOCATION_CODE:
+                                        ToastUtil.show("请开启地理位置权限 in fragment with annotation");
+                                        Log.e("TAG", "permissionRationale: 请开启地理位置权限 ");
+
+                                        new AlertDialog.Builder(getActivity())
+                                                .setMessage("地理位置权限权限申请：\n我们需要您开启地理位置权限(in fragment with annotation)")
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Permissions4M.get(NormalFragment.this)
+                                                                .requestOnRationale()
+                                                                .requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                                                                .requestCodes(LOCATION_CODE)
+                                                                .request();
+                                                    }
+                                                })
+                                                .show();
+                                        break;
+                                    case SENSORS_CODE:
+                                        ToastUtil.show("请开启传感器权限 in fragment with annotation");
+                                        Log.e("TAG", "permissionRationale: 请开启传感器权限 ");
+
+                                        new AlertDialog.Builder(getActivity())
+                                                .setMessage("传感器权限申请：\n我们需要您开启传感器权限(in fragment with annotation)")
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Permissions4M.get(NormalFragment.this)
+                                                                .requestOnRationale()
+                                                                .requestPermissions(Manifest.permission.BODY_SENSORS)
+                                                                .requestCodes(SENSORS_CODE)
+                                                                .request();
+                                                    }
+                                                })
+                                                .show();
+                                        break;
+                                    case CALENDAR_CODE:
+                                        ToastUtil.show("请开启读取日历权限 in fragment with annotation");
+                                        Log.e("TAG", "permissionRationale: 请开启读取日历权限 ");
+
+                                        new AlertDialog.Builder(getActivity())
+                                                .setMessage("日历权限申请：\n我们需要您开启日历权限(in fragment with annotation)")
+                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Permissions4M.get(NormalFragment.this)
+                                                                .requestOnRationale()
+                                                                .requestPermissions(Manifest.permission.READ_CALENDAR)
+                                                                .requestCodes(CALENDAR_CODE)
+                                                                .request();
+                                                    }
+                                                })
+                                                .show();
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        })
                         .request();
             }
         });
