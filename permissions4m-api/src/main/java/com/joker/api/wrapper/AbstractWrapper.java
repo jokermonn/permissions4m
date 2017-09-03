@@ -12,6 +12,7 @@ import com.joker.api.apply.PermissionsChecker;
 import com.joker.api.support.PermissionsPageManager;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +32,14 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     @Permissions4M.PageType
     private int pageType = DEFAULT_PAGE_TYPE;
     private int requestCode = DEFAULT_REQUEST_CODE;
-    private int[] requestCodes;
+    private Integer[] requestCodes;
     private String[] permissions;
     private String permission;
     private PermissionRequestListener permissionRequestListener;
     private PermissionPageListener permissionPageListener;
+    private PermissionCustomRationaleListener permissionCustomRationaleListener;
     private boolean force = DEFAULT_IS_FORCE;
-    private boolean allow = DEFAULT_IS_ALLOWED;
+    private boolean allowed = DEFAULT_IS_ALLOWED;
     private boolean requestOnRationale;
 
     public AbstractWrapper() {
@@ -75,7 +77,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public Wrapper requestCodes(int... codes) {
+    public Wrapper requestCodes(Integer... codes) {
         this.requestCodes = codes;
         return this;
     }
@@ -99,7 +101,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public Wrapper requestCallback(PermissionRequestListener listener) {
+    public Wrapper requestListener(PermissionRequestListener listener) {
         this.permissionRequestListener = listener;
         return this;
     }
@@ -111,8 +113,26 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
+    public Wrapper requestOnRationale() {
+        requestOnRationale = true;
+        return this;
+    }
+
+    @Override
     public Wrapper requestForce(boolean force) {
         this.force = force;
+        return this;
+    }
+
+    @Override
+    public Wrapper requestUnderM(boolean allow) {
+        this.allowed = allow;
+        return this;
+    }
+
+    @Override
+    public Wrapper requestCustomRationaleListener(PermissionCustomRationaleListener listener) {
+        this.permissionCustomRationaleListener = listener;
         return this;
     }
 
@@ -122,7 +142,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public int[] getRequestCodes() {
+    public Integer[] getRequestCodes() {
         return requestCodes;
     }
 
@@ -152,14 +172,13 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public boolean isRequestForce() {
-        return force;
+    public PermissionCustomRationaleListener getPermissionCustomRationaleListener() {
+        return permissionCustomRationaleListener;
     }
 
     @Override
-    public Wrapper requestOnRationale() {
-        requestOnRationale = true;
-        return this;
+    public boolean isRequestForce() {
+        return force;
     }
 
     @Override
@@ -168,14 +187,8 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public Wrapper requestUnderM(boolean allow) {
-        this.allow = allow;
-        return this;
-    }
-
-    @Override
     public boolean isRequestUnderM() {
-        return allow;
+        return allowed;
     }
 
     @Override
@@ -187,8 +200,8 @@ public abstract class AbstractWrapper implements PermissionWrapper {
             PermissionRequestListener requestListener = getPermissionRequestListener();
             if (requestListener != null) {
                 String[] permissions = getRequestPermissions();
-                int[] requestCodes = getRequestCodes();
-                for (int i = 0; i < permissions.length; i++) {
+                Integer[] requestCodes = getRequestCodes();
+                for (int i = permissions.length - 1; i >= 0; i--) {
                     addEntity(permissions[i], requestCodes[i % requestCodes.length]);
                     requestPermissionWithListener();
                 }
@@ -253,11 +266,9 @@ public abstract class AbstractWrapper implements PermissionWrapper {
      */
     @SuppressWarnings("unchecked")
     private void requestPermissionWithAnnotation() {
-        PermissionsProxy proxy = getProxy(getContext().getClass().getName());
-
         if (underMAboveLShouldRequest()) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
-                proxy.granted(getContext(), getRequestCode());
+                NormalApplyPermissions.grantedWithAnnotation(this);
             } else {
                 ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
             }
@@ -270,7 +281,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
                 mayGrantedWithAnnotation();
             }
         } else {
-            proxy.granted(getContext(), getRequestCode());
+            NormalApplyPermissions.grantedWithAnnotation(this);
         }
     }
 
@@ -294,11 +305,9 @@ public abstract class AbstractWrapper implements PermissionWrapper {
      * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
      */
     private void requestPermissionWithListener() {
-        PermissionRequestListener listener = getPermissionRequestListener();
-
         if (underMAboveLShouldRequest()) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
-                listener.permissionGranted(getRequestCode());
+                NormalApplyPermissions.grantedWithListener(this);
             } else {
                 ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
             }
@@ -310,7 +319,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
                 mayGrantedWithListener();
             }
         } else {
-            listener.permissionGranted(getRequestCode());
+            NormalApplyPermissions.grantedWithListener(this);
         }
     }
 
@@ -352,6 +361,23 @@ public abstract class AbstractWrapper implements PermissionWrapper {
      * use listener request
      */
     abstract void tryRequestWithListener();
+
+    @Override
+    public String toString() {
+        return "AbstractWrapper{" +
+                "pageType=" + pageType +
+                ", requestCode=" + requestCode +
+                ", requestCodes=" + Arrays.toString(requestCodes) +
+                ", permissions=" + Arrays.toString(permissions) +
+                ", permission='" + permission + '\'' +
+                ", permissionRequestListener=" + permissionRequestListener +
+                ", permissionPageListener=" + permissionPageListener +
+                ", permissionCustomRationaleListener=" + permissionCustomRationaleListener +
+                ", force=" + force +
+                ", allowed=" + allowed +
+                ", requestOnRationale=" + requestOnRationale +
+                '}';
+    }
 
     public static class Key {
         private int requestCode;

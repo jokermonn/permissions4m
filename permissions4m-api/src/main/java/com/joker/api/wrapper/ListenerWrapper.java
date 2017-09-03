@@ -15,7 +15,7 @@ public interface ListenerWrapper {
      * @param listener {@link PermissionPageListener}
      * @return
      */
-    Wrapper requestCallback(PermissionRequestListener listener);
+    Wrapper requestListener(PermissionRequestListener listener);
 
     /**
      * according to {@link Wrapper#requestPageType(int)}, will return different Intent type
@@ -25,9 +25,13 @@ public interface ListenerWrapper {
      */
     Wrapper requestPage(PermissionPageListener listener);
 
+    Wrapper requestCustomRationaleListener(PermissionCustomRationaleListener listener);
+
     PermissionRequestListener getPermissionRequestListener();
 
     PermissionPageListener getPermissionPageListener();
+
+    PermissionCustomRationaleListener getPermissionCustomRationaleListener();
 
     interface PermissionRequestListener {
         void permissionGranted(int code);
@@ -39,5 +43,9 @@ public interface ListenerWrapper {
 
     interface PermissionPageListener {
         void pageIntent(Intent intent);
+    }
+
+    interface PermissionCustomRationaleListener {
+        void permissionCustomRationale(int code);
     }
 }

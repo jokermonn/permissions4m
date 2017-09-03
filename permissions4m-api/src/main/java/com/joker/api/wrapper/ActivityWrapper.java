@@ -34,28 +34,39 @@ public class ActivityWrapper extends AbstractWrapper implements Wrapper {
     @SuppressWarnings("unchecked")
     @SuppressLint("NewApi")
     void tryRequestWithAnnotation() {
+        int requestCode = getRequestCode();
         if ((getActivity()).shouldShowRequestPermissionRationale(getRequestPermission())) {
-            if (!getProxy(getContext().getClass().getName()).customRationale(getActivity(),
-                    getRequestCode())) {
-                getProxy(getContext().getClass().getName()).rationale(getActivity(), getRequestCode());
+            Object context = getContext();
+            if (!getProxy(context.getClass().getName()).customRationale(getActivity(),
+                    requestCode)) {
+                getProxy(context.getClass().getName()).rationale(getActivity(), requestCode);
                 ActivityCompat.requestPermissions(getActivity(), new String[]{getRequestPermission()},
-                        getRequestCode());
+                        requestCode);
             }
         } else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{getRequestPermission()},
-                    getRequestCode());
+                    requestCode);
         }
     }
 
     @SuppressWarnings("unchecked")
     void tryRequestWithListener() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, getRequestPermission())) {
-            PermissionRequestListener requestListener = getPermissionRequestListener();
-            if (requestListener != null) {
-                requestListener.permissionRationale(getRequestCode());
+        PermissionCustomRationaleListener customRationaleListener = getPermissionCustomRationaleListener();
+        int requestCode = getRequestCode();
+
+        if (customRationaleListener != null) {
+            customRationaleListener.permissionCustomRationale(requestCode);
+        } else {
+            String requestPermission = getRequestPermission();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, requestPermission)) {
+                PermissionRequestListener requestListener = getPermissionRequestListener();
+                if (requestListener != null) {
+                    requestListener.permissionRationale(requestCode);
+                }
             }
+            ActivityCompat.requestPermissions(activity, new String[]{requestPermission},
+                    requestCode);
         }
-        ActivityCompat.requestPermissions(activity, new String[]{getRequestPermission()}, getRequestCode());
     }
 
     @Override

@@ -22,12 +22,10 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
                     (requestPermission)) {
                 if (!getProxy(context.getClass().getName()).customRationale(context, requestCode)) {
                     getProxy(context.getClass().getName()).rationale(context, requestCode);
-                    ((android.support.v4.app.Fragment) context).requestPermissions(new
-                            String[]{requestPermission}, requestCode);
+                    originalRequest();
                 }
             } else {
-                ((android.support.v4.app.Fragment) context).requestPermissions(new
-                        String[]{requestPermission}, requestCode);
+                originalRequest();
             }
         } else {
             if (((android.app.Fragment) context).shouldShowRequestPermissionRationale
@@ -35,57 +33,61 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
                 if (!getProxy(context.getClass().getName()).customRationale(context,
                         requestCode)) {
                     getProxy(context.getClass().getName()).rationale(context, requestCode);
-                    ((android.app.Fragment) context).requestPermissions(new String[]{requestPermission
-                    }, requestCode);
+                    originalRequest();
                 }
             } else {
-                ((android.app.Fragment) context).requestPermissions(new String[]{requestPermission},
-                        requestCode);
+                originalRequest();
             }
         }
     }
 
     @SuppressLint("NewApi")
     void tryRequestWithListener() {
+        PermissionCustomRationaleListener customRationaleListener = getPermissionCustomRationaleListener();
         Object context = getContext();
         int requestCode = getRequestCode();
         String requestPermission = getRequestPermission();
         PermissionRequestListener requestListener = getPermissionRequestListener();
+
         if (context instanceof android.app.Fragment) {
             if (((android.app.Fragment) context).shouldShowRequestPermissionRationale
                     (requestPermission)) {
-                if (requestListener != null) {
+                if (customRationaleListener != null) {
+                    customRationaleListener.permissionCustomRationale(getRequestCode());
+                } else {
                     requestListener.permissionRationale(requestCode);
+                    originalRequest();
                 }
+            } else {
+                originalRequest();
             }
-            ((android.app.Fragment) context).requestPermissions(new String[]{requestPermission},
-                    requestCode);
         } else {
             if (((android.support.v4.app.Fragment) context).shouldShowRequestPermissionRationale
                     (requestPermission)) {
-                if (requestListener != null) {
+                if (customRationaleListener != null) {
+                    customRationaleListener.permissionCustomRationale(getRequestCode());
+                } else {
                     requestListener.permissionRationale(requestCode);
+                    originalRequest();
                 }
+            } else {
+                originalRequest();
             }
-            ((android.support.v4.app.Fragment) context).requestPermissions(new
-                    String[]{requestPermission}, requestCode);
         }
     }
 
     @Override
     @SuppressLint("NewApi")
     void originalRequest() {
-        String requestPermission = getRequestPermission();
-        int requestCode = getRequestCode();
         Object context = getContext();
+        int requestCode = getRequestCode();
+        String requestPermission = getRequestPermission();
         if (context instanceof android.app.Fragment) {
             ((android.app.Fragment) context).requestPermissions(new String[]{requestPermission},
                     requestCode);
-        } else if (context instanceof android.support.v4.app.Fragment) {
+        } else {
             ((android.support.v4.app.Fragment) context).requestPermissions(new
                     String[]{requestPermission}, requestCode);
-        } else {
-            throw new IllegalArgumentException(getClass().getName() + "is not Fragment");
         }
     }
 }
