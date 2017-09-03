@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.joker.api.Permissions4M;
-import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
 import com.joker.api.wrapper.AnnotationWrapper;
 import com.joker.api.wrapper.ListenerWrapper;
@@ -19,51 +18,20 @@ import com.joker.api.wrapper.Wrapper;
 public class ForceApplyPermissions {
     // listener module ===================================================================
     public static void grantedOnResultWithListener(PermissionWrapper wrapper) {
-        Activity activity = getActivity(wrapper);
-
-        Wrapper.PermissionRequestListener requestListener = wrapper
-                .getPermissionRequestListener();
-
-        if (PermissionsChecker.isPermissionGranted(activity, wrapper.getRequestPermission())) {
-            if (requestListener != null) {
-                requestListener.permissionGranted(wrapper.getRequestCode());
-            }
+        if (PermissionsChecker.isPermissionGranted(getActivity(wrapper), wrapper.getRequestPermission())) {
+            NormalApplyPermissions.grantedWithListener(wrapper);
         } else {
-            if (requestListener != null) {
-                requestListener.permissionDenied(wrapper.getRequestCode());
-            }
-            Wrapper.PermissionPageListener pageListener = wrapper.getPermissionPageListener();
-            if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
-                boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
-                        .ANDROID_SETTING_PAGE;
-                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
-                        PermissionsPageManager.getIntent(activity);
-                pageListener.pageIntent(intent);
-            }
+            NormalApplyPermissions.deniedWithListener(wrapper);
         }
     }
 
     // annotation module ================================================================
     @SuppressWarnings("unchecked")
     public static void grantedOnResultWithAnnotation(PermissionWrapper wrapper) {
-        Activity activity = getActivity(wrapper);
-
-        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
-        String requestPermission = wrapper.getRequestPermission();
-        int requestCode = wrapper.getRequestCode();
-        if (PermissionsChecker.isPermissionGranted(activity, requestPermission)) {
-            proxy.granted(wrapper.getContext(), requestCode);
+        if (PermissionsChecker.isPermissionGranted(getActivity(wrapper), wrapper.getRequestPermission())) {
+            NormalApplyPermissions.grantedWithAnnotation(wrapper);
         } else {
-            proxy.denied(wrapper.getContext(), requestCode);
-
-            if (SupportUtil.nonShowRationale(wrapper)) {
-                boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
-                        .ANDROID_SETTING_PAGE;
-                Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
-                        PermissionsPageManager.getIntent(getActivity(wrapper));
-
-                proxy.intent(wrapper.getContext(), requestCode, intent);
-            }
+            NormalApplyPermissions.deniedWithAnnotation(wrapper);
         }
     }
 

@@ -26,7 +26,8 @@ public class NormalApplyPermissions {
 
     @SuppressWarnings("unchecked")
     public static void deniedWithAnnotation(PermissionWrapper wrapper) {
-        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
+        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass()
+                .getName());
 
         proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
 
@@ -47,7 +48,7 @@ public class NormalApplyPermissions {
         }
     }
 
-    public static void deniedOnResultWithListener(PermissionWrapper wrapper) {
+    public static void deniedWithListener(PermissionWrapper wrapper) {
         ListenerWrapper.PermissionRequestListener requestListener = wrapper.getPermissionRequestListener();
         if (requestListener != null) {
             requestListener.permissionDenied(wrapper.getRequestCode());
