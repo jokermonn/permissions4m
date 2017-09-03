@@ -27,9 +27,9 @@ import com.joker.permissions4m.other.ToastUtil;
  * A simple {@link Fragment} subclass.
  */
 public class NormalFragment extends Fragment {
-    private static final int CALENDAR_CODE = 700;
-    private static final int SENSORS_CODE = 800;
-    private static final int LOCATION_CODE = 900;
+    private static final int SENSORS_CODE = 700;
+    private static final int LOCATION_CODE = 800;
+    private static final int CALENDAR_CODE = 900;
     private static final int SMS_CODE = 500;
     private static final int AUDIO_CODE = 600;
     private static final int PHONE_STATE_CODE = 1000;
@@ -69,7 +69,7 @@ public class NormalFragment extends Fragment {
                         .requestPermissions(Manifest.permission.BODY_SENSORS, Manifest.permission
                                 .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR)
                         .requestCodes(SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE)
-                        .requestCallback(new ListenerWrapper.PermissionRequestListener() {
+                        .requestListener(new ListenerWrapper.PermissionRequestListener() {
                             @Override
                             public void permissionGranted(int code) {
                                 switch (code) {
@@ -140,7 +140,7 @@ public class NormalFragment extends Fragment {
                 Permissions4M.get(NormalFragment.this)
                         .requestPermissions(Manifest.permission.READ_PHONE_STATE)
                         .requestCodes(PHONE_STATE_CODE)
-                        .requestCallback(new ListenerWrapper.PermissionRequestListener() {
+                        .requestListener(new ListenerWrapper.PermissionRequestListener() {
                             @Override
                             public void permissionGranted(int code) {
                                 ToastUtil.show("读取手机状态权限成功 in activity with listener");
@@ -161,9 +161,9 @@ public class NormalFragment extends Fragment {
                             @Override
                             public void pageIntent(final Intent intent) {
                                 new AlertDialog.Builder(getActivity())
-                                        .setMessage("读取手机状态权限申请：\n我们需要您开启读取手机状态权限(in activity with " +
+                                        .setMessage("傻逼用户，我们需要您开启读取手机状态权限：\n请点击前往设置页面\n(in activity with " +
                                                 "listener)")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        .setPositiveButton("前往设置页面", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 startActivity(intent);
@@ -173,6 +173,24 @@ public class NormalFragment extends Fragment {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 dialog.dismiss();
+                                            }
+                                        })
+                                        .show();
+                            }
+                        })
+                        .requestCustomRationaleListener(new ListenerWrapper.PermissionCustomRationaleListener() {
+                            @Override
+                            public void permissionCustomRationale(int code) {
+                                new AlertDialog.Builder(getActivity())
+                                        .setMessage("手机状态权限申请：\n我们需要您开启手机状态权限(in fragment with annotation)")
+                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Permissions4M.get(NormalFragment.this)
+                                                        .requestOnRationale()
+                                                        .requestPermissions(Manifest.permission.READ_PHONE_STATE)
+                                                        .requestCodes(PHONE_STATE_CODE)
+                                                        .request();
                                             }
                                         })
                                         .show();
@@ -265,7 +283,7 @@ public class NormalFragment extends Fragment {
         switch (code) {
             case SMS_CODE:
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("短信权限申请：\n我们需要您开启短信权限(in fragment with annotation)")
+                        .setMessage("傻逼用户，我们需要您开启读取短信权限申请：\n请点击前往设置页面\n(in fragment with annotation)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

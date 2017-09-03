@@ -19,6 +19,7 @@ import com.joker.annotation.PermissionsRationale;
 import com.joker.annotation.PermissionsRequestSync;
 import com.joker.api.Permissions4M;
 import com.joker.api.support.PermissionsPageManager;
+import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.Wrapper;
 import com.joker.permissions4m.other.ToastUtil;
 
@@ -59,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(MainActivity.this)
-                        .requestCodes(CALL_LOG_CODE)
                         .requestPermissions(Manifest.permission.READ_CALL_LOG)
+                        .requestCodes(CALL_LOG_CODE)
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .request();
             }
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 Permissions4M.get(MainActivity.this)
                         .requestPermissions(Manifest.permission.READ_CONTACTS)
                         .requestCodes(READ_CONTACTS_CODE)
-                        .requestCallback(new Wrapper.PermissionRequestListener() {
+                        .requestListener(new ListenerWrapper.PermissionRequestListener() {
                             @Override
                             public void permissionGranted(int code) {
                                 ToastUtil.show("读取通讯录权限成功 in activity with listener");
@@ -129,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void pageIntent(final Intent intent) {
                                 new AlertDialog.Builder(MainActivity.this)
-                                        .setMessage("读取通讯录权限申请：\n我们需要您开启读取通讯录权限(in activity with listener)")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        .setMessage("傻逼用户，我们需要您开启读取通讯录权限申请：\n请点击前往设置页面\n(in activity with listener)")
+                                        .setPositiveButton("前往设置页面", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 startActivity(intent);
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
+                                                dialog.dismiss();
                                             }
                                         })
                                         .show();
@@ -268,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case AUDIO_CODE:
                 new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("读取录音权限申请：\n我们需要您开启读取录音权限(in activity with listener)")
+                        .setMessage("傻逼用户，我们需要您开启读取录音权限\n请点击前往设置页面\n(in activity with listener)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -285,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case CALL_LOG_CODE:
                 new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("读取通话记录权限申请：\n我们需要您开启读取通话记录权限(in activity with listener)")
+                        .setMessage("傻逼用户，我们需要您开启读取通话记录权限\n请点击前往设置页面\n(in activity with listener)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
