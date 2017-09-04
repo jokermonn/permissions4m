@@ -378,7 +378,7 @@
 
 <h2 id="non_rationale">@PermissionsNonRationale</h2>
 
-用户太傻逼，**拒绝权限**且**不再提示**（[国产畸形权限适配扩展](#extend)）情况下调用，此时意味着无论是 [@PermissionsCustomRationale](#custom_rationale) 或者 [@PermissionsRationale](#rationale) 都不会被调用，无法给予用户提示，此时该注解修饰的函数被调用，注解中需要传入参数，分为两种情况：
+用户太傻逼，**拒绝权限**且**不再提示**（[国产畸形权限适配扩展](#extend)）情况下调用，此时意味着无论是 [@PermissionsCustomRationale](#custom_rationale) 或者 [@PermissionsRationale](#rationale) 都不会被调用，无法给予用户提示。permission 将会返回一个跳转至 **手机管家界面**或者**应用设置界面**的 intent，具体的设置方法请参考 [注解回调](#annotationm) 中 `.requestPageType(int)` 设置方法。。此时该注解修饰的函数被调用，注解中需要传入参数，分为两种情况：
 
 - 单参数：`@PermissionsNonRationale(LOCATION_CODE)`，被修饰函数可只传入 Intent 参数，例：
 >
@@ -441,8 +441,6 @@
         }
     }
 
-Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是跳至**手机管家页面**，而具体的设置方法请参考 [注解回调](#annotationm) 中 `.requestPageType(int)` 设置方法。
-
 <h1 id="listener"> Listener 回调 </h1>
 
 例：
@@ -479,25 +477,25 @@ Intent 类型为两种，一种是跳转至**系统设置页面**，另一种是
 		//.requestPageType(Permissions4M.PageType.ANDROID_SETTING_PAGE)
 		// 权限完全被禁时回调，接口函数中的参数 Intent 是由上一行决定的
     	.requestPage(new Wrapper.PermissionPageListener() {
-        	@Override
-        	public void pageIntent(final Intent intent) {
-        	    new AlertDialog.Builder(MainActivity.this)
-        	    .setMessage("读取通讯录权限申请：\n我们需要您开启读取通讯录权限(in activity with listener)")
-        	    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-        	        @Override
-        	        public void onClick(DialogInterface dialog, int which) {
-        	            startActivity(intent);
-        	        }
-        	    })
-        	    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-        	        @Override
-        	        public void onClick(DialogInterface dialog, int which) {
-        	            dialog.cancel();
-        	        }
-        	    })
-        	    .show();
-        	}
-    	})
+	        	@Override
+	        	public void pageIntent(final Intent intent) {
+	        	    new AlertDialog.Builder(MainActivity.this)
+	        	    .setMessage("读取通讯录权限申请：\n我们需要您开启读取通讯录权限(in activity with listener)")
+	        	    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+	        	        @Override
+	        	        public void onClick(DialogInterface dialog, int which) {
+	        	            startActivity(intent);
+	        	        }
+	        	    })
+	        	    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+	        	        @Override
+	        	        public void onClick(DialogInterface dialog, int which) {
+	        	            dialog.cancel();
+	        	        }
+	        	    })
+	        	    .show();
+	        	}
+	    	})
     	.request();
 
 <h1 id="sync">同步申请</h1>
