@@ -80,14 +80,13 @@ abstract class FragmentBaseWrapper extends AbstractWrapper implements Wrapper {
     @SuppressLint("NewApi")
     void originalRequest() {
         Object context = getContext();
-        int requestCode = getRequestCode();
-        String requestPermission = getRequestPermission();
+        String permission = getRequestPermission();
+        int code = getRequestCode();
         if (context instanceof android.app.Fragment) {
-            ((android.app.Fragment) context).requestPermissions(new String[]{requestPermission},
-                    requestCode);
+            ((android.app.Fragment) context).requestPermissions(new String[]{permission}, code);
         } else {
             ((android.support.v4.app.Fragment) context).requestPermissions(new
-                    String[]{requestPermission}, requestCode);
+                    String[]{permission}, code);
         }
     }
 }
