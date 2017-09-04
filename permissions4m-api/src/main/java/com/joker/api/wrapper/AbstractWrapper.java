@@ -216,7 +216,7 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
         String[] permissions = getRequestPermissions();
         String[] targetPermissions = new String[permissions.length];
         if (permissions.length != requestCodes.length) {
-            throw new IllegalArgumentException("permissions' length is different from codes' length")
+            throw new IllegalArgumentException("permissions' length is different from codes' length");
         }
         int[] requestCodes = getRequestCodes();
         int[] targetCodes = new int[requestCodes.length];
