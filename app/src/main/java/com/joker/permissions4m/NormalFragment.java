@@ -19,7 +19,6 @@ import com.joker.annotation.PermissionsDenied;
 import com.joker.annotation.PermissionsGranted;
 import com.joker.annotation.PermissionsNonRationale;
 import com.joker.api.Permissions4M;
-import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.Wrapper;
 import com.joker.permissions4m.other.ToastUtil;
 
@@ -69,7 +68,7 @@ public class NormalFragment extends Fragment {
                         .requestPermissions(Manifest.permission.BODY_SENSORS, Manifest.permission
                                 .ACCESS_FINE_LOCATION, Manifest.permission.READ_CALENDAR)
                         .requestCodes(SENSORS_CODE, LOCATION_CODE, CALENDAR_CODE)
-                        .requestListener(new ListenerWrapper.PermissionRequestListener() {
+                        .requestListener(new Wrapper.PermissionRequestListener() {
                             @Override
                             public void permissionGranted(int code) {
                                 switch (code) {
@@ -130,7 +129,7 @@ public class NormalFragment extends Fragment {
                                 }
                             }
                         })
-                        .requestCustomRationaleListener(new ListenerWrapper.PermissionCustomRationaleListener() {
+                        .requestCustomRationaleListener(new Wrapper.PermissionCustomRationaleListener() {
                             @Override
                             public void permissionCustomRationale(int code) {
                                 switch (code) {
@@ -139,13 +138,16 @@ public class NormalFragment extends Fragment {
                                         Log.e("TAG", "permissionRationale: 请开启地理位置权限 ");
 
                                         new AlertDialog.Builder(getActivity())
-                                                .setMessage("地理位置权限权限申请：\n我们需要您开启地理位置权限(in fragment with annotation)")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                .setMessage("地理位置权限权限申请：\n我们需要您开启地理位置权限(in fragment with " +
+                                                        "annotation)")
+                                                .setPositiveButton("确定", new DialogInterface
+                                                        .OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         Permissions4M.get(NormalFragment.this)
                                                                 .requestOnRationale()
-                                                                .requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
+                                                                .requestPermissions(Manifest.permission
+                                                                        .ACCESS_FINE_LOCATION)
                                                                 .requestCodes(LOCATION_CODE)
                                                                 .request();
                                                     }
@@ -157,13 +159,16 @@ public class NormalFragment extends Fragment {
                                         Log.e("TAG", "permissionRationale: 请开启传感器权限 ");
 
                                         new AlertDialog.Builder(getActivity())
-                                                .setMessage("传感器权限申请：\n我们需要您开启传感器权限(in fragment with annotation)")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                .setMessage("传感器权限申请：\n我们需要您开启传感器权限(in fragment with " +
+                                                        "annotation)")
+                                                .setPositiveButton("确定", new DialogInterface
+                                                        .OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         Permissions4M.get(NormalFragment.this)
                                                                 .requestOnRationale()
-                                                                .requestPermissions(Manifest.permission.BODY_SENSORS)
+                                                                .requestPermissions(Manifest.permission
+                                                                        .BODY_SENSORS)
                                                                 .requestCodes(SENSORS_CODE)
                                                                 .request();
                                                     }
@@ -175,13 +180,16 @@ public class NormalFragment extends Fragment {
                                         Log.e("TAG", "permissionRationale: 请开启读取日历权限 ");
 
                                         new AlertDialog.Builder(getActivity())
-                                                .setMessage("日历权限申请：\n我们需要您开启日历权限(in fragment with annotation)")
-                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                .setMessage("日历权限申请：\n我们需要您开启日历权限(in fragment with " +
+                                                        "annotation)")
+                                                .setPositiveButton("确定", new DialogInterface
+                                                        .OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         Permissions4M.get(NormalFragment.this)
                                                                 .requestOnRationale()
-                                                                .requestPermissions(Manifest.permission.READ_CALENDAR)
+                                                                .requestPermissions(Manifest.permission
+                                                                        .READ_CALENDAR)
                                                                 .requestCodes(CALENDAR_CODE)
                                                                 .request();
                                                     }
@@ -204,7 +212,7 @@ public class NormalFragment extends Fragment {
                 Permissions4M.get(NormalFragment.this)
                         .requestPermissions(Manifest.permission.READ_PHONE_STATE)
                         .requestCodes(PHONE_STATE_CODE)
-                        .requestListener(new ListenerWrapper.PermissionRequestListener() {
+                        .requestListener(new Wrapper.PermissionRequestListener() {
                             @Override
                             public void permissionGranted(int code) {
                                 ToastUtil.show("读取手机状态权限成功 in activity with listener");
@@ -242,7 +250,7 @@ public class NormalFragment extends Fragment {
                                         .show();
                             }
                         })
-                        .requestCustomRationaleListener(new ListenerWrapper.PermissionCustomRationaleListener() {
+                        .requestCustomRationaleListener(new Wrapper.PermissionCustomRationaleListener() {
                             @Override
                             public void permissionCustomRationale(int code) {
                                 new AlertDialog.Builder(getActivity())
@@ -252,7 +260,8 @@ public class NormalFragment extends Fragment {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Permissions4M.get(NormalFragment.this)
                                                         .requestOnRationale()
-                                                        .requestPermissions(Manifest.permission.READ_PHONE_STATE)
+                                                        .requestPermissions(Manifest.permission
+                                                                .READ_PHONE_STATE)
                                                         .requestCodes(PHONE_STATE_CODE)
                                                         .request();
                                             }
