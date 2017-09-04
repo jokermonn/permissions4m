@@ -22,7 +22,7 @@ public interface Wrapper extends ListenerWrapper, AnnotationWrapper {
      * @param code
      * @return
      */
-    Wrapper requestCodes(Integer... code);
+    Wrapper requestCodes(int... code);
 
     /**
      * request permission
@@ -86,7 +86,7 @@ public interface Wrapper extends ListenerWrapper, AnnotationWrapper {
      */
     void requestSync();
 
-    Integer[] getRequestCodes();
+    int[] getRequestCodes();
 
     String[] getRequestPermissions();
 
