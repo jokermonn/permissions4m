@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-2.0.4-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.4-lib)
-[![processor](https://img.shields.io/badge/processor-2.0.4-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.0.4-processor)
+[![lib](https://img.shields.io/badge/lib-2.1.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.0-lib)
+[![processor](https://img.shields.io/badge/processor-2.1.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.0-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -50,8 +50,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:2.0.4-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:2.0.4-processor'
+      compile 'com.github.jokermonn:permissions4m:2.1.0-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:2.1.0-processor'
 	}
 
 # 使用文档 #
@@ -73,6 +73,9 @@
 
 - TODO:[help me](#help)
 
+- v2.1.0
+	- 支持 listener 自定义 rationale
+	- 支持 listener 多权限同步申请
 - v2.0.4
 	- 支持手动关闭5.0权限申请
 	- 修复代理类空指针异常
@@ -95,14 +98,13 @@
 
 - v1.0.5
 	- 低版本默认授权成功
-	- 更改最低版兼容 sdk 到`11`
+	- 支持兼容 sdk 到`11`
 
 - v1.0.3
 	- 修复 `WRITE_CONTACTS` 权限 bug
 	- 截止于[第99次 commits](https://github.com/jokermonn/permissions4m/tree/476f9e547799b1e1e42455ce4a7810f1b1c9bee6)
 
 - v1.0.2
-
 	- 适配大量国产机型，包括小米、OPPO、华为等
 	- 更改为流式 API
 	- 支持 Listener 接口回调
