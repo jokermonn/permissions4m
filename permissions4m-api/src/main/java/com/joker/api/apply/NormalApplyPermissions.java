@@ -6,10 +6,13 @@ import android.content.Intent;
 import com.joker.api.Permissions4M;
 import com.joker.api.apply.util.SupportUtil;
 import com.joker.api.support.PermissionsPageManager;
+import com.joker.api.wrapper.AbstractWrapper;
 import com.joker.api.wrapper.AnnotationWrapper;
 import com.joker.api.wrapper.ListenerWrapper;
 import com.joker.api.wrapper.PermissionWrapper;
 import com.joker.api.wrapper.Wrapper;
+
+import java.lang.ref.WeakReference;
 
 
 /**
@@ -32,10 +35,12 @@ public class NormalApplyPermissions {
         proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
 
         if (SupportUtil.nonShowRationale(wrapper)) {
+            Activity activity = getActivity(wrapper);
+
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                     .ANDROID_SETTING_PAGE;
-            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
-                    PermissionsPageManager.getIntent(getActivity(wrapper));
+            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
+                    PermissionsPageManager.getIntent(activity);
 
             proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
         }
@@ -46,6 +51,8 @@ public class NormalApplyPermissions {
         if (wrapper.getPermissionRequestListener() != null) {
             wrapper.getPermissionRequestListener().permissionGranted(wrapper.getRequestCode());
         }
+
+        requestNextPermissionWithListener(wrapper);
     }
 
     public static void deniedWithListener(PermissionWrapper wrapper) {
@@ -54,14 +61,31 @@ public class NormalApplyPermissions {
             requestListener.permissionDenied(wrapper.getRequestCode());
         }
 
+        requestNextPermissionWithListener(wrapper);
+
         if (SupportUtil.pageListenerNonNull(wrapper) && SupportUtil.nonShowRationale(wrapper)) {
             Activity activity = getActivity(wrapper);
 
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                     .ANDROID_SETTING_PAGE;
-            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
+            Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity
+                    (wrapper)) :
                     PermissionsPageManager.getIntent(activity);
             wrapper.getPermissionPageListener().pageIntent(intent);
+        }
+    }
+
+    private static void requestNextPermissionWithListener(PermissionWrapper wrapper) {
+        int nextCode = wrapper.getRequestCodes()[0];
+        if (wrapper.getRequestCode() != nextCode) {
+            WeakReference<PermissionWrapper> reference = AbstractWrapper.getWrapperMap().get(new
+                    AbstractWrapper.Key(wrapper.getContext(), nextCode));
+            if (reference != null) {
+                AbstractWrapper permissionWrapper = (AbstractWrapper) reference.get();
+                if (permissionWrapper != null) {
+                    permissionWrapper.requestPermissionWithListener();
+                }
+            }
         }
     }
 

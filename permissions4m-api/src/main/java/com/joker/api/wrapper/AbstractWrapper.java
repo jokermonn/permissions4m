@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by joker on 2017/8/5.
  */
 
-public abstract class AbstractWrapper implements PermissionWrapper {
+public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
     private static final String PERMISSIONS_PROXY = "$$PermissionsProxy";
     @Permissions4M.PageType
     private static final int DEFAULT_PAGE_TYPE = Permissions4M.PageType.ANDROID_SETTING_PAGE;
@@ -32,7 +32,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     @Permissions4M.PageType
     private int pageType = DEFAULT_PAGE_TYPE;
     private int requestCode = DEFAULT_REQUEST_CODE;
-    private Integer[] requestCodes;
+    private int[] requestCodes;
     private String[] permissions;
     private String permission;
     private PermissionRequestListener permissionRequestListener;
@@ -77,7 +77,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public Wrapper requestCodes(Integer... codes) {
+    public Wrapper requestCodes(int... codes) {
         this.requestCodes = codes;
         return this;
     }
@@ -142,7 +142,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
     }
 
     @Override
-    public Integer[] getRequestCodes() {
+    public int[] getRequestCodes() {
         return requestCodes;
     }
 
@@ -199,16 +199,39 @@ public abstract class AbstractWrapper implements PermissionWrapper {
         } else {
             PermissionRequestListener requestListener = getPermissionRequestListener();
             if (requestListener != null) {
-                String[] permissions = getRequestPermissions();
-                Integer[] requestCodes = getRequestCodes();
-                for (int i = permissions.length - 1; i >= 0; i--) {
-                    addEntity(permissions[i], requestCodes[i % requestCodes.length], true);
-                }
+                initArrayAndEntity();
                 requestPermissionWithListener();
             } else {
                 addEntity(getRequestPermissions()[0], getRequestCodes()[0], true);
                 requestPermissionWithAnnotation();
             }
+        }
+    }
+
+    /**
+     * init {@link #getRequestPermissions()} array and {@link #getRequestCodes()} array
+     * and call {@link #addEntity(String, int, boolean)} method.
+     */
+    private void initArrayAndEntity() {
+        String[] permissions = getRequestPermissions();
+        String[] targetPermissions = new String[permissions.length];
+        int[] requestCodes = getRequestCodes();
+        int[] targetCodes = new int[permissions.length];
+        for (int i = permissions.length - 1; i >= 0; i--) {
+            targetPermissions[permissions.length - i - 1] = permissions[i];
+            targetCodes[permissions.length - i - 1] = requestCodes[i];
+        }
+
+        for (int i = 0; i < targetPermissions.length; i++) {
+            if (i == 0) {
+                requestCodes(DEFAULT_REQUEST_CODE);
+                requestPermissions("");
+            } else {
+                requestCodes(targetCodes[i - 1]);
+                requestPermissions(targetPermissions[i - 1]);
+            }
+
+            addEntity(targetPermissions[i], targetCodes[i], true);
         }
     }
 
@@ -232,8 +255,13 @@ public abstract class AbstractWrapper implements PermissionWrapper {
         requestPermission(permission);
         // use a map to hold wrappers
         if (add) {
-            Key key = new Key(getContext(), getRequestCode());
-            wrapperMap.put(key, new WeakReference<PermissionWrapper>(this));
+            try {
+                // use clone() method!
+                wrapperMap.put(new Key(getContext(), requestCode), new WeakReference<>(
+                        (PermissionWrapper) this.clone()));
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -307,7 +335,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
      * 3.under {@link android.os.Build.VERSION_CODES#M}, and it's
      * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
      */
-    private void requestPermissionWithListener() {
+    public void requestPermissionWithListener() {
         if (underMAboveLShouldRequest()) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithListener(this);
@@ -382,6 +410,11 @@ public abstract class AbstractWrapper implements PermissionWrapper {
                 '}';
     }
 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
     public static class Key {
         private int requestCode;
         private WeakReference<Object> object;
@@ -410,7 +443,7 @@ public abstract class AbstractWrapper implements PermissionWrapper {
 
         @Override
         public int hashCode() {
-            return object.get().hashCode() >> 1 + requestCode;
+            return (object.get().hashCode() + requestCode) / 10;
         }
 
         public int getRequestCode() {
