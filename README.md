@@ -12,9 +12,10 @@
 
 # 前言 #
 
-- **还在为 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 无法弹出权限申请对话框困惑么？Permissions4M 让它必须弹出来**
-- **还在为明明授权失败，却回调的是权限申请成功方法而苦恼么？ Permissions4M 让它必须回调期望的方法**
-- **还在为用户拒绝且不再提示权限申请对话框而烦躁么？ Permissions4M 让它跳转到手机管家权限设置界面**
+- **还在为 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 无法弹出权限申请对话框困惑么？permissions4m 让它必须弹出来**
+- **还在为明明授权失败，却回调的是权限申请成功方法而苦恼么？permissions4m 让它必须回调期望的方法**
+- **还在为用户拒绝且不再提示权限申请对话框而烦躁么？permissions4m 让它跳转到手机管家权限设置界面**
+- **还在为5.0权限申请而烦恼么？permissions4m 帮你解决它**
 
 # permissions4m #
 意为 Permissions for M，基于 hongyangAndroid 的 [MPermissions](https://github.com/hongyangAndroid/MPermissions) 项目二次开发，使用编译时注解，较运行时注解效率更高。起初目的是仅作为纯粹的 [Andriod 编译时注解项目](http://blog.csdn.net/ziwang_/article/details/76576495)，较原有项目有以下升级：
@@ -67,6 +68,7 @@
 * 关于项目
 	* [help me](#help)
 	* [国产畸形权限适配扩展](#extend)
+	* [解决方案](#solu)
 	* [项目答疑](#problem)
 
 # 版本迭代 #
@@ -687,11 +689,11 @@
 
 <h2 id="extend">国产畸形权限适配扩展</h2>
 
-- 小米
+**总结：**
 
- - 目前小米通讯录授权在授权失败时的原因有两种，可能是**用户手机中不存在联系人**，可能是用户拒绝授权，所以建议针对小米机型应给予相应的提示
->>
->原因在于，小米手机在授权拒绝后 `Cursor` 对象不会为 null（其他手机拒绝权限后为 null），仅会返回一个 `getCount()` 为0的 `Cursor` 对象，
+- 小米
+>
+目前小米通讯录授权在授权失败时的原因有两种，可能是**用户手机中不存在联系人**，可能是用户拒绝授权，所以建议针对小米机型应给予相应的提示，原因参考下方[解决方案](#solu)
 
 - OPPO
 >
@@ -700,6 +702,26 @@
 - 华为
 >
 部分权限的 `ActivityCompat.shouldShowRequestPermissionRationale(Activity, String)` 返回 false，故权限被拒后将会调用 `@PermissionsNonRationale` 所修饰的函数
+
+- 魅族5.0+
+>
+目前手头上就几部5.0+版本的魅族测试机，遂测之。笔者国产中知道5.0+有权限管理的只有小米和魅族，5.0+权限申请原理可参考下方[解决方案](#solu)
+
+<h2 id="solu">解决方案</h2>
+
+- 国产机型的权限申请特点：
+
+>**6.0**：国产大部分机型手机的申请权限实际上应该细致地分为**申请权限**和**应用权限** 。它们的 `ContextCompat.checkSelfPermission(Context, String)` 判断是根据是否 `AndroidManifest.xml` 中声明了该权限来决定返回值，在 `AndroidManifest.xml` 中声明了权限就返回 true，当然也会有一些会返回 false，这个是**申请权限**的过程。而真正对话框的弹出是在开发者**应用权限**的过程中，什么叫做应用权限？就是调用了会触发权限的代码，这个时候就会激活对话框，但是如果仅到这里那就 **too young too simple** 了，当傻逼用户点击拒绝授权时，还是可能会回调授权成功的方法。另外，国产机大部分权限是有三个状态——询问、允许、拒绝——大部分权限都是询问状态，但是有些权限默认是允许状态，有些是拒绝状态，这就导致了调用 `ContextCompat.checkSelfPermission(Context, String)` 方法时会更畸形，例如小米手机的获取 `READ_PHONE_STATE` 状态，默认是授予状态，但是如果傻逼用户手动设置为拒绝之后，就很麻烦了
+
+>**5.0**：此时 google 还未着手处理动态权限申请这么个东西，但是我们牛(sha)逼(bi)的小米、魅族等厂商就开始提前设置了强大的权限管理，所以 6.0 权限申请代码在 5.0 上压根不管用，但是说来也简单，5.0 的权限申请对话框激活就是靠触发危险权限代码，然后根据返回值来判断权限是否获取到了（不同手机的返回值判断方式不同，此处需要一一定制）
+
+- permissions4m 解决方案：
+
+>在 **6.0** 上，permissions4m 首先调用原生**申请权限**，如果回调的结果是权限成功的话，那么为了确保真的获得到了这个权限，permissions4m 增加了一层**应用权限**的过程来确保是否真的授权，而在这个过程中权限申请对话框也是会被弹出的
+
+>在 **5.0** 上，permissions4m 直接通过触发危险代码来激活权限申请对话框，然后根据返回值来判断是否授权成功
+
+>当然，当傻逼用户完全拒绝权限时，permissions4m 将会回调响应函数返回一个可以跳转至**手机管家**或**系统设置**的 intent，方便傻逼用户打开权限。另外，由于作者个人能力有限，目前仅通过了小米、OPPO、魅族、华为等机型测试，不过这里面的机型已经可以代表许多国产机型的通病了。另外一点就是还有部分涉及到危险权限的代码并未补全，请参考 [help me](#help) 第二条
 
 <h2 id="problem">项目答疑</h2>
 
