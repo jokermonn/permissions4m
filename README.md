@@ -42,6 +42,12 @@
 <a><img src="http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/></a>
 <a><img src="http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/></a>
 
+**注：如果图片显示不了，可点击以下直链：**
+[`http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
 <h4>permissions4m</h4>
 
 **permissions4m 申请地理位置（小米）/permissions4m 申请联系人（小米）/permissions4m 申请手机状态（小米）/permissions4m 申请短信、日历（OPPO A57）：**
@@ -49,7 +55,13 @@
 <a><img src="http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/></a>
 <a><img src="http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/></a>
 <a><img src="http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/></a>
-<a><img src="http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/> </a>
+<a><img src="http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width="40%"/></a>
+
+**注：如果图片显示不了，可点击以下直链：**
+[`http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 # 引入依赖 #
 
