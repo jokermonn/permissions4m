@@ -31,6 +31,36 @@
 
 权限申请官方文档：[在运行时请求权限](https://developer.android.google.cn/training/permissions/requesting.html)
 
+<h2>permissions4m 与 AndPermission</h2>
+
+AndPermission 申请框架：
+
+**小米申请地理位置：**
+![小米申请地理位置](http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**小米申请联系人：**
+![小米申请联系人](http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**小米申请手机状态：**
+![小米申请手机状态](http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**oppo a57：**
+![这里写图片描述](http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**permissions4m:**
+
+**permissions4m 申请地理位置（小米）：**
+![permissions4m申请地理位置](http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**permissions4m 申请联系人（小米）：**
+![这里写图片描述](http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**permissions4m 申请手机状态（小米）：**
+![这里写图片描述](http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+**permissions4m 申请短信、日历（OPPO A57）**
+![这里写图片描述](http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
 # 引入依赖 #
 
 ## Gradle 依赖 ##
