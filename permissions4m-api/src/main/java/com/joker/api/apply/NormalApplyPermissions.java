@@ -55,6 +55,13 @@ public class NormalApplyPermissions {
         requestNextPermissionWithListener(wrapper);
     }
 
+    /**
+     * 1.call {@link com.joker.api.wrapper.ListenerWrapper.PermissionRequestListener#permissionDenied(int)}
+     * 2.request next permission if required
+     * 3.show page intent if required
+     *
+     * @param wrapper
+     */
     public static void deniedWithListener(PermissionWrapper wrapper) {
         ListenerWrapper.PermissionRequestListener requestListener = wrapper.getPermissionRequestListener();
         if (requestListener != null) {
@@ -71,6 +78,7 @@ public class NormalApplyPermissions {
             Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity
                     (wrapper)) :
                     PermissionsPageManager.getIntent(activity);
+
             wrapper.getPermissionPageListener().pageIntent(intent);
         }
     }

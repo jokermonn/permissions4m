@@ -45,6 +45,7 @@ public class SupportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Permissions4M.get(SupportFragment.this)
+                        .requestUnderM(true)
                         .requestPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
                         .requestCodes(LOCATION_CODE)
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
@@ -128,7 +129,6 @@ public class SupportFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(intent);
-
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {

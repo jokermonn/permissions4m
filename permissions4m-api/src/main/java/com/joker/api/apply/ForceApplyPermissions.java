@@ -17,7 +17,7 @@ import com.joker.api.wrapper.Wrapper;
 
 public class ForceApplyPermissions {
     // listener module ===================================================================
-    public static void grantedOnResultWithListener(PermissionWrapper wrapper) {
+    public static void grantedWithListener(PermissionWrapper wrapper) {
         if (PermissionsChecker.isPermissionGranted(getActivity(wrapper), wrapper.getRequestPermission())) {
             NormalApplyPermissions.grantedWithListener(wrapper);
         } else {
@@ -27,7 +27,7 @@ public class ForceApplyPermissions {
 
     // annotation module ================================================================
     @SuppressWarnings("unchecked")
-    public static void grantedOnResultWithAnnotation(PermissionWrapper wrapper) {
+    public static void grantedWithAnnotation(PermissionWrapper wrapper) {
         if (PermissionsChecker.isPermissionGranted(getActivity(wrapper), wrapper.getRequestPermission())) {
             NormalApplyPermissions.grantedWithAnnotation(wrapper);
         } else {
@@ -35,7 +35,7 @@ public class ForceApplyPermissions {
         }
     }
 
-    public static void deniedOnResultWithListenerForUnderMManufacturer(PermissionWrapper wrapper) {
+    public static void deniedWithListenerForUnderM(PermissionWrapper wrapper) {
         Activity activity = getActivity(wrapper);
         ListenerWrapper.PermissionRequestListener requestListener = wrapper.getPermissionRequestListener();
         if (requestListener != null) {
@@ -52,14 +52,16 @@ public class ForceApplyPermissions {
     }
 
     @SuppressWarnings("unchecked")
-    public static void deniedOnResultWithAnnotationForUnderMManufacturer(PermissionWrapper wrapper) {
-        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass().getName());
+    public static void deniedWithAnnotationForUnderM(PermissionWrapper wrapper) {
+        AnnotationWrapper.PermissionsProxy proxy = wrapper.getProxy(wrapper.getContext().getClass()
+                .getName());
         proxy.denied(wrapper.getContext(), wrapper.getRequestCode());
 
         boolean androidPage = wrapper.getPageType() == Permissions4M.PageType
                 .ANDROID_SETTING_PAGE;
         Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(getActivity(wrapper)) :
                 PermissionsPageManager.getIntent(getActivity(wrapper));
+
         proxy.intent(wrapper.getContext(), wrapper.getRequestCode(), intent);
     }
 
