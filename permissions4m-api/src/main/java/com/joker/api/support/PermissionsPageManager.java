@@ -78,8 +78,8 @@ public class PermissionsPageManager {
      * @return
      */
     public static boolean isForceManufacturer() {
-        return (getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
-                .equalsIgnoreCase(MANUFACTURER_XIAOMI));
+        return getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
+                .equalsIgnoreCase(MANUFACTURER_XIAOMI);
     }
 
     /**
@@ -89,8 +89,8 @@ public class PermissionsPageManager {
      * @return
      */
     public static boolean isUnderMHasPermissionRequestManufacturer() {
-        return (getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
-                .equalsIgnoreCase(MANUFACTURER_XIAOMI));
+        return getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
+                .equalsIgnoreCase(MANUFACTURER_XIAOMI) || getManufacturer().equals(MANUFACTURER_OPPO);
     }
 
     /**
