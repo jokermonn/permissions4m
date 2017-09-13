@@ -37,31 +37,19 @@
 
 **AndPermission 申请地理位置（小米）/AndPermission 申请联系人（小米）/AndPermission 申请手机状态（小米）/AndPermission 申请短信、日历（OPPO A57）：**
 
-<img src="http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-<img src="http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-<img src="http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-<img src="http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-
-**注：如果图片显示不了，可点击以下直链：**
-[`http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-[`http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-[`http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-[`http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`图片1`](http://img.blog.csdn.net/20170826090347772?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)、
+[`图片2`](http://img.blog.csdn.net/20170826090413608?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)、
+[`图片3`](http://img.blog.csdn.net/20170826090441440?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)、
+[`图片4`](http://img.blog.csdn.net/20170820222553015?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 <h4>permissions4m</h4>
 
 **permissions4m 申请地理位置（小米）/permissions4m 申请联系人（小米）/permissions4m 申请手机状态（小米）/permissions4m 申请短信、日历（OPPO A57）：**
 
-<img src="http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-<img src="http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-<img src="http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-<img src="http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" width = "200" height = "355"/>
-
-**注：如果图片显示不了，可点击以下直链：**
-[`http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-[`http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-[`http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-[`http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast`](http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+[`图片1`](http://img.blog.csdn.net/20170826093257873?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)、
+[`图片2`](http://img.blog.csdn.net/20170826093413798?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)、
+[`图片3`](http://img.blog.csdn.net/20170826133058525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)、
+[`图片4`](http://img.blog.csdn.net/20170820222606746?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveml3YW5nXw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 # 引入依赖 #
 
@@ -105,6 +93,7 @@
 
 # 版本迭代 #
 <h3 id="todo">TODO</h3>
+
 - TODO:
 	- [help me](#help)
 	- 增强魅族权限申请
@@ -112,6 +101,7 @@
 	- **由于作者最近忙于秋招，更新若不及时，望见谅，希望各位开发者共同维护这个库，毕竟作者个人手机有限、精力有限。该库源码真的很简单！**
 
 <h3 id="history">迭代历史</h3>
+
 - v2.1.1
 	- 支持 oppo 5.0+ 权限申请
 	- 修复魅族空指针异常
