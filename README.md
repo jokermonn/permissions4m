@@ -83,8 +83,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:2.1.0-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:2.1.0-processor'
+      compile 'com.github.jokermonn:permissions4m:2.1.1-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:2.1.1-processor'
 	}
 
 # 使用文档 #
@@ -104,9 +104,18 @@
 	* [项目答疑](#problem)
 
 # 版本迭代 #
+<h3 id="todo">TODO</h3>
+- TODO:
+	- [help me](#help)
+	- 增强魅族权限申请
+	- 增强各5.0+权限申请
+	- **由于作者最近忙于秋招，更新若不及时，望见谅，希望各位开发者共同维护这个库，毕竟作者个人手机有限、精力有限。该库源码真的很简单！**
 
-- TODO:[help me](#help)
-
+<h3 id="history">迭代历史</h3>
+- v2.1.1
+	- 支持 oppo 5.0+ 权限申请
+	- 修复魅族空指针异常
+	
 - v2.1.0
 	- 支持 listener 自定义 rationale
 	- 支持 listener 多权限同步申请
