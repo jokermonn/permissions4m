@@ -27,7 +27,6 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
     private static final int DEFAULT_REQUEST_CODE = -1;
     private static final boolean DEFAULT_IS_FORCE = true;
     private static final boolean DEFAULT_IS_ALLOWED = false;
-    private static Map<String, PermissionsProxy> proxyMap = new HashMap<>();
     private static Map<Key, WeakReference<PermissionWrapper>> wrapperMap = new HashMap<>();
     @Permissions4M.PageType
     private int pageType = DEFAULT_PAGE_TYPE;
@@ -53,18 +52,16 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
     public PermissionsProxy getProxy(String className) {
         String proxyName = className + PERMISSIONS_PROXY;
         try {
-            if (proxyMap.get(proxyName) == null) {
-                proxyMap.put(proxyName, (PermissionsProxy) Class.forName(proxyName).newInstance());
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
+            return (PermissionsProxy) Class.forName(proxyName).newInstance();
         } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return proxyMap.get(proxyName);
+        return null;
     }
 
     @Override
@@ -300,11 +297,11 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
      */
     @SuppressWarnings("unchecked")
     private void requestPermissionWithAnnotation() {
-        if (underMAboveLShouldRequest()) {
+        if (PermissionsPageManager.isUnderMNeedChecked(allowed)) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithAnnotation(this);
             } else {
-                ForceApplyPermissions.deniedOnResultWithAnnotationForUnderMManufacturer(this);
+                ForceApplyPermissions.deniedWithAnnotationForUnderM(this);
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String permission = getRequestPermission();
@@ -321,7 +318,7 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
 
     private void mayGrantedWithAnnotation() {
         if (isRequestForce()) {
-            ForceApplyPermissions.grantedOnResultWithAnnotation(this);
+            ForceApplyPermissions.grantedWithAnnotation(this);
         } else {
             NormalApplyPermissions.grantedWithAnnotation(this);
         }
@@ -339,11 +336,11 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
      * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
      */
     public void requestPermissionWithListener() {
-        if (underMAboveLShouldRequest()) {
+        if (PermissionsPageManager.isUnderMNeedChecked(allowed)) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithListener(this);
             } else {
-                ForceApplyPermissions.deniedOnResultWithListenerForUnderMManufacturer(this);
+                ForceApplyPermissions.deniedWithListenerForUnderM(this);
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(), getRequestPermission()) != PackageManager
@@ -359,26 +356,10 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
 
     private void mayGrantedWithListener() {
         if (isRequestForce()) {
-            ForceApplyPermissions.grantedOnResultWithListener(this);
+            ForceApplyPermissions.grantedWithListener(this);
         } else {
             NormalApplyPermissions.grantedWithListener(this);
         }
-    }
-
-    /**
-     * the condition of {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}:
-     * -> like {@link com.joker.api.support.manufacturer.XIAOMI} and
-     * {@link com.joker.api.support.manufacturer.MEIZU}
-     * could request permission:
-     * 1. is {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} device
-     * 2. version code is 5.0~6.0
-     * 3. {@link Wrapper#isRequestUnderM()} return true
-     *
-     * @return
-     */
-    private boolean underMAboveLShouldRequest() {
-        return PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() &&
-                PermissionsPageManager.BuildVersionUnderMAboveL() && isRequestUnderM();
     }
 
     /**

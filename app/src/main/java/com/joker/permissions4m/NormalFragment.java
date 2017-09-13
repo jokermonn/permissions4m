@@ -233,7 +233,7 @@ public class NormalFragment extends Fragment {
                             @Override
                             public void pageIntent(final Intent intent) {
                                 new AlertDialog.Builder(getActivity())
-                                        .setMessage("傻逼用户，我们需要您开启读取手机状态权限：\n请点击前往设置页面\n(in activity with " +
+                                        .setMessage("用户您好，我们需要您开启读取手机状态权限：\n请点击前往设置页面\n(in activity with " +
                                                 "listener)")
                                         .setPositiveButton("前往设置页面", new DialogInterface.OnClickListener() {
                                             @Override
@@ -356,7 +356,7 @@ public class NormalFragment extends Fragment {
         switch (code) {
             case SMS_CODE:
                 new AlertDialog.Builder(getActivity())
-                        .setMessage("傻逼用户，我们需要您开启读取短信权限申请：\n请点击前往设置页面\n(in fragment with annotation)")
+                        .setMessage("用户您好，我们需要您开启读取短信权限申请：\n请点击前往设置页面\n(in fragment with annotation)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

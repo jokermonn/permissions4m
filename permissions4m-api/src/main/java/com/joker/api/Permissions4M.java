@@ -98,7 +98,7 @@ public class Permissions4M {
     private static void annotationCallback(@NonNull int[] grantResults, PermissionWrapper wrapper) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (wrapper.isRequestForce()) {
-                ForceApplyPermissions.grantedOnResultWithAnnotation(wrapper);
+                ForceApplyPermissions.grantedWithAnnotation(wrapper);
             } else {
                 NormalApplyPermissions.grantedWithAnnotation(wrapper);
             }
@@ -110,7 +110,7 @@ public class Permissions4M {
     private static void listenerCallback(@NonNull int[] grantResults, PermissionWrapper wrapper) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             if (wrapper.isRequestForce()) {
-                ForceApplyPermissions.grantedOnResultWithListener(wrapper);
+                ForceApplyPermissions.grantedWithListener(wrapper);
             } else {
                 NormalApplyPermissions.grantedWithListener(wrapper);
             }

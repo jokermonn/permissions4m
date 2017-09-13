@@ -39,7 +39,6 @@ import static android.content.Context.TELEPHONY_SERVICE;
 public class PermissionsChecker {
     private static final String TAG = "permissions4m";
     private static final String TAG_NUMBER = "1";
-    private static int count = 0;
 
     /**
      * ensure whether permission granted
@@ -182,9 +181,7 @@ public class PermissionsChecker {
         Cursor cursor = activity.getContentResolver().query(Uri.parse("content://sms/"), null, null,
                 null, null);
         if (cursor != null) {
-            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() &&
-                    PermissionsPageManager.BuildVersionUnderMAboveL()) ||
-                    PermissionsPageManager.isXIAOMI()) {
+            if (PermissionsPageManager.isForceManufacturer()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(Telephony.Sms.DATE))) {
                     cursor.close();
                     return false;
@@ -247,16 +244,16 @@ public class PermissionsChecker {
         LocationManager locationManager = (LocationManager) activity.getSystemService
                 (LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if (location == null) {
-            return false;
-        } else {
+        if (location != null) {
             // fuck XIAOMI! and MEIZU!
-            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() && PermissionsPageManager
-                    .BuildVersionUnderMAboveL()) || PermissionsPageManager
-                    .isXIAOMI()) {
+            if (PermissionsPageManager.isForceManufacturer()) {
                 double latitude = location.getLatitude();
+                // fuck MEIZU!
+                Log.e(TAG, "" + latitude);
             }
             return true;
+        } else {
+            return false;
         }
     }
 
@@ -325,9 +322,7 @@ public class PermissionsChecker {
                         ("content://call_log/calls"), null, null,
                 null, null);
         if (cursor != null) {
-            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() &&
-                    PermissionsPageManager.BuildVersionUnderMAboveL()) ||
-                    PermissionsPageManager.isXIAOMI()) {
+            if (PermissionsPageManager.isForceManufacturer()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(CallLog.Calls.NUMBER))) {
                     cursor.close();
                     return false;
@@ -394,9 +389,7 @@ public class PermissionsChecker {
         Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone
                 .CONTENT_URI, null, null, null, null);
         if (cursor != null) {
-            if ((PermissionsPageManager.isUnderMHasPermissionRequestManufacturer() &&
-                    PermissionsPageManager.BuildVersionUnderMAboveL()) ||
-                    PermissionsPageManager.isXIAOMI()) {
+            if (PermissionsPageManager.isForceManufacturer()) {
                 if (isNumberIndexInfoIsNull(cursor, cursor.getColumnIndex(ContactsContract.CommonDataKinds
                         .Phone.NUMBER))) {
                     cursor.close();

@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void pageIntent(final Intent intent) {
                                 new AlertDialog.Builder(MainActivity.this)
-                                        .setMessage("傻逼用户，我们需要您开启读取通讯录权限申请：\n请点击前往设置页面\n(in activity with listener)")
+                                        .setMessage("用户您好，我们需要您开启读取通讯录权限申请：\n请点击前往设置页面\n(in activity with listener)")
                                         .setPositiveButton("前往设置页面", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         switch (code) {
             case AUDIO_CODE:
                 new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("傻逼用户，我们需要您开启读取录音权限\n请点击前往设置页面\n(in activity with listener)")
+                        .setMessage("用户您好，我们需要您开启读取录音权限\n请点击前往设置页面\n(in activity with listener)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case CALL_LOG_CODE:
                 new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("傻逼用户，我们需要您开启读取通话记录权限\n请点击前往设置页面\n(in activity with listener)")
+                        .setMessage("用户您好，我们需要您开启读取通话记录权限\n请点击前往设置页面\n(in activity with listener)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
