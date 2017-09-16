@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-2.1.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.0-lib)
-[![processor](https://img.shields.io/badge/processor-2.1.0-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.0-processor)
+[![lib](https://img.shields.io/badge/lib-2.1.1-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.1-lib)
+[![processor](https://img.shields.io/badge/processor-2.1.1-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.1-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -698,6 +698,17 @@
             .request();
 
 注：**同步申请不支持 `PermissionPageListener` 回调，理由见[项目答疑](#problem)第1条**
+
+<h2 id="pro">混淆</h2>
+1.如果你是使用 listener 可以不必混淆
+
+2.如果你是使用 annotation ，如下：
+>
+	-dontwarn com.joker.api.**
+	-keep class com.joker.api.** {*;}
+	-keep interface com.joker.api.** { *; }
+	-keep class **$$PermissionsProxy { *; }
+
 <h2 id="help">help me</h2>
 
 **1.** 作者司里没有几部测试机，所以写到这一步之后就需要各位开发者共同努力，如果你在开发过程中使用了 vivo、魅族等权限适配也很畸形的手机，请联系作者或提交 issue 或 pull request。需要提交的资料包含：
