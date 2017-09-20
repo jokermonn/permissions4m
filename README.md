@@ -4,8 +4,8 @@
 [![platform](https://img.shields.io/badge/platform-android-brightgreen.svg)](https://developer.android.com/index.html)
 [![license](https://img.shields.io/badge/license-Apach2.0-green.svg)](https://github.com/jokermonn/permissions4m/blob/master/LICENSE.txt)
 
-[![lib](https://img.shields.io/badge/lib-2.1.1-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.1-lib)
-[![processor](https://img.shields.io/badge/processor-2.1.1-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.1-processor)
+[![lib](https://img.shields.io/badge/lib-2.1.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.2-lib)
+[![processor](https://img.shields.io/badge/processor-2.1.2-blue.svg)](https://github.com/jokermonn/permissions4m/releases/tag/2.1.2-processor)
 [![annotation](https://img.shields.io/badge/annotation-1.0.3-blue.svg)](https://jcenter.bintray.com/com/jokermonn/permissions4m-annotation/1.0.3/)
 
 # 中文|[ENGLISH](https://github.com/jokermonn/permissions4m/blob/master/README_EN.md) #
@@ -71,8 +71,8 @@
 `app` 中的 `build.gradle`：
 
 	dependencies {
-      compile 'com.github.jokermonn:permissions4m:2.1.1-lib'
-      annotationProcessor 'com.github.jokermonn:permissions4m:2.1.1-processor'
+      compile 'com.github.jokermonn:permissions4m:2.1.2-lib'
+      annotationProcessor 'com.github.jokermonn:permissions4m:2.1.2-processor'
 	}
 
 # 使用文档 #
@@ -102,6 +102,10 @@
 
 <h3 id="history">迭代历史</h3>
 
+- v2.1.2
+	- 增强地理位置权限申请
+	- 添加 `code` 参数于 pageIntent 函数
+	
 - v2.1.1
 	- 支持 oppo 5.0+ 权限申请
 	- 修复魅族空指针异常
