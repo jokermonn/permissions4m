@@ -14,7 +14,7 @@ import static com.joker.api.support.PermissionsPageManager.MANUFACTURER_XIAOMI;
  * Created by joker on 2017/9/16.
  */
 
-public class SupportUtil {
+public class ManufacturerSupportUtil {
     private static String[] forceManufacturers = {MANUFACTURER_XIAOMI, MANUFACTURER_MEIZU};
     private static Set<String> forceSet = new HashSet<>(Arrays.asList(forceManufacturers));
     private static String[] underMHasPermissionsRequestManufacturer = {MANUFACTURER_XIAOMI,
@@ -40,6 +40,10 @@ public class SupportUtil {
      */
     public static boolean isUnderMHasPermissionRequestManufacturer() {
         return underMSet.contains(PermissionsPageManager.getManufacturer());
+    }
+
+    public static boolean isLocationMustNeedGpsManufacturer() {
+        return PermissionsPageManager.getManufacturer().equalsIgnoreCase(MANUFACTURER_OPPO);
     }
 
     /**

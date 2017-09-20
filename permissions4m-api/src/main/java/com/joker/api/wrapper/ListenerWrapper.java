@@ -2,6 +2,8 @@ package com.joker.api.wrapper;
 
 import android.content.Intent;
 
+import java.util.List;
+
 /**
  * listener callback should implement this interface
  * <p>
@@ -42,7 +44,7 @@ public interface ListenerWrapper {
     }
 
     interface PermissionPageListener {
-        void pageIntent(Intent intent);
+        void pageIntent(int code, Intent intent);
     }
 
     interface PermissionCustomRationaleListener {

@@ -47,7 +47,7 @@ public class ForceApplyPermissions {
             boolean androidPage = wrapper.getPageType() == Permissions4M.PageType.ANDROID_SETTING_PAGE;
             Intent intent = androidPage ? PermissionsPageManager.getSettingIntent(activity) :
                     PermissionsPageManager.getIntent(activity);
-            pageListener.pageIntent(intent);
+            pageListener.pageIntent(wrapper.getRequestCode(), intent);
         }
     }
 

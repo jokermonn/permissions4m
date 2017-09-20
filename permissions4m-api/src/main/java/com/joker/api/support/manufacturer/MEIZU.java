@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 
-import com.joker.api.support.PermissionsPageManager;
+import com.joker.api.support.ManufacturerSupportUtil;
 
 /**
  * Created by joker on 2017/8/24.
@@ -32,7 +32,7 @@ public class MEIZU implements PermissionsPage {
     }
 
     private String getCls() {
-        if (PermissionsPageManager.isAndroidL()) {
+        if (ManufacturerSupportUtil.isAndroidL()) {
             return L_MANAGER_OUT_CLS;
         } else {
             return N_MANAGER_OUT_CLS;
