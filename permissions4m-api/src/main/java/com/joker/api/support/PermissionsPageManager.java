@@ -21,12 +21,12 @@ public class PermissionsPageManager {
     /**
      * Build.MANUFACTURER
      */
-    private static final String MANUFACTURER_HUAWEI = "HUAWEI";
-    private static final String MANUFACTURER_XIAOMI = "XIAOMI";
-    private static final String MANUFACTURER_OPPO = "OPPO";
-    private static final String MANUFACTURER_VIVO = "vivo";
-    private static final String MANUFACTURER_MEIZU = "meizu";
-    private static final String manufacturer = Build.MANUFACTURER;
+    static final String MANUFACTURER_HUAWEI = "HUAWEI";
+    static final String MANUFACTURER_XIAOMI = "XIAOMI";
+    static final String MANUFACTURER_OPPO = "OPPO";
+    static final String MANUFACTURER_VIVO = "vivo";
+    static final String MANUFACTURER_MEIZU = "meizu";
+    static final String manufacturer = Build.MANUFACTURER;
 
     public static String getManufacturer() {
         return manufacturer;
@@ -69,53 +69,5 @@ public class PermissionsPageManager {
 
     public static boolean isMEIZU() {
         return getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU);
-    }
-
-    /**
-     * those manufacturer that need request by some special measures, above
-     * {@link android.os.Build.VERSION_CODES#M}
-     *
-     * @return
-     */
-    public static boolean isForceManufacturer() {
-        return getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
-                .equalsIgnoreCase(MANUFACTURER_XIAOMI);
-    }
-
-    /**
-     * those manufacturer that need request permissions under {@link android.os.Build.VERSION_CODES#M},
-     * above {@link android.os.Build.VERSION_CODES#LOLLIPOP}
-     *
-     * @return
-     */
-    public static boolean isUnderMHasPermissionRequestManufacturer() {
-        return getManufacturer().equalsIgnoreCase(MANUFACTURER_MEIZU) || getManufacturer()
-                .equalsIgnoreCase(MANUFACTURER_XIAOMI) || getManufacturer().equals(MANUFACTURER_OPPO);
-    }
-
-    /**
-     * 1.is under {@link android.os.Build.VERSION_CODES#M}, above
-     * {@link android.os.Build.VERSION_CODES#LOLLIPOP}
-     * 2.has permissions check
-     * 3.open under check
-     * <p>
-     * now, we know {@link PermissionsPageManager#isXIAOMI()}, {@link PermissionsPageManager#isMEIZU()}
-     *
-     * @param isUnderMNeedChecked {@link com.joker.api.wrapper.Wrapper#requestUnderM(boolean)}
-     * @return
-     */
-    public static boolean isUnderMNeedChecked(boolean isUnderMNeedChecked) {
-        return isUnderMHasPermissionRequestManufacturer() && isUnderMNeedChecked &&
-                isAndroidL();
-    }
-
-    /**
-     * Build version code is under 6.0 but above 5.0
-     *
-     * @return
-     */
-    public static boolean isAndroidL() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES
-                .LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
     }
 }

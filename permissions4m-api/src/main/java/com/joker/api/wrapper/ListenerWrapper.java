@@ -42,7 +42,7 @@ public interface ListenerWrapper {
     }
 
     interface PermissionPageListener {
-        void pageIntent(Intent intent);
+        void pageIntent(int code, Intent intent);
     }
 
     interface PermissionCustomRationaleListener {

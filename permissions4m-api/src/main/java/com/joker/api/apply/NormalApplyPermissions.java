@@ -79,7 +79,7 @@ public class NormalApplyPermissions {
                     (wrapper)) :
                     PermissionsPageManager.getIntent(activity);
 
-            wrapper.getPermissionPageListener().pageIntent(intent);
+            wrapper.getPermissionPageListener().pageIntent(wrapper.getRequestCode(), intent);
         }
     }
 

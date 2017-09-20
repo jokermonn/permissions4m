@@ -231,7 +231,7 @@ public class NormalFragment extends Fragment {
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .requestPage(new Wrapper.PermissionPageListener() {
                             @Override
-                            public void pageIntent(final Intent intent) {
+                            public void pageIntent(int code, final Intent intent) {
                                 new AlertDialog.Builder(getActivity())
                                         .setMessage("用户您好，我们需要您开启读取手机状态权限：\n请点击前往设置页面\n(in activity with " +
                                                 "listener)")

@@ -209,7 +209,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        Set<String> set = new HashSet<>(6);
+        Set<String> set = new HashSet<>(16);
         set.add(PermissionsGranted.class.getCanonicalName());
         set.add(PermissionsDenied.class.getCanonicalName());
         set.add(PermissionsRationale.class.getCanonicalName());

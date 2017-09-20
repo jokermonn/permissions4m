@@ -9,7 +9,7 @@ import com.joker.api.Permissions4M;
 import com.joker.api.apply.ForceApplyPermissions;
 import com.joker.api.apply.NormalApplyPermissions;
 import com.joker.api.apply.PermissionsChecker;
-import com.joker.api.support.PermissionsPageManager;
+import com.joker.api.support.ManufacturerSupportUtil;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
@@ -284,20 +284,20 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
 
     /**
      * 1.under {@link android.os.Build.VERSION_CODES#M}, and it's not the
-     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
+     * {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
      * some manufacturers that has permission manage under M) or it's the
-     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, but under
+     * {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()}, but under
      * {@link android.os.Build.VERSION_CODES#LOLLIPOP}
      * <p>
-     * 2.it's not the {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, and
+     * 2.it's not the {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()}, and
      * Version Code is above than {@link android.os.Build.VERSION_CODES#M}
      * <p>
      * 3.under {@link android.os.Build.VERSION_CODES#M}, and it's
-     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
+     * {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()}
      */
     @SuppressWarnings("unchecked")
     private void requestPermissionWithAnnotation() {
-        if (PermissionsPageManager.isUnderMNeedChecked(allowed)) {
+        if (ManufacturerSupportUtil.isUnderMNeedChecked(isRequestUnderM())) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithAnnotation(this);
             } else {
@@ -326,17 +326,17 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
 
     /**
      * 1.under {@link android.os.Build.VERSION_CODES#M}, and it's not the
-     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
+     * {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()} manufacturer (those are
      * some manufacturers that has permission manage under M)
      * <p>
-     * 2.it's not the {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}, and
+     * 2.it's not the {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()}, and
      * Version Code is bigger than {@link android.os.Build.VERSION_CODES#M}
      * <p>
      * 3.under {@link android.os.Build.VERSION_CODES#M}, and it's
-     * {@link PermissionsPageManager#isUnderMHasPermissionRequestManufacturer()}
+     * {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()}
      */
     public void requestPermissionWithListener() {
-        if (PermissionsPageManager.isUnderMNeedChecked(allowed)) {
+        if (ManufacturerSupportUtil.isUnderMNeedChecked(isRequestUnderM())) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithListener(this);
             } else {
