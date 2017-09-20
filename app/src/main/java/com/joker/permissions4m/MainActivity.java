@@ -128,9 +128,10 @@ public class MainActivity extends AppCompatActivity {
                         .requestPageType(Permissions4M.PageType.MANAGER_PAGE)
                         .requestPage(new Wrapper.PermissionPageListener() {
                             @Override
-                            public void pageIntent(final Intent intent) {
+                            public void pageIntent(int code, final Intent intent) {
                                 new AlertDialog.Builder(MainActivity.this)
-                                        .setMessage("用户您好，我们需要您开启读取通讯录权限申请：\n请点击前往设置页面\n(in activity with listener)")
+                                        .setMessage("用户您好，我们需要您开启读取通讯录权限申请：\n请点击前往设置页面\n(in activity with" +
+                                                " listener)")
                                         .setPositiveButton("前往设置页面", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
