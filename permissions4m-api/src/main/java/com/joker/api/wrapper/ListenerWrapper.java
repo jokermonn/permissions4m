@@ -2,8 +2,6 @@ package com.joker.api.wrapper;
 
 import android.content.Intent;
 
-import java.util.List;
-
 /**
  * listener callback should implement this interface
  * <p>

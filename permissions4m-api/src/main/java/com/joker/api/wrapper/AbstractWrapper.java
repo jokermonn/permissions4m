@@ -297,7 +297,7 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
      */
     @SuppressWarnings("unchecked")
     private void requestPermissionWithAnnotation() {
-        if (ManufacturerSupportUtil.isUnderMNeedChecked(allowed)) {
+        if (ManufacturerSupportUtil.isUnderMNeedChecked(isRequestUnderM())) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithAnnotation(this);
             } else {
@@ -336,7 +336,7 @@ public abstract class AbstractWrapper implements PermissionWrapper, Cloneable {
      * {@link ManufacturerSupportUtil#isUnderMHasPermissionRequestManufacturer()}
      */
     public void requestPermissionWithListener() {
-        if (ManufacturerSupportUtil.isUnderMNeedChecked(allowed)) {
+        if (ManufacturerSupportUtil.isUnderMNeedChecked(isRequestUnderM())) {
             if (PermissionsChecker.isPermissionGranted(getActivity(), getRequestPermission())) {
                 NormalApplyPermissions.grantedWithListener(this);
             } else {
