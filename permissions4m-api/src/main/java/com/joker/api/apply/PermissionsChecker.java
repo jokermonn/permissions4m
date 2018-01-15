@@ -207,15 +207,27 @@ public class PermissionsChecker {
      * @throws Exception
      */
     private static boolean checkWriteStorage(Activity activity) throws Exception {
+        File filePath=new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES).getPath());
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).getPath(), TAG);
+
         if (!file.exists()) {
             boolean newFile;
-            try {
-                newFile = file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+            if(!filePath.exists()){
+                try {
+                    newFile=filePath.mkdir();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }else{
+                try {
+                    newFile = file.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
             }
             return newFile;
         } else {
